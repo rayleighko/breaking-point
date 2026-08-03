@@ -31,7 +31,7 @@
 - `src/lib/engine.ts` — Queue 시뮬레이션 엔진. 앞으로의 랩 대부분이 이걸 재사용한다.
   도착(포아송) / 창구(커넥션 풀) / 대기열 / acquire 타임아웃 / 재시도 / 리틀의 법칙 계산.
   시드 고정이라 재현 가능.
-- 랩 2개 완성:
+- 랩 3개 완성:
   - `커넥션 풀 고갈` (`src/content/labs/connection-pool.mdx`)
     - 시각화(`Stage.tsx` — 은행 창구 비유 캔버스 애니메이션)
     - 응답시간 그래프(`Chart.tsx` — 로그 스케일 p50/p99 + 에러율)
@@ -42,7 +42,12 @@
     - 실시간 Stage/Chart와 70%/95% 비교
     - 챌린지(`QueueSenseChallenge.tsx` — 피크에서도 70% 여유)
     - 확인 문제(`Quiz.tsx`)
-- 엔진 테스트 3종 (`test/`, `pnpm test`)
+  - `p50과 p99` (`src/content/labs/p50-p99.mdx`) — **feature/p50-p99 브랜치**
+    - 혼합 분포 순수 계산(`src/lib/p50-p99.ts`)
+    - 나란히 비교 UI(`P50P99Lab.tsx` + `DistCompare.tsx`)
+    - 챌린지(`P50P99Challenge.tsx` — 평균만 맞추기 실패 / 꼬리 자르기 통과)
+    - 확인 문제(`Quiz.tsx`)
+- 엔진·랩 테스트 (`test/`, `pnpm test`에 `test-p50-p99.ts` 포함)
 - 정적 Wiki content collection과 knowledge graph (`src/content/topics/*.json`)
 - Pagefind 기반 통합 검색: lab·Wiki·roadmap·resource 검색
 - JSON scenario playground와 공유 가능한 URL
@@ -64,6 +69,15 @@
 > `pnpm quality` 통과. Queue의 감각 lab은 preview에서 70%→95% 프리셋(대기 약 14배),
 > 375px overflow 없음, console error 없음을 확인했습니다.
 > 챌린지는 `test/test-queue-sense.ts`로 순진한 해법 실패·의도한 해법 통과를 검증했습니다.
+
+**진행 중 — feature/p50-p99 (2026-08-03)**
+
+> 브랜치: `feature/p50-p99` → PR target `develop` (main 직접 merge 금지).
+> 로컬 `pnpm quality` 통과 (format·lint·astro check·test·build).
+> 챌린지: `test/test-p50-p99.ts`에서 순진한 해법(평균 100·p99 5050) 실패,
+> 의도한 해법(평균 100·p99 290) 통과.
+> 남은 확인: preview 375px overflow·console, CI(browser) 녹색 후 develop merge.
+> 다음 slice: `engine.ts` Sim 좌우 체감 연결, Pet Coach `labId` 등록, browser smoke.
 
 ---
 
@@ -119,9 +133,9 @@ AI retrieval은 내부 검수 자료를 먼저 사용하고, 부족할 때만 �
 
 1. ~~**Queue의 감각**~~ — 완료 (`queue-sense`, roadmap status `done`)
 
-2. **p50과 p99** — 평균 응답시간은 멀쩡한데 왜 사용자는 느리다고 할까
-   시뮬: 같은 평균, 다른 분포 두 개를 나란히 놓고 체감 비교.
-   → 기존 engine 통계로 충분. 분포 시각화 UI가 핵심.
+2. ~~**p50과 p99**~~ — 콘텐츠·챌린지 스크립트 완료 (`p50-p99`). develop PR 리뷰/CI 대기.
+   다음 slice 후보: 실제 `engine.ts` Sim을 낮은 이용률로 좌우 실행해 체감 연결,
+   Pet Coach `labId` 등록, browser smoke.
 
 3. **캐시 스탬피드** — 캐시를 넣었는데 왜 5분마다 DB가 죽을까
    시뮬: TTL 동시 만료 순간 요청이 DB로 쏟아지는 장면 + 지터/뮤텍스 적용 비교.

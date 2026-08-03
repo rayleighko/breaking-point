@@ -65,3 +65,6 @@ read-only fallback으로 유지할 수 있습니다.
 
 현재는 analytics를 수집하지 않습니다. 도입할 때 검색어가 민감한 문제나 내부 system 이름을 포함할 수
 있다는 점을 고려해 보관 기간, 익명화와 opt-out을 먼저 결정합니다.
+
+AI retrieval의 vectorless baseline, managed index 도입 조건과 비용 상한은
+[`docs/RETRIEVAL_COST_POLICY.md`](./RETRIEVAL_COST_POLICY.md)를 따릅니다.

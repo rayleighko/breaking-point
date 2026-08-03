@@ -37,6 +37,15 @@ Evidence: test, browser state, measurement 또는 screenshot
 5. **Observe** — UI면 browser, performance면 raw measurement로 실제 결과를 확인합니다.
 6. **Handoff** — 변경, evidence, 남은 risk와 다음 결정을 분리해 보고합니다.
 
+## Cost and retrieval gate
+
+- AI 기능은 내부 검수 자료를 먼저 검색하고, 부족할 때만 공식 원문을 사용하며, 사용자 답변마다 출처를 표시합니다.
+- database, vector index, hosted analytics와 account system은 예상 traffic이 아니라 측정된 실패 지표로 정당화합니다.
+- 새 managed service proposal에는 현재 무료 대안, 도입 기준, 월 비용 상한, 초과 시 동작과 제거 경로를 적습니다.
+- 비용이 드는 retrieval을 추가하기 전에 고정 eval set으로 lexical recall, citation coverage와 token 사용량을 기록합니다.
+- 대화에서 합의한 architecture 결정은 `docs/DECISIONS.md`, 사용자에게 전달된 변경은 `CHANGELOG.md`, 현재 실행
+  상태와 다음 작업은 `HANDOFF.md`에 반영합니다. 대화 원문은 canonical context가 아닙니다.
+
 대화 내용은 evidence가 아닙니다. test fixture, Scenario JSON, result bundle, screenshot, command output과 decision log처럼
 다시 실행하거나 검토할 수 있는 artifact를 남깁니다.
 

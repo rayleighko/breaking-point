@@ -42,6 +42,7 @@
 - JSON scenario playground와 공유 가능한 URL
 - 라이트/다크 테마, 반응형 navigation, 375px mobile 기준
 - 전역 AI Pet Coach beta UI와 OpenRouter용 Cloudflare Worker proxy 뼈대
+- Connection Pool Lab과 상태를 공유하는 Mini Lab, 승인형 AI 제안과 단계형 Hint
 - ESLint·Prettier·TypeScript·engine test·build를 묶은 `pnpm quality`
 - Chromium·Firefox·WebKit용 Playwright compatibility/performance test
 
@@ -95,12 +96,16 @@
 - [ ] `Chart.tsx`에 처리량(throughput) 라인 추가 검토 (현재는 지연시간과 에러율만)
 - [x] 다크/라이트 테마 토글과 system preference 지원 (기본은 라이트)
 - [ ] OG 이미지 자동 생성
-- [ ] AI Gateway 실제 배포: OpenRouter key, Cloudflare Worker, `PUBLIC_AI_API_URL` 연결
+- [x] AI Gateway 실제 배포: OpenRouter key, Cloudflare Worker, `PUBLIC_AI_API_URL` 연결
 - [ ] 최종 고양이 sprite asset 제작과 상태별 animation 연결
 - [ ] Wiki 규모가 수천 건을 넘을 때 build 시간·검색 index 크기를 측정하고 외부 검색 전환 판단
 
 Cloudflare는 정적 site hosting이 아니라 AI API key를 보호하는 proxy에만 사용합니다. 설정과 수동 작업은
 `docs/AI_GATEWAY.md`를 따릅니다. API key를 repository나 `PUBLIC_` 환경 변수에 넣지 않습니다.
+
+AI retrieval은 내부 검수 자료를 먼저 사용하고, 부족할 때만 공식 원문으로 fallback하며 답변마다 출처를
+표시합니다. 현재는 별도 database나 vector index를 사용하지 않습니다. 도입 기준은
+`docs/RETRIEVAL_COST_POLICY.md`, 결정 이력은 `docs/DECISIONS.md`를 따릅니다.
 
 ### D. 다음 콘텐츠 (`src/lib/roadmap.ts`가 전체 목차 = 진행 상황판)
 
@@ -139,4 +144,7 @@ Cloudflare는 정적 site hosting이 아니라 AI API key를 보호하는 proxy�
 3. UI 변경은 `docs/FRONTEND_GUIDELINES.md`, simulation 변경은 `docs/ENGINE_GUIDE.md`, 새 콘텐츠는
    `CONTENT_GUIDE.md`를 먼저 읽습니다.
 4. 완료 후 `main`에 push하면 GitHub Pages가 자동 배포됩니다. Actions와 공개 URL을 모두 확인합니다.
-5. AI Coach를 활성화하려면 먼저 `docs/AI_GATEWAY.md`의 Cloudflare 단계와 수동 secret 등록을 완료합니다.
+5. AI Gateway는 배포되어 있습니다. Worker를 변경하면 `docs/AI_GATEWAY.md`에 따라 dry-run, deploy와 공개
+   endpoint를 검증합니다.
+6. 완료된 제품 변경은 `CHANGELOG.md`, architecture 결정은 `docs/DECISIONS.md`, 다음 실행 상태는 이 문서에
+   반영합니다.

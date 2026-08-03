@@ -62,6 +62,9 @@ Local Lab 자동화의 장기 방향과 CLI contract는 [`docs/CLI_VISION.md`](.
 [`docs/BROWSER_SUPPORT.md`](./docs/BROWSER_SUPPORT.md)에 있습니다.
 정적 검색과 대규모 knowledge base 전환 기준은
 [`docs/SEARCH_ARCHITECTURE.md`](./docs/SEARCH_ARCHITECTURE.md)에 있습니다.
+AI 검색의 출처 fallback과 비용 gate는
+[`docs/RETRIEVAL_COST_POLICY.md`](./docs/RETRIEVAL_COST_POLICY.md)에 있습니다.
+주요 제품·architecture 결정은 [`docs/DECISIONS.md`](./docs/DECISIONS.md)에 기록합니다.
 
 ## 배포 (GitHub Pages)
 

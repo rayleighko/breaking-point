@@ -15,6 +15,7 @@ Breaking Point는 system behavior를 browser simulation으로 부수며 배우�
 3. constraint가 있는 challenge로 닫고 순진한 해법이 실패하게 합니다.
 4. 각 lab 끝에는 30초 안에 복습할 Recall card를 둡니다.
 5. generic pattern을 먼저 설명한 뒤 TypeScript, Go, Rust, JVM, AWS와 Kubernetes 구현으로 연결합니다.
+6. AI 답변은 내부 검수 자료를 먼저 찾고, 부족할 때만 공식 원문을 사용하며, 답변마다 출처를 표시합니다.
 
 ## Start every task
 
@@ -51,6 +52,8 @@ Breaking Point는 system behavior를 browser simulation으로 부수며 배우�
 - 외부 host로 load test를 보내지 않습니다. 명시적 사용자 승인 없이는 local target만 사용합니다.
 - 기존 사용자 변경을 덮어쓰거나 unrelated file을 정리하지 않습니다.
 - AI가 작성한 코드도 contributor가 설명하고 검증할 수 있어야 합니다.
+- 새 database, hosted search 또는 analytics는 측정된 필요와 비용 상한 없이 도입하지 않습니다. Git·정적 index·browser
+  저장소로 요구사항을 충족할 수 있으면 그것을 우선합니다.
 - commit message는 `영역: 변경 내용` 형식의 한국어로 작성합니다.
 
 상세 harness contract와 제품별 사용법은 `docs/AI_HARNESS.md`, 프로젝트 skill은

@@ -14,8 +14,8 @@ Breaking Point의 AI는 범용 AGI를 축소해서 흉내 내지 않습니다. �
 ```text
 질문과 선택적 architecture context
   → intent 분류(설명 / ideation / diagnosis / ADR)
-  → topic·tag·related graph 검색
-  → 원전과 공식 source 우선순위 적용
+  → 내부 topic·lab·source registry를 lexical/tag/graph로 검색
+  → 내부 근거가 부족할 때만 공식 원문 검색
   → 필요한 lab·simulation·template 결합
   → 제한된 evidence bundle만 model에 전달
   → citation이 포함된 답변
@@ -23,6 +23,17 @@ Breaking Point의 AI는 범용 AGI를 축소해서 흉내 내지 않습니다. �
 ```
 
 전체 문서를 매번 prompt에 넣지 않습니다. 먼저 metadata와 lexical search로 후보를 좁히고, 필요할 때만 embedding retrieval이나 graph traversal을 추가합니다. corpus가 작은 초기에는 단순 검색이 더 싸고 설명 가능할 수 있습니다. RAG는 목적이 아니라 context precision과 citation coverage를 높이는 수단입니다.
+
+## Source fallback contract
+
+1. `src/content/topics`, lab 본문과 repository의 source registry를 먼저 검색합니다.
+2. 내부 자료가 질문을 지지하지 못할 때만 표준 기구, 원 논문 또는 vendor의 공식 문서를 검색합니다.
+3. Blog, 영상, 검색 결과 요약과 community 글은 사실의 fallback 근거로 사용하지 않습니다. 업계 관점을 소개해야
+   할 때는 관점임을 표시하고 내부 편집 검수를 거칩니다.
+4. 답변의 사실 주장에는 가까운 위치에 source title과 canonical URL을 표시합니다. 내부 자료와 외부 원문을
+   구분하고, 근거가 없으면 추측하지 않고 확인할 수 없다고 답합니다.
+5. 공식 원문 fallback은 검색 결과를 영구 저장하라는 뜻이 아닙니다. 허용 host, 확인 시각과 사용한 URL만
+   기록하고 필요한 최소 문단만 일회성 context로 전달합니다.
 
 ## 제공할 인터페이스
 
@@ -55,5 +66,7 @@ MCP와 skill은 서로 다른 진실을 갖지 않습니다. `src/content/topics
 2. 답변에 topic·source citation과 사용한 context 표시
 3. `explain`, `ideate`, `draft_adr` mode와 template 추가
 4. 질문·정답·필수 출처로 구성된 eval set 구축
-5. corpus가 커질 때만 embedding index와 hybrid retrieval 도입
+5. 측정된 lexical recall이 목표에 못 미치고 동의어 사전으로 해결되지 않을 때만 embedding index와 hybrid retrieval 도입
 6. read-only MCP server와 portable agent skill 제공
+
+도입 순서와 비용 gate는 [`docs/RETRIEVAL_COST_POLICY.md`](./RETRIEVAL_COST_POLICY.md)를 따릅니다.

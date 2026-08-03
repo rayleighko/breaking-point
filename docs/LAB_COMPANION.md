@@ -90,8 +90,13 @@ System prompt는 고정하고 최근 대화 12개와 현재 Lab Snapshot만 전�
 4. Snapshot, retrieval context, 최근 대화 요약을 서로 다른 block으로 전달합니다.
 5. 답변에는 근거 source를 표시하고 검색 결과가 없으면 일반 지식임을 밝힙니다.
 
+내부 자료에 충분한 근거가 없을 때는 공식 원문만 fallback으로 검색합니다. 일반 지식으로 빈칸을 채우지 않고,
+내부 자료와 외부 원문의 출처를 답변마다 구분해 표시합니다.
+
 Prompt caching은 변하지 않는 System prompt와 Topic chunk 앞부분에만 적용합니다. 사용자 질문과 실험 Snapshot은
 뒤에 배치합니다. Provider별 cache semantics와 실제 hit rate를 확인하기 전에는 비용 절감을 주장하지 않습니다.
 
-Vector search는 Topic 수가 작을 때 필요하지 않습니다. 먼저 tag와 graph edge를 사용하는 deterministic retrieval을
-구현하고, 동의어·자연어 질문의 recall이 부족하다는 측정 결과가 생기면 Vectorize 같은 vector index를 검토합니다.
+Vector search는 Topic 수가 작을 때 필요하지 않습니다. 먼저 Pagefind, tag, synonym과 graph edge를 사용하는
+vectorless retrieval을 구현합니다. 고정 eval set에서 recall이 목표보다 낮고 lexical 개선으로 해결되지 않을 때만
+Vectorize 같은 vector index를 검토합니다. 상세 비용 gate는
+[`docs/RETRIEVAL_COST_POLICY.md`](./RETRIEVAL_COST_POLICY.md)를 따릅니다.

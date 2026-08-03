@@ -8,6 +8,9 @@ const requiredReferences: Record<string, string[]> = {
   'AGENTS.md': ['docs/AI_HARNESS.md', 'skills/breaking-point-maintainer/SKILL.md'],
   'CONTENT_GUIDE.md': ['docs/GLOBAL_STANDARD.md', 'docs/KNOWLEDGE_SOURCES.md'],
   'README.md': ['docs/GLOBAL_STANDARD.md'],
+  'docs/DOMAIN_AI.md': ['docs/RETRIEVAL_COST_POLICY.md'],
+  'docs/SEARCH_ARCHITECTURE.md': ['docs/RETRIEVAL_COST_POLICY.md'],
+  'docs/AI_HARNESS.md': ['docs/DECISIONS.md', 'CHANGELOG.md', 'HANDOFF.md'],
 };
 
 for (const [file, references] of Object.entries(requiredReferences)) {

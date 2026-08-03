@@ -2,6 +2,16 @@
 
 GitHub Pages에는 secret을 저장할 server runtime이 없습니다. `PUBLIC_` 환경 변수나 build-time secret에 API key를 넣으면 browser bundle에 노출됩니다. 정적 site는 그대로 두고 Cloudflare Worker가 OpenRouter API key를 보관합니다.
 
+## 현재 배포 상태
+
+- Worker: `breaking-point-ai`
+- Endpoint: <https://breaking-point-ai.holders.workers.dev/chat>
+- 허용 Origin: `https://rayleighko.github.io`
+- GitHub Actions의 `PUBLIC_AI_API_URL` repository variable로 정적 site와 연결
+
+API key 값은 문서나 Git에 기록하지 않습니다. Worker 코드나 binding을 변경한 뒤에는 dry-run, 실제 deploy와
+허용 Origin에서의 요청을 다시 검증합니다.
+
 ## 사용자가 준비할 것
 
 1. OpenRouter 계정을 만들고 completion용 API key를 하나 발급합니다. 가능한 낮은 spending limit과 별도 이름을 설정합니다.

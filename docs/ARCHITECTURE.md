@@ -78,13 +78,10 @@ AI 학습 코치의 UI는 별도 페이지가 아니라 전역 `PetCoach` React 
 사용자가 열 때만 채팅과 model catalog를 mount합니다. 상태와 3D asset의 경계는
 [`PET_COACH.md`](./PET_COACH.md)를 따릅니다.
 
-초기 AI 학습 코치는 사용자가 제공한 OpenRouter API key로 browser에서 provider API를 직접 호출합니다. Key는
-React memory에만 두고 localStorage, analytics, Issue 또는 server에 저장하지 않습니다. 무료 model catalog는
-runtime에 조회하므로 특정 model availability를 build에 고정하지 않습니다.
-
-사용자별 history, project-owned credit, abuse prevention, prompt audit 또는 private context가 필요해지면 browser
-직접 호출을 중단하고 별도 AI gateway를 둡니다. 이 gateway는 SSR page와 동일한 책임이 아니라 key protection,
-rate limiting, provider routing과 data policy를 담당합니다.
+현재 공개 AI 학습 코치는 Cloudflare Worker gateway를 통해 OpenRouter를 호출합니다. Project API key는 Worker
+Secret에만 두고 browser bundle, localStorage, analytics와 Issue에 저장하지 않습니다. Worker는 model allowlist,
+Origin 검증, 요청 크기 제한과 rate limiting을 담당합니다. 이 gateway는 SSR page가 아니라 key protection과
+provider routing을 위한 작은 독립 경계입니다.
 
 SSR을 먼저 도입하지 않습니다. 콘텐츠 전달, simulation model, 실제 workload 실행은 서로 다른 문제이며,
 각 문제에 필요한 가장 작은 runtime을 선택합니다.
@@ -95,6 +92,7 @@ allowlist, 요청 크기 제한, Origin 검증과 rate limiting을 담당합니�
 
 AI의 제품 방향과 retrieval contract는 [`docs/DOMAIN_AI.md`](./DOMAIN_AI.md)를 따릅니다. Web chat, MCP와
 agent skill은 서로 다른 knowledge base를 만들지 않고 topic collection과 source registry를 공유합니다.
+검색·저장소의 비용 gate는 [`docs/RETRIEVAL_COST_POLICY.md`](./RETRIEVAL_COST_POLICY.md)를 따릅니다.
 
 ## 권장 진화 순서
 

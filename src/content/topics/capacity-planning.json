@@ -1,0 +1,20 @@
+{
+  "name": "Capacity Planning",
+  "kind": "Product",
+  "oneLiner": "하고 싶은 일의 양과 실제로 감당할 수 있는 시간·사람·기술을 맞추는 계획",
+  "description": "팀이 한 기간에 처리할 수 있는 양을 보고 우선순위와 약속을 조정합니다. 숫자를 사람을 압박하는 목표가 아니라 과부하를 피하고 명시적으로 포기할 일을 정하는 입력으로 사용합니다. Product growth의 Carrying Capacity와 이름이 비슷하지만, 이 항목은 사람·시간·기술 자원을 계획하는 별개의 practice입니다.",
+  "signals": [
+    "Sprint마다 미완료 작업 이월",
+    "계획에 interrupt와 운영 업무가 빠짐",
+    "모든 요청이 최우선"
+  ],
+  "related": ["overload", "queueing", "carrying-capacity"],
+  "keywords": ["team capacity", "resource planning", "WIP", "prioritization"],
+  "sources": [
+    {
+      "title": "Capacity Planning — Atlassian",
+      "url": "https://www.atlassian.com/work-management/project-management/resource-planning/capacity-planning",
+      "type": "공식 문서"
+    }
+  ]
+}

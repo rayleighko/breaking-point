@@ -1,0 +1,16 @@
+{
+  "name": "Queue와 Stack",
+  "kind": "CS 기초",
+  "oneLiner": "먼저 온 일을 먼저 처리하거나 가장 최근의 문맥으로 돌아가는 순서 규칙",
+  "description": "Queue는 FIFO로 traffic과 worker의 속도 차이를 다루고 Stack은 LIFO로 call, undo와 traversal 상태를 다룹니다. 자료구조의 모양보다 어떤 순서가 system invariant인지 먼저 정해야 합니다.",
+  "signals": ["도착 순서 보존", "최근 작업 되돌리기", "producer와 consumer 속도 차이"],
+  "related": ["queueing", "message-queue", "complexity"],
+  "keywords": ["FIFO", "LIFO", "scheduler", "call stack"],
+  "sources": [
+    {
+      "title": "Algorithms, Part I — Princeton",
+      "url": "https://online.princeton.edu/algorithms-part-i",
+      "type": "대학 강의"
+    }
+  ]
+}

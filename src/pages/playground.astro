@@ -1,0 +1,46 @@
+---
+import ScenarioPlayground from '@/components/playground/ScenarioPlayground';
+import Base from '@/layouts/Base.astro';
+---
+
+<Base
+  title="Simulation Playground — Breaking Point"
+  description="Scenario JSON을 작성하고 system behavior를 시각적으로 검증해 보세요."
+>
+  <div class="page wrap-wide">
+    <p class="eyebrow">설정을 작성하고 결과를 확인해 보세요</p>
+    <h1>Simulation Playground</h1>
+    <p class="lead">
+      실제 infrastructure 비용 없이 queue, capacity, timeout과 retry의 관계를 재현합니다. 이 결과는
+      실제 benchmark가 아니라 입력한 model의 예측입니다.
+    </p>
+    <ScenarioPlayground client:load />
+    <section class="limits">
+      <h2>어디까지 믿을 수 있나요?</h2><p>
+        같은 JSON과 seed는 같은 결과를 만듭니다. 따라서 가설 비교와 regression 확인에는 적합합니다.
+        실제 runtime, network, database engine의 성능은 포함하지 않으므로 production capacity
+        산정에는 사용하지 마세요.
+      </p>
+    </section>
+  </div>
+</Base>
+<style>
+  .page {
+    padding: 2.8rem 1.25rem 0;
+  }
+  .eyebrow {
+    color: var(--accent);
+    font-size: 0.82rem;
+    margin-bottom: 0.35rem;
+  }
+  .lead {
+    max-width: 760px;
+    color: var(--fg-muted);
+  }
+  .limits {
+    max-width: 760px;
+  }
+  .limits p {
+    color: var(--fg-muted);
+  }
+</style>

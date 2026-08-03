@@ -1,0 +1,478 @@
+/* ── 시뮬레이터 공통 스타일 ─────────────────────────────── */
+.sim {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--bg-card);
+  overflow: hidden;
+  margin: 1.8rem 0 2.2rem;
+  font-size: 15px;
+  transition:
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+.sim[data-health='tight'] {
+  border-color: color-mix(in srgb, var(--warn) 45%, var(--line));
+}
+.sim[data-health='over'] {
+  border-color: color-mix(in srgb, var(--bad) 55%, var(--line));
+  box-shadow:
+    0 0 0 1px var(--bad-bg),
+    0 0 34px -12px var(--bad);
+}
+
+.sim-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--line-soft);
+  background: var(--bg-soft);
+  flex-wrap: wrap;
+}
+.sim-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+}
+.sim-actions {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
+  border-radius: 7px;
+  cursor: pointer;
+  background: var(--bg-card);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+.btn:hover {
+  background: var(--line-soft);
+}
+.btn[data-variant='primary'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #04121f;
+}
+.btn[data-variant='primary']:hover {
+  filter: brightness(1.1);
+}
+.btn[aria-pressed='true'] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* 상황 판정 배너 */
+.verdict {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.7rem 1rem;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  border-bottom: 1px solid var(--line-soft);
+}
+.verdict[data-k='safe'] {
+  background: var(--ok-bg);
+  color: #a5e8b0;
+}
+.verdict[data-k='tight'] {
+  background: var(--warn-bg);
+  color: #f2d492;
+}
+.verdict[data-k='over'] {
+  background: var(--bad-bg);
+  color: #ffb3ae;
+}
+.verdict b {
+  color: inherit;
+}
+.verdict-icon {
+  font-size: 1rem;
+  line-height: 1.5;
+  flex-shrink: 0;
+}
+
+/* 캔버스 */
+.stage {
+  display: block;
+  width: 100%;
+  background: var(--bg);
+}
+
+/* 지표 카드 */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+  border-top: 1px solid var(--line-soft);
+}
+.metric {
+  padding: 0.6rem 0.8rem;
+  border-right: 1px solid var(--line-soft);
+}
+.metric:last-child {
+  border-right: 0;
+}
+.metric-label {
+  font-size: 0.72rem;
+  color: var(--fg-dim);
+  letter-spacing: 0.01em;
+}
+.metric-value {
+  font-family: var(--mono);
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.metric-value small {
+  font-size: 0.62em;
+  font-weight: 400;
+  color: var(--fg-dim);
+  margin-left: 0.12em;
+}
+.metric[data-k='ok'] .metric-value {
+  color: var(--ok);
+}
+.metric[data-k='warn'] .metric-value {
+  color: var(--warn);
+}
+.metric[data-k='bad'] .metric-value {
+  color: var(--bad);
+}
+
+/* 컨트롤 */
+.controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.2rem 1.4rem;
+  padding: 0.9rem 1rem 1.1rem;
+  border-top: 1px solid var(--line-soft);
+  background: var(--bg-soft);
+}
+.ctrl {
+  padding: 0.45rem 0;
+}
+.ctrl-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.ctrl-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.ctrl-label span {
+  font-weight: 400;
+  color: var(--fg-dim);
+  font-size: 0.78rem;
+  margin-left: 0.3rem;
+}
+.ctrl-val {
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+.ctrl input[type='range'] {
+  width: 100%;
+  margin: 0.35rem 0 0;
+  height: 22px;
+  accent-color: var(--accent);
+  background: transparent;
+  cursor: pointer;
+}
+.ctrl-hint {
+  font-size: 0.76rem;
+  color: var(--fg-dim);
+  line-height: 1.5;
+  margin-top: 0.1rem;
+}
+
+.toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0 1rem 1rem;
+  background: var(--bg-soft);
+}
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.84rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  cursor: pointer;
+  background: var(--bg-card);
+  user-select: none;
+}
+.toggle input {
+  accent-color: var(--accent);
+  margin: 0;
+}
+.toggle[data-on='true'] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* 프리셋 */
+.presets {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  padding: 0.8rem 1rem;
+  border-top: 1px solid var(--line-soft);
+}
+.preset {
+  font: inherit;
+  font-size: 0.82rem;
+  text-align: left;
+  cursor: pointer;
+  padding: 0.5rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg-card);
+  color: var(--fg-muted);
+  line-height: 1.45;
+}
+.preset:hover {
+  border-color: var(--accent);
+  color: var(--fg);
+}
+.preset b {
+  display: block;
+  color: var(--fg);
+  font-size: 0.87rem;
+  font-weight: 600;
+}
+
+/* 계산식 패널 */
+.math {
+  padding: 0.85rem 1rem;
+  border-top: 1px solid var(--line-soft);
+  font-family: var(--mono);
+  font-size: 0.84rem;
+  line-height: 1.9;
+  color: var(--fg-muted);
+  background: var(--bg);
+}
+.math .hl {
+  color: var(--fg);
+  font-weight: 600;
+}
+.math .tag {
+  color: var(--accent);
+}
+
+/* 챌린지 */
+.chal {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--bg-card);
+  margin: 2rem 0;
+  overflow: hidden;
+}
+.chal-head {
+  padding: 0.9rem 1rem;
+  background: linear-gradient(90deg, var(--accent-bg), transparent);
+  border-bottom: 1px solid var(--line-soft);
+}
+.chal-head h4 {
+  margin: 0 0 0.2rem;
+  font-size: 1rem;
+}
+.chal-head p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--fg-muted);
+}
+.goals {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.9rem 1rem;
+}
+.goal {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.9rem;
+}
+.goal-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+}
+.goal[data-s='pass'] .goal-dot {
+  background: var(--ok-bg);
+  border-color: var(--ok);
+  color: var(--ok);
+}
+.goal[data-s='fail'] .goal-dot {
+  background: var(--bad-bg);
+  border-color: var(--bad);
+  color: var(--bad);
+}
+.goal-now {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 0.84rem;
+  color: var(--fg-muted);
+}
+.chal-result {
+  padding: 0.9rem 1rem;
+  border-top: 1px solid var(--line-soft);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+.chal-result[data-s='pass'] {
+  background: var(--ok-bg);
+}
+.chal-result[data-s='fail'] {
+  background: var(--bad-bg);
+}
+.progress {
+  height: 3px;
+  background: var(--line-soft);
+}
+.progress > i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.1s linear;
+}
+
+@media (max-width: 640px) {
+  .sim {
+    font-size: 14px;
+    border-radius: 10px;
+  }
+  .metrics {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .metric {
+    border-bottom: 1px solid var(--line-soft);
+  }
+}
+
+/* ── 확인 문제 ─────────────────────────────────────────── */
+.quiz {
+  margin: 2rem 0;
+  display: grid;
+  gap: 1rem;
+}
+.quiz-item {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  background: var(--bg-card);
+}
+.quiz-q {
+  font-size: 0.96rem;
+  margin-bottom: 0.7rem;
+  line-height: 1.65;
+}
+.quiz-choices {
+  display: grid;
+  gap: 0.35rem;
+}
+.quiz-choice {
+  font: inherit;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  line-height: 1.5;
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg-soft);
+  color: var(--fg);
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+.quiz-choice:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+.quiz-choice:disabled {
+  cursor: default;
+}
+.quiz-choice[data-s='right'] {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+}
+.quiz-choice[data-s='wrong'] {
+  border-color: var(--bad);
+  background: var(--bad-bg);
+}
+.quiz-choice[data-s='off'] {
+  opacity: 0.45;
+}
+.quiz-mark {
+  flex-shrink: 0;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  margin-top: 0.15rem;
+  display: grid;
+  place-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border: 1px solid var(--line);
+  color: var(--fg-dim);
+}
+.quiz-choice[data-s='right'] .quiz-mark {
+  border-color: var(--ok);
+  color: var(--ok);
+}
+.quiz-choice[data-s='wrong'] .quiz-mark {
+  border-color: var(--bad);
+  color: var(--bad);
+}
+.quiz-why {
+  margin-top: 0.7rem;
+  font-size: 0.89rem;
+  line-height: 1.65;
+  color: var(--fg-muted);
+  padding-left: 0.1rem;
+}
+.quiz-why[data-s='right'] b {
+  color: var(--ok);
+}
+.quiz-why[data-s='wrong'] b {
+  color: var(--warn);
+}
+
+/* fieldset/legend 로 감싼 라디오 그룹 보정 */
+.controls fieldset.ctrl {
+  display: block;
+}
+.controls legend.ctrl-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}

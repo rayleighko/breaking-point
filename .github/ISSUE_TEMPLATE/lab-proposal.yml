@@ -1,0 +1,34 @@
+name: Lab proposal
+description: 새 학습 주제와 simulation을 구현하기 전에 검증 가능한 문제를 제안합니다.
+title: '[Lab] '
+labels: [proposal, needs-review]
+body:
+  - type: textarea
+    id: phenomenon
+    attributes:
+      label: Observable phenomenon
+      description: 용어 정의 대신 사용자가 먼저 보게 될 현상을 적어 주세요.
+    validations: { required: true }
+  - type: textarea
+    id: naive
+    attributes:
+      label: Naive solution that must fail
+      description: 자원만 늘리는 식의 순진한 해법과 실패 이유를 적어 주세요.
+    validations: { required: true }
+  - type: textarea
+    id: challenge
+    attributes:
+      label: Challenge and constraints
+      description: 성공 조건과 자원 상한을 숫자로 적어 주세요.
+    validations: { required: true }
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation plan
+      description: 실패해야 하는 설정과 통과해야 하는 설정을 어떻게 test할지 적어 주세요.
+    validations: { required: true }
+  - type: textarea
+    id: lenses
+    attributes:
+      label: Technology lenses
+      description: Generic pattern, TypeScript stack, Kubernetes/Serverless/AWS 중 실제로 관련 있는 연결만 적어 주세요.

@@ -1,0 +1,8 @@
+{
+  "name": "AWS",
+  "kind": "시스템",
+  "oneLiner": "Compute, data, messaging과 운영 책임을 managed service로 조합하는 cloud platform",
+  "description": "AWS service 이름을 외우는 것보다 각 service가 generic architecture의 어떤 책임을 맡는지 구분하는 것이 중요합니다. Lambda는 compute, SQS는 queue, RDS Proxy는 database connection 경계를 담당합니다.",
+  "signals": ["service quota", "throttling", "CloudWatch metric"],
+  "related": ["serverless", "message-queue", "database", "cdn"]
+}

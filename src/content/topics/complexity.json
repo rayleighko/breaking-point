@@ -1,0 +1,20 @@
+{
+  "name": "Complexity",
+  "kind": "CS 기초",
+  "oneLiner": "입력이 커질 때 시간과 memory가 얼마나 빨리 늘어나는지 설명하는 방법",
+  "description": "Big O는 실제 실행 시간을 맞히는 공식이 아니라 입력 크기가 커질 때 증가하는 모양을 비교합니다. 작은 입력에서는 단순한 구현이 더 나을 수 있습니다. 자료구조 선택에서는 연산 횟수뿐 아니라 cache locality, allocation과 유지보수 비용도 함께 봅니다.",
+  "signals": [
+    "데이터 10배에 처리시간 100배",
+    "전체 목록 반복 탐색",
+    "정렬을 매 요청마다 다시 수행"
+  ],
+  "related": ["hash-table", "queue-stack", "tree-graph"],
+  "keywords": ["Big O", "time complexity", "space complexity", "trade-off"],
+  "sources": [
+    {
+      "title": "MIT 6.006 Introduction to Algorithms",
+      "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2008/",
+      "type": "대학 강의"
+    }
+  ]
+}

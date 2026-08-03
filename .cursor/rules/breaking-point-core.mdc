@@ -1,0 +1,10 @@
+---
+description: Breaking Point의 architecture, workflow, validation과 communication contract
+globs:
+alwaysApply: true
+---
+
+`AGENTS.md`가 이 repository의 canonical AI instruction입니다. 작업 전에 `@AGENTS.md`를 읽고 따르세요.
+제품별 규칙과 중복되는 내용을 이 파일에 추가하지 말고 `AGENTS.md`를 수정하세요.
+
+Harness 운영과 handoff 형식은 `@docs/AI_HARNESS.md`를 따르세요.

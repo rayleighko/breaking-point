@@ -1,0 +1,8 @@
+{
+  "name": "Container",
+  "kind": "시스템",
+  "oneLiner": "application과 실행 환경을 격리된 process 단위로 묶는 방식",
+  "description": "Container는 배포 단위를 일관되게 만들지만 database나 network 같은 외부 자원의 한계를 없애지 않습니다. CPU와 memory limit, signal 처리, filesystem과 network 경계를 함께 이해해야 합니다.",
+  "signals": ["OOMKilled", "CPU throttling", "container restart"],
+  "related": ["kubernetes", "overload"]
+}

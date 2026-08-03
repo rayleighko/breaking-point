@@ -1,0 +1,116 @@
+.playground {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.82fr) minmax(420px, 1.18fr);
+  gap: 1rem;
+  align-items: start;
+}
+.editor-pane,
+.result-pane {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-card);
+}
+.pane-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.7rem;
+  padding: 0.65rem 0.8rem;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 0.82rem;
+}
+.pane-head span {
+  color: var(--fg-dim);
+  font: 0.72rem var(--mono);
+}
+.editor-pane textarea {
+  display: block;
+  width: 100%;
+  min-height: 610px;
+  resize: vertical;
+  padding: 0.8rem;
+  border: 0;
+  outline: 0;
+  background: #0b0e13;
+  color: var(--fg);
+  font: 12.5px/1.6 var(--mono);
+  tab-size: 2;
+}
+.editor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.7rem 0.8rem;
+  border-top: 1px solid var(--line-soft);
+}
+.speed-control {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-left: auto;
+  color: var(--fg-muted);
+  font-size: 0.78rem;
+}
+.speed-control select {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg-soft);
+  color: var(--fg);
+  padding: 0.35rem 0.5rem;
+}
+.json-errors {
+  padding: 0.7rem 0.8rem;
+  color: #ffb3ae;
+  background: var(--bad-bg);
+  font-size: 0.8rem;
+}
+.json-errors ul {
+  margin: 0.25rem 0 0;
+}
+.play-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-block: 1px solid var(--line-soft);
+}
+.play-metrics span {
+  display: grid;
+  padding: 0.55rem 0.65rem;
+  border-right: 1px solid var(--line-soft);
+}
+.play-metrics span:last-child {
+  border: 0;
+}
+.play-metrics small {
+  color: var(--fg-dim);
+}
+.play-metrics b {
+  font: 600 0.95rem var(--mono);
+}
+.report {
+  padding: 0.75rem 0.85rem;
+  border-top: 1px solid var(--line-soft);
+  font-size: 0.82rem;
+}
+.report p {
+  margin: 0.25rem 0 0;
+  color: var(--fg-dim);
+  font-size: 0.74rem;
+}
+@media (max-width: 900px) {
+  .playground {
+    grid-template-columns: 1fr;
+  }
+  .editor-pane textarea {
+    min-height: 420px;
+  }
+}
+@media (max-width: 520px) {
+  .play-metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .pane-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

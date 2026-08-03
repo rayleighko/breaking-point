@@ -1,0 +1,20 @@
+{
+  "name": "TDD",
+  "kind": "개발 방식",
+  "oneLiner": "작은 실패를 먼저 만들고 구현과 설계를 짧은 주기로 교정하는 방식",
+  "description": "TDD는 test 개수를 늘리는 규칙이 아니라 red, green, refactor의 짧은 feedback loop입니다. 외부 행동을 먼저 고정하면 AI가 만든 구현도 같은 contract로 검증할 수 있습니다. 모든 세부 구현을 mock하거나 test에 고정하는 것은 목적이 아닙니다.",
+  "signals": [
+    "요구사항을 실행 가능한 예제로 표현",
+    "regression을 즉시 발견",
+    "구현 전에 경계를 고민"
+  ],
+  "related": ["ddd", "oop"],
+  "keywords": ["Red-Green-Refactor", "feedback loop", "Kent Beck"],
+  "sources": [
+    {
+      "title": "Test-Driven Development: By Example — Kent Beck",
+      "url": "https://www.pearson.com/en-us/subject-catalog/p/test-driven-development-by-example/P200000009421/9780321146533",
+      "type": "원전"
+    }
+  ]
+}

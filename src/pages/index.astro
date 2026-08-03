@@ -1,0 +1,226 @@
+---
+import { getCollection } from 'astro:content';
+
+import ConnectionPoolLab from '@/components/sim/ConnectionPoolLab.tsx';
+import Base from '@/layouts/Base.astro';
+import { counts } from '@/lib/roadmap';
+import { url } from '@/lib/url';
+
+const labs = (await getCollection('labs', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const { done, total } = counts();
+---
+
+<Base title="Breaking Point — 시스템이 무너지는 방식을 만져보며 배우기">
+  <section class="hero wrap-wide">
+    <p class="kicker">AI 시대의 소프트웨어 시스템 실험실</p>
+    <h1>
+      트래픽이 2배가 되면<br />
+      응답시간은 왜 <span class="hl">20배</span>가 될까?
+    </h1>
+    <p class="lead">
+      "파드를 늘리면 되지 않나?" — 스케일아웃으로 풀리지 않는 문제들이 있습니다. 겪어보지 않으면 <b
+        >있는지조차 모르는</b
+      > 종류의 문제들이에요. 여기서는 그걸 글로 읽는 대신, 브라우저에서 직접 터뜨려봅니다. 그리고 같은
+      문제가 TypeScript application, Kubernetes와 AWS에서 어떤 결정으로 이어지는지 연결합니다.
+    </p>
+    <div class="cta">
+      <a class="btn-lg primary" href={url('/labs/connection-pool')}>첫 실험 시작하기</a>
+      <a class="btn-lg" href={url('/roadmap')}>로드맵 보기</a>
+      <a class="btn-lg" href={url('/about')}>왜 만들었나요?</a>
+      <span class="progress-txt dim">실험 {done} / {total} 완성</span>
+    </div>
+  </section>
+
+  <section class="wrap-wide demo">
+    <div class="demo-label">
+      ↓ 아래는 설명이 아니라 <b>지금 돌아가고 있는 시뮬레이션</b>입니다. 슬라이더를 움직이면 즉시
+      반응합니다.
+    </div>
+    <ConnectionPoolLab
+      client:visible
+      initial={{ arrivalRate: 300, poolSize: 10, serviceTime: 50 }}
+    />
+  </section>
+
+  <section class="wrap-wide why">
+    <h2>이 사이트가 다른 점</h2>
+    <div class="cards">
+      <div class="c">
+        <div class="c-i" aria-hidden="true">🎛</div>
+        <h3>읽지 말고 만지세요</h3>
+        <p>
+          모든 개념에 실제로 돌아가는 시뮬레이터가 붙어 있습니다. 값을 바꾸면 결과가 바로 바뀝니다.
+        </p>
+      </div>
+      <div class="c">
+        <div class="c-i" aria-hidden="true">🧮</div>
+        <h3>곱셈 하나면 됩니다</h3>
+        <p>
+          용어를 외우게 하지 않습니다. 중학교 수학으로 설명하고, 그 위에 용어를 나중에 붙입니다.
+        </p>
+      </div>
+      <div class="c">
+        <div class="c-i" aria-hidden="true">🎯</div>
+        <h3>챌린지로 확인</h3>
+        <p>각 주제 끝에 제약 조건이 있는 문제가 나옵니다. 배운 걸 써야만 통과합니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap-wide list">
+    <h2>실험 목록</h2>
+    <div class="rows">
+      {
+        labs.map((lab) => (
+          <a class="row" href={url(`/labs/${lab.id}`)}>
+            <span class="row-n mono">{String(lab.data.order).padStart(2, '0')}</span>
+            <span class="row-b">
+              <b>{lab.data.title}</b>
+              <span class="muted">{lab.data.question}</span>
+            </span>
+            <span class="dim">{lab.data.minutes}분 →</span>
+          </a>
+        ))
+      }
+    </div>
+    <p class="dim more">
+      나머지 {total - done}개는 로드맵에 순서대로 정리해 뒀습니다. 하나씩 채워 나가는 중입니다.
+      {' '}<a href={url('/roadmap')}>로드맵 →</a>
+    </p>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding: 4.5rem 1.25rem 2rem;
+  }
+  .kicker {
+    font-size: 0.84rem;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.8rem;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 5.2vw, 3.1rem);
+    line-height: 1.28;
+    margin-bottom: 1.1rem;
+  }
+  .hl {
+    color: var(--bad);
+  }
+  .lead {
+    max-width: 620px;
+    font-size: 1.03rem;
+    color: var(--fg-muted);
+  }
+  .cta {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 1.8rem;
+  }
+  .btn-lg {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    border-radius: 9px;
+    font-weight: 600;
+    font-size: 0.94rem;
+    border: 1px solid var(--line);
+    color: var(--fg);
+    background: var(--bg-card);
+  }
+  .btn-lg:hover {
+    text-decoration: none;
+    border-color: var(--accent);
+  }
+  .btn-lg.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #04121f;
+  }
+  .progress-txt {
+    font-size: 0.85rem;
+    margin-left: 0.3rem;
+  }
+
+  .demo {
+    padding-top: 1rem;
+  }
+  .demo-label {
+    font-size: 0.88rem;
+    color: var(--fg-muted);
+    margin-bottom: -0.6rem;
+  }
+
+  .why {
+    padding-top: 2rem;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+  .c {
+    padding: 1.1rem 1.2rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--bg-card);
+  }
+  .c-i {
+    font-size: 1.4rem;
+    margin-bottom: 0.4rem;
+  }
+  .c h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1rem;
+  }
+  .c p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--fg-muted);
+  }
+
+  .rows {
+    display: grid;
+    gap: 0.4rem;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--bg-card);
+    color: var(--fg);
+  }
+  .row:hover {
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+  .row-n {
+    color: var(--fg-dim);
+    font-size: 0.85rem;
+  }
+  .row-b {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    line-height: 1.5;
+  }
+  .row-b .muted {
+    font-size: 0.87rem;
+  }
+  .row > .dim {
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+  .more {
+    font-size: 0.9rem;
+    margin-top: 1.2rem;
+  }
+</style>

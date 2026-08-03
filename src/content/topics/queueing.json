@@ -1,0 +1,20 @@
+{
+  "name": "Queue(대기열)",
+  "kind": "개념",
+  "oneLiner": "들어오는 속도가 나가는 속도보다 빠를 때 생기는 줄",
+  "description": "요청이 몰려도 처리 자리가 비어 있으면 바로 지나갑니다. 자리가 모두 차면 요청은 Queue에 들어가 기다립니다. 이용률이 100%에 가까워질수록 작은 흔들림도 긴 대기로 바뀝니다. Queueing theory를 다루는 학술 문헌에서는 ‘대기행렬’이라는 번역어도 쓰지만, 개발 현장과 이 사이트의 일반 설명에서는 Queue, 큐 또는 대기열이라고 부릅니다.",
+  "signals": ["p99 급등", "큐 길이 증가", "처리량은 그대로인데 대기만 증가"],
+  "related": ["message-queue", "little-law", "timeout"],
+  "relations": [
+    {
+      "slug": "message-queue",
+      "type": "구분하기",
+      "note": "Queue는 줄이라는 구조이고, Message Queue는 그 구조를 제공하는 system입니다."
+    },
+    {
+      "slug": "little-law",
+      "type": "선행 개념",
+      "note": "유입 속도와 머무는 시간으로 system 안의 요청 수를 계산합니다."
+    }
+  ]
+}

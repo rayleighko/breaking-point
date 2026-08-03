@@ -1,0 +1,25 @@
+{
+  "name": "AI Engineering",
+  "kind": "AI Engineering",
+  "oneLiner": "model 자체를 연구하기보다 model을 제품 안에서 평가·운영·개선하는 engineering 영역",
+  "description": "AI Engineering이라는 표현은 아직 빠르게 변하고 있습니다. 이 프로젝트에서는 prompt 작성만이 아니라 context contract, eval, latency와 cost, fallback, observability, data policy와 human review를 함께 다루는 범위로 사용합니다. 특정 인물의 전망은 사실이 아니라 관점으로 표시합니다.",
+  "signals": [
+    "답변 품질을 대화 감상으로만 판단",
+    "model 변경 시 regression을 모름",
+    "prompt와 tool 권한 경계가 없음"
+  ],
+  "related": ["tdd", "pragmatic-programming"],
+  "keywords": ["evals", "agents", "RAG", "model routing", "harness"],
+  "sources": [
+    {
+      "title": "Latent.Space — AI Engineer community",
+      "url": "https://www.latent.space/about",
+      "type": "참고 자료"
+    },
+    {
+      "title": "AI Engineer",
+      "url": "https://www.ai.engineer/",
+      "type": "참고 자료"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "Functional Programming",
+  "kind": "개발 방식",
+  "oneLiner": "상태 변경을 줄이고 function의 조합과 data transformation으로 문제를 표현하는 접근",
+  "description": "Functional Programming은 map이나 arrow function을 쓰는 style만 뜻하지 않습니다. pure function, immutable data, composition과 effect boundary를 통해 reasoning 범위를 줄입니다. 모든 코드를 억지로 순수하게 만들기보다 simulation engine처럼 입력과 결과를 재현해야 하는 core에서 먼저 활용합니다.",
+  "signals": [
+    "숨은 전역 상태로 결과가 달라짐",
+    "순서에 따라 test 결과가 달라짐",
+    "동시 실행에서 상태 충돌"
+  ],
+  "related": ["tdd", "code-smell"],
+  "keywords": ["pure function", "immutability", "composition", "effect"],
+  "sources": [
+    {
+      "title": "Functional Programming Fundamentals — Microsoft Learn",
+      "url": "https://learn.microsoft.com/en-us/shows/c9-lectures-erik-meijer-functional-programming-fundamentals/lecture-series-erik-meijer-functional-programming-fundamentals-chapter-1",
+      "type": "대학 강의"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "name": "breaking-point",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.32.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "preview": "astro preview",
+    "check": "cross-env ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "quality": "pnpm format:check && pnpm lint && pnpm check && pnpm test && pnpm build",
+    "test": "node --experimental-strip-types --no-warnings test/test-engine.ts && node --experimental-strip-types --no-warnings test/test-inv.ts && node --experimental-strip-types --no-warnings test/test-chal.ts && node --experimental-strip-types --no-warnings test/test-scenario.ts && node --experimental-strip-types --no-warnings test/test-harness.ts && node --experimental-strip-types --no-warnings test/test-ai-models.ts && node --experimental-strip-types --no-warnings test/test-knowledge.ts"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.0",
+    "@astrojs/react": "^4.3.0",
+    "astro": "^5.13.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwind-merge": "^3.6.0",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@eslint/js": "^10.0.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.1.2",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "cross-env": "^10.1.0",
+    "eslint": "^10.8.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.5",
+    "eslint-plugin-astro": "^3.1.0",
+    "eslint-plugin-import-x": "^4.17.1",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.9.0",
+    "prettier": "^3.9.6",
+    "prettier-plugin-astro": "^0.14.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.8.0",
+    "typescript-eslint": "^8.65.0"
+  }
+}

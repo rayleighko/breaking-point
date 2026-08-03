@@ -1,0 +1,25 @@
+{
+  "name": "Code Smell",
+  "kind": "개발 방식",
+  "oneLiner": "깊은 설계 문제일 가능성을 빠르게 알아차리게 하는 표면의 신호",
+  "description": "Code Smell은 곧바로 bug라는 뜻이 아닙니다. Martin Fowler의 설명처럼 더 깊이 살펴볼 이유가 되는 신호입니다. 긴 함수나 중복을 이름만 보고 제거하지 않고 변경 비용과 실제 책임이 어디에 있는지 확인한 뒤 작은 behavior-preserving refactoring을 적용합니다.",
+  "signals": [
+    "한 변경이 여러 파일에 같은 방식으로 반복",
+    "함수 이름으로 설명하기 어려운 여러 책임",
+    "test 없이 구조만 크게 이동"
+  ],
+  "related": ["tdd", "oop", "functional-programming"],
+  "keywords": ["refactoring", "behavior preserving", "technical debt"],
+  "sources": [
+    {
+      "title": "Code Smell — Martin Fowler",
+      "url": "https://martinfowler.com/bliki/CodeSmell.html",
+      "type": "원전"
+    },
+    {
+      "title": "Refactoring — Martin Fowler",
+      "url": "https://martinfowler.com/books/refactoring.html",
+      "type": "원전"
+    }
+  ]
+}

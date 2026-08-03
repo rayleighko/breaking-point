@@ -1,0 +1,20 @@
+{
+  "name": "DDD",
+  "kind": "개발 방식",
+  "oneLiner": "업무의 언어와 경계를 코드의 model과 일치시키는 설계 접근",
+  "description": "DDD는 directory 이름이나 pattern 모음이 아닙니다. 서로 다른 의미가 섞이는 지점을 Bounded Context로 나누고, 현업과 개발자가 같은 Ubiquitous Language로 규칙을 설명하게 합니다. 복잡한 domain이 없으면 더 단순한 구조가 낫습니다.",
+  "signals": [
+    "같은 단어가 팀마다 다른 뜻",
+    "업무 규칙이 여러 계층에 흩어짐",
+    "변경 영향 범위가 예측되지 않음"
+  ],
+  "related": ["oop", "tdd"],
+  "keywords": ["Bounded Context", "Ubiquitous Language", "Eric Evans"],
+  "sources": [
+    {
+      "title": "Domain-Driven Design Reference — Eric Evans",
+      "url": "https://www.domainlanguage.com/wp-content/uploads/2016/05/DDD_Reference_2015-03.pdf",
+      "type": "원전"
+    }
+  ]
+}

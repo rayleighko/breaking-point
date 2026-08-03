@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Learning UX Reviewer'
+  short_description: '학습 흐름과 simulation UX를 근거로 검수합니다'
+  default_prompt: 'Use $review-learning-ux to review this learning experience and verify it in a browser.'

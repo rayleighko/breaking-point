@@ -1,0 +1,51 @@
+{
+  "name": "Carrying Capacity",
+  "kind": "Product",
+  "oneLiner": "자연 유입과 이탈이 균형을 이루면 제품의 활성 사용자 수가 어디에서 안정될지 보는 growth mental model",
+  "description": "호수에 비가 내리면 물이 들어오고, 땅으로 스며들거나 증발하면 물이 빠져나갑니다. Product에서는 비를 광고를 제외한 자연 Inflow, 빠지는 물을 Churn, 호수에 남은 물을 Active users로 봅니다. Inflow와 Churn rate가 일정하다는 단순한 가정 아래 평형점은 Inflow = Churn rate × Active users이고, 따라서 Carrying Capacity = Inflow / Churn rate로 계산합니다. 이 값은 물리적인 서버 용량이나 확정된 최대 사용자 수가 아닙니다. 유입이 viral loop에 따라 변하거나 cohort별 이탈률이 다르면 하나의 값으로 설명하기 어렵기 때문에, 제품 개선 전후의 방향을 묻는 mental model로 사용합니다.",
+  "signals": [
+    "마케팅으로 MAU가 올랐지만 중단하면 다시 내려감",
+    "신규 사용자 유입은 유지되는데 성장이 평평해짐",
+    "새 기능이 Inflow와 Churn 중 무엇을 바꾸는지 불명확함",
+    "Active와 Churn의 정의가 팀마다 다름"
+  ],
+  "related": ["capacity-planning", "queueing", "little-law"],
+  "relations": [
+    {
+      "slug": "capacity-planning",
+      "type": "구분하기",
+      "note": "Product growth의 평형점과 팀의 작업 capacity는 서로 다른 문제입니다."
+    },
+    {
+      "slug": "little-law",
+      "type": "비교하기",
+      "note": "둘 다 유입·체류·전체량을 연결하지만 전제와 적용 대상이 다릅니다."
+    },
+    {
+      "slug": "queueing",
+      "type": "함께 보기",
+      "note": "들어오고 나가는 속도의 차이가 system 상태를 어떻게 바꾸는지 비교합니다."
+    }
+  ],
+  "keywords": [
+    "Inflow",
+    "Churn rate",
+    "Retention",
+    "Active users",
+    "MAU",
+    "Growth Dynamics",
+    "equilibrium"
+  ],
+  "context": {
+    "standing": "업계 실무 용어",
+    "attribution": "Toss PO Session에서 이승건 님이 Product growth에 적용해 소개한 사례",
+    "note": "생태학 용어를 Product에 적용한 은유적 model입니다. 국제 표준이나 모든 제품에 성립하는 예측 공식이 아니며, 발표의 가정과 적용 맥락을 함께 확인해야 합니다."
+  },
+  "sources": [
+    {
+      "title": "Toss PO Session: Carrying Capacity 정리 및 비판적 검토",
+      "url": "https://lazypm.tistory.com/entry/Toss-PO-session-Carrying-Capacity%EB%9E%80",
+      "type": "회사 사례"
+    }
+  ]
+}

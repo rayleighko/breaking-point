@@ -1,0 +1,8 @@
+{
+  "name": "Kubernetes",
+  "kind": "시스템",
+  "oneLiner": "Container workload의 배치, 복구, rollout과 scaling을 관리하는 platform",
+  "description": "Kubernetes는 Pod가 죽었을 때 다시 만들고 Deployment의 replica를 관리합니다. application이나 database가 처리할 수 없는 요청을 자동으로 안전하게 만드는 것은 아니므로 readiness, resource limit과 overload policy가 필요합니다.",
+  "signals": ["Pending Pod", "CrashLoopBackOff", "HPA replica 증가"],
+  "related": ["container", "overload", "database"]
+}

@@ -1,0 +1,105 @@
+---
+import { getCollection } from 'astro:content';
+
+import { url } from '@/lib/url';
+
+import Base from './Base.astro';
+
+interface Props {
+  title: string;
+  subtitle: string;
+  question: string;
+  level: string;
+  minutes: number;
+  tags: string[];
+}
+const { title, subtitle, question, level, minutes, tags } = Astro.props;
+const topics = await getCollection('topics');
+---
+
+<Base title={`${title} — Breaking Point`} description={subtitle}>
+  <article class="wrap lab">
+    <a href={url('/labs')} class="back">← 실험실 목록</a>
+    <div class="meta">
+      <span class="chip">{level}</span>
+      <span class="dim">읽는 데 {minutes}분</span>
+    </div>
+    <h1>{title}</h1>
+    <p class="q">{question}</p>
+    <div class="tags">
+      {
+        tags.map((t) => {
+          const topic = topics.find((candidate) => candidate.data.name === t);
+          return topic ? (
+            <a class="tag" href={url(`/topics/${topic.id}`)}>
+              #{t}
+              <span>↗</span>
+            </a>
+          ) : (
+            <span class="tag">#{t}</span>
+          );
+        })
+      }
+    </div>
+    <div class="body"><slot /></div>
+  </article>
+</Base>
+
+<style>
+  .lab {
+    padding-top: 2.5rem;
+  }
+  .back {
+    font-size: 0.86rem;
+    color: var(--fg-dim);
+  }
+  .meta {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    margin: 1.4rem 0 0.5rem;
+    font-size: 0.82rem;
+  }
+  .chip {
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 0.1rem 0.6rem;
+    color: var(--fg-muted);
+  }
+  .q {
+    font-size: 1.08rem;
+    color: var(--fg-muted);
+    margin: 0.3rem 0 1rem;
+    line-height: 1.65;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.14rem 0.45rem;
+    border: 1px solid var(--line-soft);
+    border-radius: 6px;
+    font-size: 0.76rem;
+    color: var(--fg-dim);
+    font-family: var(--mono);
+  }
+  a.tag:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+  .tag span {
+    font-size: 0.65rem;
+  }
+  .body :global(h2:first-of-type) {
+    border-top: 0;
+    padding-top: 0;
+    margin-top: 2rem;
+  }
+</style>

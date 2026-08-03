@@ -1,0 +1,8 @@
+{
+  "name": "MQ",
+  "kind": "시스템",
+  "oneLiner": "당장 처리하지 못하는 일을 안전한 줄에 보관하는 시스템",
+  "description": "메시지 큐는 생산자와 소비자의 속도 차이를 흡수합니다. 줄을 없애는 기술은 아닙니다. 큐가 얼마나 쌓일 수 있는지, 소비 속도와 실패 메시지를 어떻게 다룰지를 함께 정해야 합니다.",
+  "signals": ["consumer lag 증가", "처리 지연 증가", "dead-letter queue 누적"],
+  "related": ["queueing", "retry", "timeout"]
+}

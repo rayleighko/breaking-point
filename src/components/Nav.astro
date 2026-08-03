@@ -1,0 +1,92 @@
+---
+import { url } from '@/lib/url';
+
+const path = Astro.url.pathname.replace(/\/$/, '');
+const isActive = (href: string) => path.startsWith(url(href).replace(/\/$/, ''));
+---
+
+<header class="nav">
+  <div class="wrap-wide nav-inner">
+    <a href={url('/')} class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-text">Breaking&nbsp;Point</span>
+    </a>
+    <nav class="links">
+      <a href={url('/labs')} class:list={[{ on: isActive('/labs') }]}>실험실</a>
+      <a href={url('/topics')} class:list={[{ on: isActive('/topics') }]}>주제</a>
+      <a href={url('/playground')} class:list={[{ on: isActive('/playground') }]}>Playground</a>
+      <a href={url('/ai')} class:list={[{ on: isActive('/ai') }]}>AI 코치</a>
+      <a href={url('/roadmap')} class:list={[{ on: isActive('/roadmap') }]}>로드맵</a>
+      <a href="https://github.com/rayleighko/breaking-point" target="_blank" rel="noopener"
+        >GitHub</a
+      >
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 54px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--fg);
+    font-weight: 700;
+  }
+  .brand:hover {
+    text-decoration: none;
+  }
+  .brand-mark {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--bad);
+    box-shadow: 0 0 10px var(--bad);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 0.45;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  .brand-text {
+    letter-spacing: -0.03em;
+  }
+  .links {
+    display: flex;
+    gap: 1.15rem;
+    font-size: 0.92rem;
+  }
+  .links a {
+    color: var(--fg-muted);
+  }
+  .links a.on {
+    color: var(--fg);
+  }
+  @media (max-width: 620px) {
+    .links {
+      gap: 0.62rem;
+      font-size: 0.78rem;
+    }
+    .links a:last-child {
+      display: none;
+    }
+  }
+</style>

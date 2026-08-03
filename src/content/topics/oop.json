@@ -1,0 +1,12 @@
+{
+  "name": "OOP",
+  "kind": "개발 방식",
+  "oneLiner": "관련된 상태와 행동을 경계 안에 두고 잘못된 변경을 막는 모델링 방식",
+  "description": "OOP의 핵심은 class를 많이 만드는 것이 아니라 invariant를 가진 객체가 자신의 상태 변경을 책임지게 하는 데 있습니다. 단순한 data transformation에는 function이 더 명확할 수 있으며, composition과 explicit contract를 우선합니다.",
+  "signals": [
+    "상태 변경 규칙이 여러 곳에 중복",
+    "유효하지 않은 상태 생성 가능",
+    "상속 계층 변경이 넓게 전파"
+  ],
+  "related": ["ddd", "tdd"]
+}

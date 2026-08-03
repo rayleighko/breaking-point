@@ -1,0 +1,27 @@
+name: Bug or content error
+description: 동작 오류, 기술적 오류, 현실과 다른 simulation model을 제보합니다.
+title: '[Bug] '
+labels: [bug, triage]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Type
+      options: [Simulation behavior, Technical content, UI or accessibility, Broken link]
+    validations: { required: true }
+  - type: textarea
+    id: observed
+    attributes:
+      label: What happened?
+      description: 설정값과 관찰한 결과를 적어 주세요.
+    validations: { required: true }
+  - type: textarea
+    id: expected
+    attributes:
+      label: What should happen?
+    validations: { required: true }
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: 가능하면 공식 문서, 재현 영상, screenshot을 첨부해 주세요.

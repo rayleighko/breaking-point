@@ -1,0 +1,52 @@
+---
+import { getCollection } from 'astro:content';
+
+import KnowledgeGraph from '@/components/topics/KnowledgeGraph';
+import Base from '@/layouts/Base.astro';
+import { url } from '@/lib/url';
+
+const topics = await getCollection('topics');
+const graphTopics = topics.map((topic) => ({
+  id: topic.id,
+  name: topic.data.name,
+  kind: topic.data.kind,
+  href: url(`/topics/${topic.id}`),
+  related: [
+    ...new Set([...topic.data.related, ...topic.data.relations.map((relation) => relation.slug)]),
+  ],
+}));
+---
+
+<Base title="지식 그래프 — Breaking Point" description="주제 사이의 연결을 따라 탐색합니다.">
+  <main class="wrap-wide page">
+    <a href={url('/topics')} class="back">← 주제 위키</a>
+    <p class="eyebrow">목차보다 연결을 따라가세요</p>
+    <h1>지식 그래프</h1>
+    <p class="lead">
+      각 node는 하나의 독립적인 주제입니다. 선은 함께 읽을 이유가 있는 연결이며, 상세 페이지에서는
+      관계의 종류와 backlink를 확인할 수 있습니다.
+    </p>
+    <KnowledgeGraph topics={graphTopics} client:load />
+  </main>
+</Base>
+
+<style>
+  .page {
+    padding: 2.8rem 1.25rem 0;
+  }
+  .back {
+    color: var(--fg-dim);
+    font-size: 0.84rem;
+  }
+  .eyebrow {
+    margin: 1.5rem 0 0.35rem;
+    color: var(--accent);
+    font: 0.75rem var(--mono);
+    letter-spacing: 0.12em;
+  }
+  .lead {
+    max-width: 720px;
+    color: var(--fg-muted);
+    line-height: 1.7;
+  }
+</style>

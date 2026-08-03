@@ -1,0 +1,8 @@
+{
+  "name": "Overload",
+  "kind": "운영",
+  "oneLiner": "수요가 처리 능력을 넘었을 때 무엇을 보관하고 무엇을 거절할지 정하는 문제",
+  "description": "Autoscaling만으로는 새 capacity가 준비되는 시간과 downstream 한계를 해결하지 못합니다. bounded queue, concurrency limit, timeout, rate limit과 load shedding을 경계마다 배치합니다.",
+  "signals": ["queue depth 증가", "p99 급등", "timeout과 retry 증가"],
+  "related": ["queueing", "timeout", "kubernetes"]
+}

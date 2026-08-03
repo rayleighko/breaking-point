@@ -1,0 +1,68 @@
+---
+import Nav from '@/components/Nav.astro';
+import { url } from '@/lib/url';
+import '@/styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const {
+  title,
+  description = '부하 아래서 시스템이 무너지는 방식을, 직접 만져보며 배우는 실험실.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#0e1117" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='10' fill='%23f85149'/></svg>"
+    />
+  </head>
+  <body>
+    <Nav />
+    <main><slot /></main>
+    <footer class="foot">
+      <div class="wrap-wide">
+        <p class="dim">
+          Breaking Point — 공개 학습 프로젝트. 내용 오류나 개선 제안은 GitHub 이슈로 환영합니다.
+        </p>
+        <div class="foot-links">
+          <a href={url('/about')}>About</a>
+          <a href="https://github.com/rayleighko/breaking-point/blob/main/CONTRIBUTING.md"
+            >Contributing</a
+          >
+          <a href="https://github.com/rayleighko/breaking-point">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .foot {
+    margin-top: 5rem;
+    padding: 2rem 0 3rem;
+    border-top: 1px solid var(--line-soft);
+    font-size: 0.87rem;
+  }
+  .foot p {
+    margin: 0;
+  }
+  .foot-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.45rem;
+    font-size: 0.8rem;
+  }
+</style>

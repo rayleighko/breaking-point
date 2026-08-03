@@ -1,0 +1,20 @@
+{
+  "name": "Atomic Design",
+  "kind": "Design",
+  "oneLiner": "화면을 작은 부품과 조합으로 동시에 바라보는 interface design system의 mental model",
+  "description": "Brad Frost는 interface를 Atom, Molecule, Organism, Template, Page의 다섯 단계로 설명했습니다. 이것은 file naming이나 React directory 규칙이 아니라 부분과 전체를 함께 보는 mental model입니다. 실제 codebase에서는 domain boundary와 팀의 언어가 더 명확하다면 다른 분류를 써도 됩니다.",
+  "signals": [
+    "같은 interaction이 화면마다 다름",
+    "component 이름의 추상도 혼재",
+    "작은 변경이 여러 화면에 반복"
+  ],
+  "related": ["oop", "code-smell"],
+  "keywords": ["Atom", "Molecule", "Organism", "Template", "Page", "design system"],
+  "sources": [
+    {
+      "title": "Atomic Design Methodology — Brad Frost",
+      "url": "https://atomicdesign.bradfrost.com/chapter-2/",
+      "type": "원전"
+    }
+  ]
+}

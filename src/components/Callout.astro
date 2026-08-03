@@ -1,0 +1,50 @@
+---
+interface Props {
+  type?: 'info' | 'warn' | 'key' | 'trap';
+  title?: string;
+}
+const { type = 'info', title } = Astro.props;
+const icon = { info: '💡', warn: '⚠️', key: '🔑', trap: '🪤' }[type];
+const fallback = { info: '알아두기', warn: '주의', key: '핵심', trap: '흔한 함정' }[type];
+---
+
+<aside class="callout" data-t={type}>
+  <div class="callout-title"><span aria-hidden="true">{icon}</span>{title ?? fallback}</div>
+  <div class="callout-body"><slot /></div>
+</aside>
+
+<style>
+  .callout {
+    margin: 1.6rem 0;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--bg-soft);
+  }
+  .callout[data-t='warn'] {
+    border-color: color-mix(in srgb, var(--warn) 40%, var(--line));
+    background: var(--warn-bg);
+  }
+  .callout[data-t='key'] {
+    border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+    background: var(--accent-bg);
+  }
+  .callout[data-t='trap'] {
+    border-color: color-mix(in srgb, var(--bad) 35%, var(--line));
+    background: var(--bad-bg);
+  }
+  .callout-title {
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 0.35rem;
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+  }
+  .callout-body :global(p:last-child) {
+    margin-bottom: 0;
+  }
+  .callout-body {
+    font-size: 0.95rem;
+  }
+</style>

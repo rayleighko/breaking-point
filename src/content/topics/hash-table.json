@@ -1,0 +1,16 @@
+{
+  "name": "Hash Table",
+  "kind": "CS 기초",
+  "oneLiner": "key를 계산 가능한 위치로 바꿔 빠르게 찾는 자료구조",
+  "description": "평균적으로 빠른 lookup을 제공하지만 collision, resize와 memory overhead가 있습니다. 면접 문제를 풀기 위한 도구에 그치지 않고 idempotency key, cache, request deduplication과 metric aggregation에서 같은 선택이 나타납니다.",
+  "signals": ["같은 key를 반복 탐색", "중복 요청 판별", "group별 횟수 집계"],
+  "related": ["complexity", "little-law"],
+  "keywords": ["hash function", "collision", "lookup", "idempotency"],
+  "sources": [
+    {
+      "title": "Algorithms, Part I — Princeton",
+      "url": "https://online.princeton.edu/algorithms-part-i",
+      "type": "대학 강의"
+    }
+  ]
+}

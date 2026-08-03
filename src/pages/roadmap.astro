@@ -1,0 +1,153 @@
+---
+import Base from '@/layouts/Base.astro';
+import { ROADMAP, STATUS_LABEL, counts } from '@/lib/roadmap';
+import { url } from '@/lib/url';
+
+const { done, total } = counts();
+---
+
+<Base title="로드맵 — Breaking Point">
+  <div class="wrap-wide page">
+    <h1>로드맵</h1>
+    <p class="muted">
+      backend 병목에서 시작해 application, cloud, delivery와 AI-assisted engineering까지 이어집니다.
+      모든 코드를 외우는 순서가 아니라, 한 결정이 전체 system에 미치는 영향을 설명하는 순서입니다.
+    </p>
+    <div class="bar" role="img" aria-label={`${total}개 중 ${done}개 완성`}>
+      <i style={`width:${(done / total) * 100}%`}></i>
+    </div>
+    <p class="dim count">{done} / {total} 완성</p>
+
+    {
+      ROADMAP.map((stage) => (
+        <section class="stage">
+          <h2>{stage.name}</h2>
+          <p class="goal muted">{stage.goal}</p>
+          <div class="items">
+            {stage.items.map((i) => (
+              <div class="item" data-s={i.status}>
+                <span class="badge">{STATUS_LABEL[i.status]}</span>
+                <div class="item-b">
+                  <div class="item-t">
+                    {i.slug ? (
+                      <a href={url(`/labs/${i.slug}`)}>
+                        <b>{i.title}</b>
+                      </a>
+                    ) : (
+                      <b>{i.title}</b>
+                    )}
+                  </div>
+                  <div class="item-q muted">{i.question}</div>
+                  <div class="item-s dim">🎛 {i.sim}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      ))
+    }
+
+    <section class="contrib">
+      <h2>같이 만들고 싶다면</h2>
+      <p>
+        설명이 틀렸거나 simulation이 현실과 다르다면 Issue로 알려주세요. 새 랩은 구현 전에 현상,
+        실패해야 하는 순진한 해법, challenge constraint와 validation plan을 Proposal로 합의합니다.
+      </p>
+      <p>
+        <a href="https://github.com/rayleighko/breaking-point/blob/main/CONTRIBUTING.md"
+          >Contribution guide →</a
+        >
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .page {
+    padding: 2.8rem 1.25rem 0;
+  }
+  .bar {
+    height: 6px;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 1.6rem;
+  }
+  .bar > i {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--ok));
+  }
+  .count {
+    font-size: 0.84rem;
+    margin-top: 0.4rem;
+  }
+  .stage h2 {
+    font-size: 1.25rem;
+  }
+  .goal {
+    font-size: 0.93rem;
+    margin-top: -0.5rem;
+  }
+  .items {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .item {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--bg-card);
+  }
+  .item[data-s='planned'] {
+    opacity: 0.62;
+  }
+  .item[data-s='done'] {
+    border-color: color-mix(in srgb, var(--ok) 35%, var(--line));
+  }
+  .badge {
+    flex-shrink: 0;
+    font-size: 0.72rem;
+    padding: 0.12rem 0.5rem;
+    border-radius: 20px;
+    border: 1px solid var(--line);
+    color: var(--fg-dim);
+    margin-top: 0.18rem;
+  }
+  .item[data-s='done'] .badge {
+    border-color: var(--ok);
+    color: var(--ok);
+    background: var(--ok-bg);
+  }
+  .item[data-s='writing'] .badge {
+    border-color: var(--warn);
+    color: var(--warn);
+    background: var(--warn-bg);
+  }
+  .item-b {
+    flex: 1;
+    line-height: 1.55;
+  }
+  .item-t {
+    font-size: 0.98rem;
+  }
+  .item-q {
+    font-size: 0.88rem;
+  }
+  .item-s {
+    font-size: 0.8rem;
+    font-family: var(--mono);
+    margin-top: 0.25rem;
+  }
+  .contrib {
+    margin-top: 3rem;
+  }
+  .contrib p {
+    font-size: 0.93rem;
+    color: var(--fg-muted);
+  }
+</style>

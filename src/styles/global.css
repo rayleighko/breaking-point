@@ -1,0 +1,203 @@
+@import 'tailwindcss';
+
+/* ── Breaking Point 디자인 토큰 ─────────────────────────────── */
+:root {
+  --bg: #0e1117;
+  --bg-soft: #151b24;
+  --bg-card: #1a2029;
+  --line: #2a323e;
+  --line-soft: #212934;
+
+  --fg: #e6edf3;
+  --fg-muted: #9aa7b5;
+  --fg-dim: #808d9b; /* WCAG AA 4.5:1 확보 (작은 글씨에 쓰임) */
+
+  --ok: #3fb950;
+  --ok-bg: rgba(63, 185, 80, 0.12);
+  --warn: #e3a008;
+  --warn-bg: rgba(227, 160, 8, 0.12);
+  --bad: #f85149;
+  --bad-bg: rgba(248, 81, 73, 0.12);
+  --accent: #58a6ff;
+  --accent-bg: rgba(88, 166, 255, 0.12);
+
+  --radius: 10px;
+  --mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  --sans:
+    -apple-system, BlinkMacSystemFont, 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR',
+    Segoe UI, Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: 16.5px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all; /* 한국어 줄바꿈: 단어 단위 유지 */
+  overflow-wrap: break-word;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.35;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+h1 {
+  font-size: 2.1rem;
+  margin: 0 0 0.6rem;
+}
+h2 {
+  font-size: 1.45rem;
+  margin: 3rem 0 1rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line-soft);
+}
+h3 {
+  font-size: 1.12rem;
+  margin: 2rem 0 0.6rem;
+}
+
+p {
+  margin: 0 0 1.1rem;
+}
+ul,
+ol {
+  padding-left: 1.3rem;
+  margin: 0 0 1.1rem;
+}
+li {
+  margin: 0.3rem 0;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 0.875em;
+  background: var(--bg-soft);
+  border: 1px solid var(--line-soft);
+  padding: 0.12em 0.4em;
+  border-radius: 5px;
+}
+pre {
+  background: var(--bg-soft) !important;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: inherit;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 1.2rem;
+  font-size: 0.93rem;
+}
+th,
+td {
+  border: 1px solid var(--line);
+  padding: 0.5rem 0.7rem;
+  text-align: left;
+}
+th {
+  background: var(--bg-soft);
+  font-weight: 600;
+}
+@media (max-width: 640px) {
+  table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  th,
+  td {
+    min-width: 8.5rem;
+  }
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-soft);
+  margin: 2.5rem 0;
+}
+
+blockquote {
+  margin: 0 0 1.1rem;
+  padding: 0.1rem 0 0.1rem 1rem;
+  border-left: 3px solid var(--line);
+  color: var(--fg-muted);
+}
+
+.wrap {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+.wrap-wide {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* 시뮬레이터는 본문보다 넓게 빼내기 */
+/* 본문(.wrap, 780px) 안에서만 넓게 빼낸다. .wrap-wide 안에서는 적용되지 않아야 함 */
+.wrap .bleed {
+  margin-left: calc((780px - 1040px) / 2);
+  width: 1040px;
+  max-width: 100vw;
+}
+@media (max-width: 1080px) {
+  .wrap .bleed {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+.muted {
+  color: var(--fg-muted);
+}
+.dim {
+  color: var(--fg-dim);
+}
+.mono {
+  font-family: var(--mono);
+}
+
+/* 접근성: 모션 최소화 선호 시 애니메이션 억제 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}

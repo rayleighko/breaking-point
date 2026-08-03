@@ -1,0 +1,167 @@
+---
+import { getCollection } from 'astro:content';
+
+import Base from '@/layouts/Base.astro';
+import { url } from '@/lib/url';
+
+const labs = await getCollection('labs', ({ data }) => !data.draft);
+const topics = await getCollection('topics');
+const countLabs = (name: string) => labs.filter((lab) => lab.data.tags.includes(name)).length;
+const kinds = [
+  'CS 기초',
+  '개념',
+  '시스템',
+  '운영',
+  '개발 방식',
+  'Product',
+  'Design',
+  'AI Engineering',
+] as const;
+---
+
+<Base
+  title="주제 위키 — Breaking Point"
+  description="백엔드 장애를 이해하는 개념과 시스템을 연결해서 탐색합니다."
+>
+  <div class="wrap-wide page">
+    <p class="eyebrow">개념을 연결해서 살펴보세요</p>
+    <h1>주제 위키</h1>
+    <p class="lead">랩 하나에서 끝내지 않고, 개념이 다음 개념으로 어떻게 이어지는지 따라갑니다.</p>
+
+    <div class="intro-actions">
+      <a href={url('/topics/graph')}>지식 그래프로 탐색하기 →</a>
+      <a href={url('/resources')}>검증한 참고 자료와 출처 원칙 보기 →</a>
+    </div>
+
+    {
+      kinds.map((kind) => {
+        const groupTopics = topics.filter((topic) => topic.data.kind === kind);
+        if (!groupTopics.length) return null;
+        return (
+          <section class="topic-group">
+            <div class="group-head">
+              <h2>{kind}</h2>
+              <span>{groupTopics.length}개</span>
+            </div>
+            <div class="grid">
+              {groupTopics.map((topic) => (
+                <a class="topic" href={url(`/topics/${topic.id}`)}>
+                  <div class="topic-top">
+                    <span class="kind" data-kind={topic.data.kind}>
+                      {topic.data.kind}
+                    </span>
+                    <span class="dim">관련 랩 {countLabs(topic.data.name)}개</span>
+                  </div>
+                  <h3>{topic.data.name}</h3>
+                  <p>{topic.data.oneLiner}</p>
+                  <div class="links">
+                    {topic.data.related.slice(0, 3).map((slug) => (
+                      <span>↗ {topics.find((candidate) => candidate.id === slug)?.data.name}</span>
+                    ))}
+                  </div>
+                </a>
+              ))}
+            </div>
+          </section>
+        );
+      })
+    }
+  </div>
+</Base>
+
+<style>
+  .page {
+    padding: 2.8rem 1.25rem 0;
+  }
+  .eyebrow {
+    color: var(--accent);
+    font: 0.75rem var(--mono);
+    letter-spacing: 0.12em;
+    margin-bottom: 0.35rem;
+  }
+  .lead {
+    color: var(--fg-muted);
+    max-width: 620px;
+  }
+  .intro-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem 1.2rem;
+    margin: 1.25rem 0 2.2rem;
+  }
+  .intro-actions a {
+    color: var(--accent);
+    font-size: 0.86rem;
+  }
+  .topic-group {
+    margin-top: 2.3rem;
+  }
+  .group-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 0.85rem;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .group-head h2 {
+    margin: 0;
+    padding-bottom: 0.55rem;
+    border: 0;
+    font-size: 1.15rem;
+  }
+  .group-head span {
+    color: var(--fg-dim);
+    font: 0.72rem var(--mono);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 1rem;
+  }
+  .topic {
+    display: block;
+    padding: 1.15rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--bg-card);
+    color: var(--fg);
+  }
+  .topic:hover {
+    border-color: var(--accent);
+    text-decoration: none;
+    transform: translateY(-2px);
+  }
+  .topic-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+  }
+  .kind {
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  .kind[data-kind='시스템'] {
+    color: var(--warn);
+  }
+  .kind[data-kind='운영'] {
+    color: var(--ok);
+  }
+  .topic h3 {
+    margin: 0.7rem 0 0.35rem;
+    font-size: 1.25rem;
+  }
+  .topic p {
+    color: var(--fg-muted);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    min-height: 2.8rem;
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.7rem;
+    color: var(--fg-dim);
+    font: 0.72rem var(--mono);
+  }
+</style>

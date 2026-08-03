@@ -1,0 +1,8 @@
+---
+description: Lab, React island, Astro page와 CSS를 변경할 때 학습 UX를 검수하는 규칙
+globs: "src/**/*.{astro,tsx,css,mdx}"
+alwaysApply: false
+---
+
+UI와 학습 경험을 변경할 때 `@skills/review-learning-ux/SKILL.md`를 읽고 evidence checklist를 적용하세요.
+시각적 유려함보다 task 이해, feedback, 오류 회복, accessibility와 mobile 사용성을 먼저 검증하세요.

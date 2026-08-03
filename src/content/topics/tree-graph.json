@@ -1,0 +1,16 @@
+{
+  "name": "Tree와 Graph",
+  "kind": "CS 기초",
+  "oneLiner": "계층과 연결 관계를 표현하고 영향이 퍼지는 경로를 찾는 자료구조",
+  "description": "Tree는 부모-자식 계층을, Graph는 여러 방향의 관계를 표현합니다. DOM, file system, dependency graph, service topology와 workflow가 같은 구조를 사용합니다. traversal은 단순 방문 문제가 아니라 장애 영향 범위와 build 순서를 계산하는 도구입니다.",
+  "signals": ["dependency cycle", "조직·DOM 계층", "서비스 장애 전파 경로"],
+  "related": ["complexity", "overload"],
+  "keywords": ["BFS", "DFS", "topological sort", "dependency graph"],
+  "sources": [
+    {
+      "title": "MIT 6.006 Introduction to Algorithms",
+      "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2008/",
+      "type": "대학 강의"
+    }
+  ]
+}

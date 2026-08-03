@@ -1,0 +1,48 @@
+---
+import StudyAssistant from '@/components/ai/StudyAssistant';
+import Base from '@/layouts/Base.astro';
+---
+
+<Base
+  title="AI 학습 코치 — Breaking Point"
+  description="무료 model을 선택해 system design 질문을 이어서 탐구해 보세요."
+>
+  <div class="page wrap-wide">
+    <p class="eyebrow">AI에게 정답을 맡기지 말고, 다음 실험을 물어보세요</p>
+    <h1>AI 학습 코치</h1>
+    <p class="lead">
+      고양이 코치와 대화를 이어가며 이해되지 않는 현상과 다음 실험을 탐색합니다. 답변은 참고
+      자료이며, simulation과 공식 문서로 다시 검증해 주세요.
+    </p>
+    <div class="notice">
+      공개 서비스용 AI gateway는 준비 중입니다. 연결 전에는 개발용 OpenRouter API key를 tab
+      memory에서만 사용할 수 있습니다. 민감한 코드, credential이나 회사 내부 정보를 입력하지 마세요.
+    </div>
+    <StudyAssistant client:load />
+  </div>
+</Base>
+
+<style>
+  .page {
+    padding: 2.8rem 1.25rem 0;
+  }
+  .eyebrow {
+    color: var(--accent);
+    font-size: 0.82rem;
+    margin-bottom: 0.35rem;
+  }
+  .lead {
+    max-width: 760px;
+    color: var(--fg-muted);
+  }
+  .notice {
+    max-width: 900px;
+    margin: 1rem 0 1.25rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--warn);
+    border-radius: var(--radius);
+    background: var(--warn-bg);
+    color: var(--fg-muted);
+    font-size: 0.85rem;
+  }
+</style>

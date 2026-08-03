@@ -1,0 +1,111 @@
+---
+import { getCollection } from 'astro:content';
+
+import Base from '@/layouts/Base.astro';
+import { ROADMAP } from '@/lib/roadmap';
+import { url } from '@/lib/url';
+
+const labs = (await getCollection('labs', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const planned = ROADMAP.flatMap((s) => s.items)
+  .filter((i) => i.status !== 'done')
+  .slice(0, 4);
+---
+
+<Base title="실험실 — Breaking Point">
+  <div class="wrap-wide page">
+    <h1>실험실</h1>
+    <p class="muted">읽는 글이 아니라 만지는 글입니다. 슬라이더를 끝까지 밀어보세요.</p>
+
+    <div class="grid">
+      {
+        labs.map((lab) => (
+          <a class="card" href={url(`/labs/${lab.id}`)}>
+            <div class="card-top">
+              <span class="chip">{lab.data.level}</span>
+              <span class="dim">{lab.data.minutes}분</span>
+            </div>
+            <h2>{lab.data.title}</h2>
+            <p class="card-q">{lab.data.question}</p>
+            <p class="card-sub muted">{lab.data.subtitle}</p>
+          </a>
+        ))
+      }
+    </div>
+
+    <h2 class="next-h">준비 중</h2>
+    <ul class="next">
+      {
+        planned.map((i) => (
+          <li>
+            <b>{i.title}</b> — <span class="muted">{i.question}</span>
+          </li>
+        ))
+      }
+    </ul>
+    <p><a href={url('/roadmap')}>전체 로드맵 보기 →</a></p>
+  </div>
+</Base>
+
+<style>
+  .page {
+    padding: 2.8rem 1.25rem 0;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0 0;
+  }
+  .card {
+    display: block;
+    padding: 1.1rem 1.2rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--bg-card);
+    color: var(--fg);
+    transition:
+      border-color 0.15s,
+      transform 0.15s;
+  }
+  .card:hover {
+    border-color: var(--accent);
+    text-decoration: none;
+    transform: translateY(-2px);
+  }
+  .card-top {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    font-size: 0.78rem;
+    margin-bottom: 0.5rem;
+  }
+  .chip {
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 0.05rem 0.55rem;
+    color: var(--fg-muted);
+  }
+  .card h2 {
+    font-size: 1.12rem;
+    margin: 0 0 0.4rem;
+    padding: 0;
+    border: 0;
+  }
+  .card-q {
+    font-size: 0.92rem;
+    margin: 0 0 0.5rem;
+    line-height: 1.6;
+  }
+  .card-sub {
+    font-size: 0.84rem;
+    margin: 0;
+  }
+  .next-h {
+    font-size: 1.05rem;
+  }
+  .next {
+    font-size: 0.92rem;
+  }
+</style>

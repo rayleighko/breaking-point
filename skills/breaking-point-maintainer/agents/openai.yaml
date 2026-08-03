@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Breaking Point Maintainer'
+  short_description: 'Breaking Point 랩과 시뮬레이션을 일관되게 구현합니다'
+  default_prompt: 'Use $breaking-point-maintainer to implement and verify a Breaking Point change.'

@@ -1,0 +1,420 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+import Base from '@/layouts/Base.astro';
+import { url } from '@/lib/url';
+
+export async function getStaticPaths() {
+  const topics = await getCollection('topics');
+  return topics.map((topic) => ({ params: { slug: topic.id }, props: { topic } }));
+}
+
+interface Props {
+  topic: CollectionEntry<'topics'>;
+}
+
+const { topic } = Astro.props;
+const topics = await getCollection('topics');
+const data = topic.data;
+const labs = (
+  await getCollection('labs', ({ data: lab }) => !lab.draft && lab.tags.includes(data.name))
+).sort((a, b) => a.data.order - b.data.order);
+const related = data.related.map((slug) => topics.find((item) => item.id === slug)).filter(Boolean);
+const backlinks = topics.filter(
+  (item) =>
+    item.id !== topic.id &&
+    (item.data.related.includes(topic.id) ||
+      item.data.relations.some((relation) => relation.slug === topic.id)),
+);
+const relationDetails = data.relations
+  .map((relation) => ({
+    ...relation,
+    topic: topics.find((item) => item.id === relation.slug),
+  }))
+  .filter((relation) => relation.topic);
+const typedRelationIds = new Set(data.relations.map((relation) => relation.slug));
+const untypedRelated = related.filter((item) => item && !typedRelationIds.has(item.id));
+const keywordHref = (keyword: string) => {
+  const internal = topics.find(
+    (item) =>
+      item.id.toLowerCase() === keyword.toLowerCase() ||
+      item.data.name.toLowerCase() === keyword.toLowerCase(),
+  );
+  return internal
+    ? url(`/topics/${internal.id}`)
+    : `https://www.google.com/search?q=${encodeURIComponent(`${keyword} software engineering`)}`;
+};
+const introHeading = {
+  'CS 기초': '어떤 개념인가요?',
+  개념: '어떤 개념인가요?',
+  시스템: '어떤 시스템인가요?',
+  운영: '어떤 운영 문제인가요?',
+  '개발 방식': '어떤 개발 방식인가요?',
+  Product: 'Product에서는 어떻게 사용하나요?',
+  Design: 'Design에서는 어떻게 사용하나요?',
+  'AI Engineering': '어떤 engineering 영역인가요?',
+}[data.kind];
+---
+
+<Base title={`${data.name} — 주제 위키 — Breaking Point`} description={data.oneLiner}>
+  <article class="wrap page">
+    <a href={url('/topics')} class="back">← 주제 위키</a>
+    <div class="head">
+      <span class="kind" data-kind={data.kind}>{data.kind}</span>
+      <h1>{data.name}</h1>
+      <p class="lead">{data.oneLiner}</p>
+    </div>
+
+    <section>
+      <h2>{introHeading}</h2>
+      <p>{data.description}</p>
+    </section>
+
+    {
+      data.context && (
+        <aside class="context-card">
+          <div>
+            <span>{data.context.standing}</span>
+            {data.context.attribution && <b>{data.context.attribution}</b>}
+          </div>
+          <p>{data.context.note}</p>
+        </aside>
+      )
+    }
+
+    <section>
+      <h2>이 신호가 보이면 떠올리세요</h2>
+      <ul class="signals">{data.signals.map((signal) => <li>{signal}</li>)}</ul>
+    </section>
+
+    {
+      data.keywords.length > 0 && (
+        <section>
+          <h2>함께 검색할 키워드</h2>
+          <p class="section-help">
+            사이트 안에 같은 주제가 있으면 위키로, 아직 없으면 Google 검색으로 연결됩니다.
+          </p>
+          <div class="keywords">
+            {data.keywords.map((keyword) => {
+              const href = keywordHref(keyword);
+              const external = href.startsWith('https://');
+              return (
+                <a
+                  href={href}
+                  target={external ? '_blank' : undefined}
+                  rel={external ? 'noopener noreferrer' : undefined}
+                >
+                  {keyword}
+                  <i>{external ? '↗' : '→'}</i>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      data.sources.length > 0 && (
+        <section>
+          <h2>출처와 더 읽을거리</h2>
+          <div class="sources">
+            {data.sources.map((source) => (
+              <a href={source.url} target="_blank" rel="noopener noreferrer">
+                <span>{source.type}</span>
+                <b>{source.title}</b>
+                <i>↗</i>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section>
+      <h2>함께 보면 좋은 주제</h2>
+      {
+        relationDetails.length > 0 && (
+          <div class="relation-notes">
+            {relationDetails.map(
+              (relation) =>
+                relation.topic && (
+                  <a href={url(`/topics/${relation.topic.id}`)}>
+                    <span>{relation.type}</span>
+                    <b>{relation.topic.data.name}</b>
+                    <small>{relation.note}</small>
+                  </a>
+                ),
+            )}
+          </div>
+        )
+      }
+      <div class="related">
+        {
+          untypedRelated.map(
+            (item) =>
+              item && (
+                <a href={url(`/topics/${item.id}`)}>
+                  <>
+                    <span>{item.data.kind}</span>
+                    <b>{item.data.name}</b>
+                    <small>{item.data.oneLiner}</small>
+                  </>
+                </a>
+              ),
+          )
+        }
+      </div>
+    </section>
+
+    {
+      backlinks.length > 0 && (
+        <section>
+          <h2>이 주제를 가리키는 주제</h2>
+          <p class="section-help">다른 개념에서 이 페이지로 들어오는 backlink입니다.</p>
+          <div class="backlinks">
+            {backlinks.map((item) => (
+              <a href={url(`/topics/${item.id}`)}>← {item.data.name}</a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section>
+      <h2>직접 만져보는 랩</h2>
+      {
+        labs.length ? (
+          <div class="labs">
+            {labs.map((lab) => (
+              <a href={url(`/labs/${lab.id}`)}>
+                <b>
+                  {String(lab.data.order).padStart(2, '0')} · {lab.data.title}
+                </b>
+                <span>{lab.data.question}</span>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <p class="empty">
+            이 주제를 직접 다루는 랩은 준비 중입니다. 연결된 주제에서 먼저 감각을 잡아보세요.
+          </p>
+        )
+      }
+    </section>
+  </article>
+</Base>
+
+<style>
+  .page {
+    padding-top: 2.5rem;
+  }
+  .back {
+    font-size: 0.86rem;
+    color: var(--fg-dim);
+  }
+  .head {
+    margin-top: 1.5rem;
+  }
+  .kind {
+    color: var(--accent);
+    font: 0.75rem var(--mono);
+  }
+  .kind[data-kind='시스템'] {
+    color: var(--warn);
+  }
+  .kind[data-kind='운영'] {
+    color: var(--ok);
+  }
+  .head h1 {
+    margin-top: 0.35rem;
+  }
+  .lead {
+    color: var(--fg-muted);
+    font-size: 1.08rem;
+  }
+  .signals {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.6rem;
+    padding: 0;
+    list-style: none;
+  }
+  .context-card {
+    margin: 1.2rem 0;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--warn);
+    border-radius: 9px;
+    background: var(--warn-bg);
+  }
+  .context-card div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem 0.75rem;
+  }
+  .context-card span {
+    padding: 0.14rem 0.45rem;
+    border-radius: 999px;
+    background: var(--warn);
+    color: #171107;
+    font: 0.7rem var(--mono);
+  }
+  .context-card b {
+    font-size: 0.82rem;
+  }
+  .context-card p {
+    margin: 0.55rem 0 0;
+    color: var(--fg-muted);
+    font-size: 0.84rem;
+    line-height: 1.65;
+  }
+  .signals li {
+    padding: 0.65rem 0.75rem;
+    background: var(--bg-soft);
+    border: 1px solid var(--line-soft);
+    border-radius: 8px;
+    font-size: 0.88rem;
+  }
+  .keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+  .keywords a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.55rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--fg-muted);
+    font: 0.75rem var(--mono);
+  }
+  .keywords a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .keywords i {
+    color: var(--fg-dim);
+    font-style: normal;
+  }
+  .sources {
+    display: grid;
+    gap: 0.55rem;
+  }
+  .sources a {
+    display: grid;
+    grid-template-columns: 76px 1fr auto;
+    gap: 0.6rem;
+    align-items: center;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--fg);
+  }
+  .sources a:hover {
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+  .sources span {
+    color: var(--accent);
+    font: 0.7rem var(--mono);
+  }
+  .sources i {
+    color: var(--fg-dim);
+    font-style: normal;
+  }
+  .related {
+    display: grid;
+    gap: 0.65rem;
+  }
+  .relation-notes {
+    display: grid;
+    gap: 0.55rem;
+    margin-bottom: 0.8rem;
+  }
+  .relation-notes a {
+    display: grid;
+    grid-template-columns: 80px 120px 1fr;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.75rem 0.85rem;
+    border-left: 2px solid var(--accent);
+    background: var(--bg-soft);
+    color: var(--fg);
+  }
+  .relation-notes a:hover {
+    text-decoration: none;
+    background: var(--bg-card);
+  }
+  .relation-notes span {
+    color: var(--accent);
+    font: 0.7rem var(--mono);
+  }
+  .relation-notes small,
+  .section-help {
+    color: var(--fg-muted);
+  }
+  .backlinks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+  .backlinks a {
+    padding: 0.3rem 0.55rem;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    color: var(--fg-muted);
+    font-size: 0.78rem;
+  }
+  .related a,
+  .labs a {
+    display: grid;
+    padding: 0.8rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    color: var(--fg);
+  }
+  .related a {
+    grid-template-columns: 72px 90px 1fr;
+    align-items: center;
+  }
+  .related a:hover,
+  .labs a:hover {
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+  .related span {
+    color: var(--fg-dim);
+    font: 0.72rem var(--mono);
+  }
+  .related small,
+  .labs span {
+    color: var(--fg-muted);
+  }
+  .labs {
+    display: grid;
+    gap: 0.65rem;
+  }
+  .labs span {
+    font-size: 0.86rem;
+  }
+  .empty {
+    padding: 1rem;
+    border: 1px dashed var(--line);
+    border-radius: 9px;
+    color: var(--fg-muted);
+  }
+  @media (max-width: 560px) {
+    .related a {
+      grid-template-columns: 1fr;
+      gap: 0.15rem;
+    }
+    .relation-notes a {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
+    }
+  }
+</style>

@@ -1,0 +1,8 @@
+{
+  "name": "Serverless",
+  "kind": "시스템",
+  "oneLiner": "server instance 운영을 platform에 맡기고 event 단위로 실행하는 model",
+  "description": "Serverless는 server가 없는 것이 아니라 provisioning과 lifecycle 책임이 cloud provider로 이동한 것입니다. 빠르게 늘어나는 concurrency가 database와 external API의 고정된 한계를 먼저 칠 수 있습니다.",
+  "signals": ["concurrency 증가", "cold start", "downstream throttling"],
+  "related": ["aws", "overload", "database"]
+}

@@ -1,0 +1,51 @@
+---
+/** 30초 리마인드 카드 — 나중에 다시 왔을 때 이것만 읽어도 되게. */
+interface Props {
+  items: string[];
+  formula?: string;
+}
+const { items, formula } = Astro.props;
+---
+
+<section class="recall">
+  <h3 class="recall-h">⏱ 30초 리마인드</h3>
+  {formula && <div class="recall-formula">{formula}</div>}
+  <ol class="recall-list">
+    {items.map((t) => <li set:html={t} />)}
+  </ol>
+</section>
+
+<style>
+  .recall {
+    margin: 2.5rem 0;
+    padding: 1.1rem 1.2rem;
+    border-radius: 12px;
+    border: 1px dashed color-mix(in srgb, var(--accent) 45%, var(--line));
+    background: linear-gradient(180deg, var(--accent-bg), transparent);
+  }
+  .recall-h {
+    margin: 0 0 0.7rem;
+    font-size: 0.95rem;
+    color: var(--accent);
+  }
+  .recall-formula {
+    font-family: var(--mono);
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 0.8rem;
+    border-radius: 8px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    text-align: center;
+    letter-spacing: -0.01em;
+  }
+  .recall-list {
+    margin: 0;
+    padding-left: 1.2rem;
+    font-size: 0.94rem;
+  }
+  .recall-list li {
+    margin: 0.35rem 0;
+  }
+</style>

@@ -1,0 +1,138 @@
+---
+import Base from '@/layouts/Base.astro';
+import { url } from '@/lib/url';
+---
+
+<Base
+  title="About — Breaking Point"
+  description="AI 시대에 시스템을 이해하고 설명할 수 있는 개발자를 위한 프로젝트입니다."
+>
+  <article class="wrap page">
+    <p class="eyebrow">이 프로젝트를 만든 이유</p>
+    <h1>코드를 만드는 속도와<br />이해하는 속도 사이</h1>
+    <p class="lead">
+      AI 덕분에 더 많은 기능을 만들고 더 많은 문제를 해결합니다. 그런데 결정을 빠르게 위임할수록, 몇
+      달 뒤 그 시스템을 설명하는 일은 오히려 어려워질 수 있습니다.
+    </p>
+
+    <h2>손으로 몇 줄 썼는지는 핵심이 아닙니다</h2>
+    <p>
+      중요한 건 code ownership입니다. 왜 이 architecture를 골랐는지, 어디서 무너지는지, AI가 제안한
+      변경을 어떤 evidence로 승인했는지 설명할 수 있어야 합니다. 과제 면접에서 모든 코드를 암기해
+      다시 쓰는 능력과, production system을 안전하게 이끄는 능력은 겹치지만 같지는 않습니다.
+    </p>
+
+    <h2>개발자 한 명이 작은 Tech Lead가 되는 시대</h2>
+    <p>
+      구현의 일부를 AI agent가 맡으면 개발자의 일은 specification, decomposition, review,
+      evaluation, incident ownership 쪽으로 이동합니다. 그래서 framework 사용법만큼 database,
+      network, cloud, delivery pipeline과 비용의 연결을 이해해야 합니다.
+    </p>
+
+    <h2>한국어로 배우고, 글로벌 환경에서 통하는 언어로 설명합니다</h2>
+    <p>
+      Breaking Point가 지향하는 기준은 특정 국가나 회사의 관행이 아닙니다. 국제 표준, 원전, 공식
+      문서와 여러 지역의 production practice를 근거로 삼습니다. 본문은 한국어 존칭으로 쉽게
+      설명하되, 기술 이름과 metric, architecture pattern은 전 세계 동료가 같은 의미로 검색하고
+      토론할 수 있는 원어를 함께 사용합니다.
+    </p>
+    <p>
+      글로벌 스탠다드는 하나의 유행이나 정답 목록이 아닙니다. RFC나 specification처럼 합의된
+      표준인지, vendor의 공식 동작인지, 널리 쓰이는 practice인지, 한 조직의 경험인지 먼저
+      구분합니다. 지역마다 법률, 비용, 조직과 traffic 조건이 다르므로 적용 범위와 trade-off까지
+      설명할 수 있는 판단력을 목표로 합니다.
+    </p>
+
+    <h2>왜 TypeScript인가요?</h2>
+    <p>
+      거창한 이유는 없습니다. 작성자에게 가장 익숙해서 simulation과 설명을 빠르게 만들 수 있었기
+      때문입니다. TypeScript가 더 우월하거나 system design의 정답이라고 생각하지 않습니다.
+    </p>
+    <p>
+      개발자는 주어진 환경에 적응해 문제를 풀 수 있어야 합니다. 같은 queue와 concurrency 문제도
+      Node.js, Go, JVM에서 드러나는 방식과 사용할 수 있는 도구가 다릅니다. 중요한 건 문법이 아니라
+      runtime의 특성과 constraint를 파악하고, 그 환경에 맞는 trade-off를 선택하는 능력입니다. 이
+      사이트는 language-agnostic한 model을 먼저 다루고, 구현 예제는 TypeScript를 시작점으로 Go,
+      Kotlin, Java까지 비교할 수 있게 확장합니다.
+    </p>
+
+    <div class="principles">
+      <div><b>관찰</b><span>현상을 보고 metric으로 말씀하실 수 있습니다.</span></div>
+      <div><b>설명</b><span>trade-off와 실패 경로를 설명하실 수 있습니다.</span></div>
+      <div><b>검증</b><span>AI의 결과를 test와 source로 검증하실 수 있습니다.</span></div>
+      <div><b>책임</b><span>배포 뒤의 결과까지 살펴보실 수 있습니다.</span></div>
+      <div><b>연결</b><span>한국어의 이해를 글로벌 engineering language로 연결합니다.</span></div>
+      <div><b>맥락</b><span>표준, 관행과 회사 사례를 같은 권위로 섞지 않습니다.</span></div>
+    </div>
+
+    <h2>누구를 위한 프로젝트인가요?</h2>
+    <p>
+      구현 경험은 쌓였지만 설명할 언어가 흐릿해진 개발자, 연차보다 성장 속도를 높이고 싶은 junior와
+      mid-level engineer, 팀의 판단 기준을 시각적으로 공유하려는 senior와 Tech Lead를 위해 만듭니다.
+    </p>
+
+    <h2>만든 사람</h2>
+    <p>
+      이 프로젝트는 software engineer인 <a href="https://github.com/rayleighko">Rayleigh Ko</a>가
+      자신의 실무 경험을 다시 설명 가능한 지식으로 바꾸기 위해 시작했습니다. 현재 다음 팀을 찾고
+      있으며, 이 사이트 자체를 architecture, product thinking, verification 방식에 대한 공개 work
+      sample로 만들고 있습니다.
+    </p>
+    <p class="actions">
+      <a href={url('/roadmap')}>학습 로드맵 보기 →</a><a
+        href="https://github.com/rayleighko/breaking-point">GitHub에서 기여하기 →</a
+      >
+    </p>
+  </article>
+</Base>
+
+<style>
+  .page {
+    padding-top: 3rem;
+  }
+  .eyebrow {
+    color: var(--accent);
+    font: 0.75rem var(--mono);
+    letter-spacing: 0.12em;
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-size: clamp(2rem, 6vw, 3rem);
+  }
+  .lead {
+    color: var(--fg-muted);
+    font-size: 1.08rem;
+  }
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.7rem;
+    margin: 1.8rem 0;
+  }
+  .principles div {
+    display: grid;
+    padding: 0.8rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: var(--bg-card);
+  }
+  .principles b {
+    font-family: var(--mono);
+    color: var(--accent);
+  }
+  .principles span {
+    color: var(--fg-muted);
+    font-size: 0.86rem;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  @media (max-width: 560px) {
+    .principles {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,141 @@
+---
+import Base from '@/layouts/Base.astro';
+import { LEARNING_RESOURCES, type ResourceCategory } from '@/lib/resources';
+
+const categories: ResourceCategory[] = [
+  'CS와 알고리즘',
+  'Software Design',
+  'System Design',
+  'Frontend',
+  'AI Engineering',
+];
+---
+
+<Base
+  title="참고 자료 — Breaking Point"
+  description="원전과 공식 교육을 우선한 개발 학습 자료입니다."
+>
+  <main class="wrap-wide page">
+    <p class="eyebrow">출처의 역할까지 구분합니다</p>
+    <h1>참고 자료</h1>
+    <p class="lead">
+      사실과 용어는 원전·공식 문서·대학 강의를 우선합니다. 실무 서비스와 채널은 연습 형식과 현재
+      논점을 탐색할 때 참고하며, 그곳의 문제·해설·도표를 재사용하지 않습니다.
+    </p>
+
+    <aside class="policy">
+      <b>Breaking Point의 원칙</b>
+      <p>
+        외부 자료의 목차를 복제하지 않습니다. 실제 장애 현상에서 출발한 독자적인 scenario,
+        constraint, 수치, test와 visualization을 만들고 원문은 link로 연결합니다. 개인의 전망은
+        사실과 구분해 ‘관점’으로 표시합니다.
+      </p>
+    </aside>
+
+    {
+      categories.map((category) => (
+        <section>
+          <h2>{category}</h2>
+          <div class="grid">
+            {LEARNING_RESOURCES.filter((resource) => resource.category === category).map(
+              (resource) => (
+                <a class="resource" href={resource.url} target="_blank" rel="noopener noreferrer">
+                  <div class="meta">
+                    <span>{resource.sourceRole}</span>
+                    <i>{resource.access}</i>
+                  </div>
+                  <h3>{resource.name}</h3>
+                  <p>{resource.description}</p>
+                  <small>참고 방식 · {resource.useFor}</small>
+                </a>
+              ),
+            )}
+          </div>
+        </section>
+      ))
+    }
+  </main>
+</Base>
+
+<style>
+  .page {
+    padding: 2.8rem 1.25rem 0;
+  }
+  .eyebrow {
+    color: var(--accent);
+    font: 0.75rem var(--mono);
+    letter-spacing: 0.12em;
+    margin-bottom: 0.35rem;
+  }
+  .lead {
+    color: var(--fg-muted);
+    max-width: 760px;
+    line-height: 1.75;
+  }
+  .policy {
+    margin: 1.5rem 0 2.8rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--bg-soft);
+  }
+  .policy p {
+    margin: 0.35rem 0 0;
+    color: var(--fg-muted);
+    line-height: 1.7;
+  }
+  section {
+    margin-top: 2.4rem;
+  }
+  section h2 {
+    font-size: 1.15rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 0.85rem;
+  }
+  .resource {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 1rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    color: var(--fg);
+    background: var(--bg-card);
+  }
+  .resource:hover {
+    border-color: var(--accent);
+    text-decoration: none;
+    transform: translateY(-2px);
+  }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font: 0.7rem var(--mono);
+  }
+  .meta span {
+    color: var(--accent);
+  }
+  .meta i {
+    color: var(--fg-dim);
+    font-style: normal;
+  }
+  h3 {
+    margin: 0.65rem 0 0.3rem;
+    font-size: 1rem;
+  }
+  .resource p {
+    margin: 0 0 0.9rem;
+    color: var(--fg-muted);
+    font-size: 0.86rem;
+    line-height: 1.6;
+  }
+  .resource small {
+    margin-top: auto;
+    color: var(--fg-dim);
+    line-height: 1.5;
+  }
+</style>

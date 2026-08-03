@@ -29,9 +29,8 @@ Base.astro
 | `done`    | 새 답변 도착           | 완료 pose + “답변 도착”                         |
 | `error`   | 사용자의 조치 필요     | 오류 pose + 복구 문장                           |
 
-3D asset은 이 상태 이름을 파일 contract로 사용합니다. 예를 들어
-`public/pet/working@1x.webp`, `working@2x.webp` 또는 상태별 sprite sheet를 둡니다. Asset이 없어도 emoji
-placeholder, 상태 문장과 stripe만으로 기능이 완성되어야 합니다.
+3D asset은 이 상태 이름을 파일 contract로 사용합니다. 현재 `public/pet/{state}.webp`와
+`launcher.webp`를 사용합니다. 상태 문장과 stripe가 이미지와 별개로 의미를 전달해야 합니다.
 
 ## Product constraints
 

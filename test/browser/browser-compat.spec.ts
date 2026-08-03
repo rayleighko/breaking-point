@@ -74,6 +74,25 @@ test.describe('브라우저 호환성', () => {
     await expect(input).toHaveValue('녕');
     await expect(page.locator('.pet-message--user')).toHaveCount(0);
   });
+
+  test('접힌 Pet을 드래그한 뒤 키보드로 열 수 있습니다', async ({ page, isMobile }) => {
+    test.skip(isMobile, '모바일에서는 스크롤 제스처와 충돌하지 않도록 드래그를 비활성화합니다.');
+    await page.goto(`${BASE}/`, { waitUntil: 'networkidle' });
+    const launcher = page.getByRole('button', { name: 'AI 학습 코치 열기' });
+    const before = await launcher.boundingBox();
+    expect(before).not.toBeNull();
+
+    await page.mouse.move(before!.x + before!.width / 2, before!.y + before!.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(before!.x - 120, before!.y - 80, { steps: 5 });
+    await page.mouse.up();
+
+    const after = await launcher.boundingBox();
+    expect(after).not.toBeNull();
+    expect(after!.x).toBeLessThan(before!.x - 80);
+    await launcher.press('Enter');
+    await expect(page.getByRole('dialog', { name: 'AI 학습 코치' })).toBeVisible();
+  });
 });
 
 test.describe('모바일 UX', () => {

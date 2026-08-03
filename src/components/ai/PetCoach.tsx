@@ -19,6 +19,7 @@ const AUTO_MODEL: OpenRouterModel = { id: 'openrouter/free', name: '무료 model
 const SERVICE_API_URL = import.meta.env.PUBLIC_AI_API_URL?.trim();
 const SESSION_KEY = 'breaking-point-coach-messages';
 const REQUEST_TIMEOUT_MS = 45_000;
+const PET_ASSET_BASE = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/pet`;
 const WELCOME: StudyMessage = {
   role: 'assistant',
   content:
@@ -26,6 +27,13 @@ const WELCOME: StudyMessage = {
 };
 
 type PetActivity = 'idle' | 'typing' | 'working' | 'done' | 'error';
+type DragState = {
+  dx: number;
+  dy: number;
+  startX: number;
+  startY: number;
+  moved: boolean;
+};
 
 const ACTIVITY_LABEL: Record<PetActivity, string> = {
   idle: '쉬는 중',
@@ -41,7 +49,8 @@ export default function PetCoach() {
   const setOpen = useCoachPreferences((state) => state.setOpen);
   const setPosition = useCoachPreferences((state) => state.setPosition);
   const rootRef = useRef<HTMLDivElement>(null);
-  const drag = useRef<{ dx: number; dy: number } | null>(null);
+  const drag = useRef<DragState | null>(null);
+  const dragEndedAt = useRef(0);
   const [mobile, setMobile] = useState(false);
 
   useEffect(() => {
@@ -56,26 +65,35 @@ export default function PetCoach() {
     if (!position || mobile) return;
     const clamped = clampPosition(position, rootRef.current);
     if (clamped.x !== position.x || clamped.y !== position.y) setPosition(clamped);
-  }, [mobile, position, setPosition]);
+  }, [mobile, open, position, setPosition]);
 
   const style =
     !mobile && position
       ? { left: position.x, top: position.y, right: 'auto', bottom: 'auto' }
       : undefined;
-  const onPointerDown = (event: ReactPointerEvent<HTMLElement>) => {
+  const onPointerDown = (event: ReactPointerEvent<HTMLElement>, allowButton = false) => {
     if (
       mobile ||
       event.button !== 0 ||
       !rootRef.current ||
-      (event.target as HTMLElement).closest('button')
+      (!allowButton && (event.target as HTMLElement).closest('button'))
     )
       return;
     const rect = rootRef.current.getBoundingClientRect();
-    drag.current = { dx: event.clientX - rect.left, dy: event.clientY - rect.top };
+    drag.current = {
+      dx: event.clientX - rect.left,
+      dy: event.clientY - rect.top,
+      startX: event.clientX,
+      startY: event.clientY,
+      moved: false,
+    };
     event.currentTarget.setPointerCapture(event.pointerId);
   };
   const onPointerMove = (event: ReactPointerEvent<HTMLElement>) => {
     if (!drag.current || !rootRef.current) return;
+    drag.current.moved ||=
+      Math.hypot(event.clientX - drag.current.startX, event.clientY - drag.current.startY) > 4;
+    if (!drag.current.moved) return;
     setPosition(
       clampPosition(
         { x: event.clientX - drag.current.dx, y: event.clientY - drag.current.dy },
@@ -84,8 +102,10 @@ export default function PetCoach() {
     );
   };
   const onPointerUp = (event: ReactPointerEvent<HTMLElement>) => {
+    if (drag.current?.moved) dragEndedAt.current = performance.now();
     drag.current = null;
-    event.currentTarget.releasePointerCapture(event.pointerId);
+    if (event.currentTarget.hasPointerCapture(event.pointerId))
+      event.currentTarget.releasePointerCapture(event.pointerId);
   };
 
   return (
@@ -99,9 +119,10 @@ export default function PetCoach() {
         <section className="pet-panel" role="dialog" aria-label="AI 학습 코치">
           <header
             className="pet-panel__head"
-            onPointerDown={onPointerDown}
+            onPointerDown={(event) => onPointerDown(event)}
             onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
           >
             <div>
               <b>Breaking Point Cat</b>
@@ -123,7 +144,15 @@ export default function PetCoach() {
           type="button"
           className="pet-launcher"
           aria-label="AI 학습 코치 열기"
-          onClick={() => setOpen(true)}
+          title={mobile ? 'AI 학습 코치 열기' : '클릭해서 열거나 드래그해서 옮기세요'}
+          onPointerDown={(event) => onPointerDown(event, true)}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
+          onClick={(event) => {
+            if (event.detail > 0 && performance.now() - dragEndedAt.current < 350) return;
+            setOpen(true);
+          }}
         >
           <PetVisual activity="idle" compact />
           <span className="pet-launcher__beta">Beta</span>
@@ -304,13 +333,20 @@ function CoachChat() {
 }
 
 function PetVisual({ activity, compact = false }: { activity: PetActivity; compact?: boolean }) {
+  const asset = compact ? 'launcher' : activity;
   return (
     <div
       className={`pet-visual ${compact ? 'pet-visual--compact' : ''}`}
       data-activity={activity}
       aria-hidden="true"
     >
-      <span>🐈</span>
+      <img
+        src={`${PET_ASSET_BASE}/${asset}.webp`}
+        alt=""
+        width="1024"
+        height="1024"
+        draggable={false}
+      />
     </div>
   );
 }

@@ -12,8 +12,8 @@ import {
 } from '@/lib/p50-p99';
 import '@/styles/sim.css';
 
-import DistCompare from './DistCompare';
 import { Slider } from './Controls';
+import DistCompare from './DistCompare';
 
 const { meanLimitMs, p99LimitMs, slowPctMax, sampleCount, seed } = P50_P99_CHALLENGE;
 

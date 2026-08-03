@@ -13,7 +13,6 @@ interface Props {
 export default function DistCompare({ samples, summary, title, accent = 'accent' }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stateRef = useRef({ samples, summary, title, accent });
-  stateRef.current = { samples, summary, title, accent };
 
   const draw = () => {
     const cv = canvasRef.current;
@@ -87,8 +86,9 @@ export default function DistCompare({ samples, summary, title, accent = 'accent'
   };
 
   useEffect(() => {
+    stateRef.current = { samples, summary, title, accent };
     draw();
-  });
+  }, [samples, summary, title, accent]);
 
   useEffect(() => {
     const onResize = () => draw();

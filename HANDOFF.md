@@ -73,8 +73,8 @@
 - [x] `astro.config.mjs`의 `SITE` / `BASE`를 실제 GitHub 계정·레포명으로 교체
       (`USERNAME.github.io` 레포면 `BASE = '/'`)
 - [x] `src/components/Nav.astro`의 GitHub 링크 URL 교체
-- [ ] 레포 Settings → Pages → Source를 `GitHub Actions`로 설정
-- [ ] 푸시 후 배포 확인, 실제 URL에서 base 경로가 깨지지 않는지 점검
+- [x] 레포 Settings → Pages → Source를 `GitHub Actions`로 설정
+- [x] 푸시 후 배포 확인, 실제 URL에서 base 경로가 깨지지 않는지 점검
 
 ### C. 알려진 개선 과제
 

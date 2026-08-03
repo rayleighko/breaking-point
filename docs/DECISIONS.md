@@ -2,6 +2,16 @@
 
 대화가 아니라 이 문서가 현재 결정의 요약입니다. 새 결정은 날짜, 상태, 이유, 결과와 재검토 조건을 남깁니다.
 
+## 2026-08-03 — Dual process surface and rebase delivery
+
+**Status:** Accepted
+
+기여자·agent용 canonical 문서(`docs/AI_DEVELOPMENT_LOOP.md`, `docs/GITFLOW.md`, `docs/AI_HARNESS.md`)와
+공개 `/process`·로드맵 시각화를 함께 둡니다. mattpocock/skills, Open Code Review, Ouroboros는 권장
+참고이며 CI/merge 조건에 넣지 않습니다. feature→develop과 release→main은 rebase merge로 선형
+이력을 유지합니다. 시스템 설명은 GLOBAL_STANDARD에 따라 project contract / practice / vendor
+boundary를 구분합니다.
+
 ## 2026-08-03 — GitFlow for stable Pages delivery
 
 **Status:** Accepted

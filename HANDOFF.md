@@ -162,8 +162,8 @@ AI retrieval은 내부 검수 자료를 먼저 사용하고, 부족할 때만 �
 ## 다음 작업 시작점
 
 1. 일반 변경은 `AGENTS.md` → 관련 문서 → 관련 test 순으로 읽습니다.
-2. 브랜치는 `docs/GITFLOW.md`를 따릅니다. `develop`에서 `feature/<slug>`를 만들고, 공개는
-   `develop` → `main` release PR로만 합니다.
+2. 브랜치는 `docs/GITFLOW.md`와 `docs/AI_DEVELOPMENT_LOOP.md`를 따릅니다. `feature/<slug>` →
+   `develop`과 release → `main`은 **rebase merge**입니다. 공개 설명은 `/process`입니다.
 3. 현재 상태 확인은 `git status --short --branch`와 `pnpm quality`로 시작합니다.
 4. UI 변경은 `docs/FRONTEND_GUIDELINES.md`, simulation 변경은 `docs/ENGINE_GUIDE.md`, 새 콘텐츠는
    `CONTENT_GUIDE.md`를 먼저 읽습니다.

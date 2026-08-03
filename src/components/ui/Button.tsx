@@ -9,7 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'border-[var(--accent)] bg-[var(--accent)] px-3 py-2 text-[#07111f]',
+        default: 'border-[var(--accent)] bg-[var(--accent)] px-3 py-2 text-[var(--on-accent)]',
         outline: 'border-[var(--line)] bg-[var(--bg-soft)] px-3 py-2 text-[var(--fg)]',
         ghost: 'border-transparent bg-transparent px-3 py-2 text-[var(--fg-muted)]',
       },

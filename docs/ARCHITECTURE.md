@@ -71,6 +71,10 @@ cleanup, abuse prevention과 비용 상한도 필요합니다.
 
 ## AI assistant boundary
 
+AI 학습 코치의 UI는 별도 페이지가 아니라 전역 `PetCoach` React island입니다. 기본은 접힌 상태이며,
+사용자가 열 때만 채팅과 model catalog를 mount합니다. 상태와 3D asset의 경계는
+[`PET_COACH.md`](./PET_COACH.md)를 따릅니다.
+
 초기 AI 학습 코치는 사용자가 제공한 OpenRouter API key로 browser에서 provider API를 직접 호출합니다. Key는
 React memory에만 두고 localStorage, analytics, Issue 또는 server에 저장하지 않습니다. 무료 model catalog는
 runtime에 조회하므로 특정 model availability를 build에 고정하지 않습니다.

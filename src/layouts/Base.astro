@@ -1,7 +1,9 @@
 ---
+import PetCoach from '@/components/ai/PetCoach';
 import Nav from '@/components/Nav.astro';
 import { url } from '@/lib/url';
 import '@/styles/global.css';
+import '@/styles/pet-coach.css';
 
 interface Props {
   title: string;
@@ -46,6 +48,7 @@ const {
   <body>
     <Nav />
     <main><slot /></main>
+    <PetCoach client:only="react" />
     <footer class="foot">
       <div class="wrap-wide">
         <p class="dim">

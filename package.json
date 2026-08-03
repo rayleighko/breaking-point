@@ -14,6 +14,8 @@
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "quality": "pnpm format:check && pnpm lint && pnpm check && pnpm test && pnpm build",
+    "test:browser": "playwright test",
+    "test:browser:install": "playwright install --with-deps chromium firefox webkit",
     "test": "node --experimental-strip-types --no-warnings test/test-engine.ts && node --experimental-strip-types --no-warnings test/test-inv.ts && node --experimental-strip-types --no-warnings test/test-chal.ts && node --experimental-strip-types --no-warnings test/test-scenario.ts && node --experimental-strip-types --no-warnings test/test-harness.ts && node --experimental-strip-types --no-warnings test/test-ai-models.ts && node --experimental-strip-types --no-warnings test/test-knowledge.ts"
   },
   "dependencies": {
@@ -30,6 +32,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.1.2",
     "@types/react": "^19.1.0",

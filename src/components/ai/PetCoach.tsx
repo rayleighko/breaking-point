@@ -99,7 +99,7 @@ export default function PetCoach() {
       data-testid="pet-coach"
     >
       {open ? (
-        <section className="pet-panel" aria-label="AI 학습 코치 Beta">
+        <section className="pet-panel" role="dialog" aria-label="AI 학습 코치">
           <header
             className="pet-panel__head"
             onPointerDown={onPointerDown}

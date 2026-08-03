@@ -58,6 +58,8 @@ implementation recipe로 확장합니다.
 Local Lab 자동화의 장기 방향과 CLI contract는 [`docs/CLI_VISION.md`](./docs/CLI_VISION.md)에 있습니다.
 글로벌 기준을 고르고 한국어로 전달하는 원칙은
 [`docs/GLOBAL_STANDARD.md`](./docs/GLOBAL_STANDARD.md)에 있습니다.
+지원 브라우저와 자동 성능 검수 범위는
+[`docs/BROWSER_SUPPORT.md`](./docs/BROWSER_SUPPORT.md)에 있습니다.
 
 ## 배포 (GitHub Pages)
 

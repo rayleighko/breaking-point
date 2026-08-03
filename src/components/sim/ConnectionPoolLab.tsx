@@ -100,6 +100,15 @@ export default function ConnectionPoolLab({ initial }: { initial?: Partial<SimCo
   const chartRef = useRef<ChartHandle>(null);
 
   useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    root.dataset.hydrated = 'true';
+    return () => {
+      delete root.dataset.hydrated;
+    };
+  }, []);
+
+  useEffect(() => {
     sim.setConfig(cfg);
     stageRef.current?.draw(); // 일시정지 중에도 창구 개수 변경이 바로 보이도록
   }, [cfg, sim]);

@@ -63,7 +63,7 @@
 .btn[data-variant='primary'] {
   background: var(--accent);
   border-color: var(--accent);
-  color: #04121f;
+  color: var(--on-accent);
 }
 .btn[data-variant='primary']:hover {
   filter: brightness(1.1);
@@ -89,15 +89,15 @@
 }
 .verdict[data-k='safe'] {
   background: var(--ok-bg);
-  color: #a5e8b0;
+  color: var(--ok-fg);
 }
 .verdict[data-k='tight'] {
   background: var(--warn-bg);
-  color: #f2d492;
+  color: var(--warn-fg);
 }
 .verdict[data-k='over'] {
   background: var(--bad-bg);
-  color: #ffb3ae;
+  color: var(--bad-fg);
 }
 .verdict b {
   color: inherit;
@@ -373,6 +373,41 @@
   }
   .metric {
     border-bottom: 1px solid var(--line-soft);
+  }
+  .sim-head,
+  .sim-actions {
+    align-items: stretch;
+  }
+  .sim-actions {
+    width: 100%;
+  }
+  .sim-actions .btn {
+    flex: 1 1 auto;
+  }
+  .controls {
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline: 0.8rem;
+  }
+  .presets {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding-inline: 0.8rem;
+  }
+  .preset:last-child {
+    grid-column: 1 / -1;
+  }
+  .toggles {
+    align-items: stretch;
+    padding-inline: 0.8rem;
+  }
+  .toggles > * {
+    flex: 1 1 100%;
+  }
+  .toggles .btn {
+    margin-left: 0 !important;
+  }
+  .math {
+    overflow-x: auto;
   }
 }
 

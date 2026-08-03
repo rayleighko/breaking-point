@@ -32,8 +32,8 @@
   padding: 0.8rem;
   border: 0;
   outline: 0;
-  background: #0b0e13;
-  color: var(--fg);
+  background: var(--code-bg);
+  color: var(--code-fg);
   font: 12.5px/1.6 var(--mono);
   tab-size: 2;
 }
@@ -61,7 +61,7 @@
 }
 .json-errors {
   padding: 0.7rem 0.8rem;
-  color: #ffb3ae;
+  color: var(--bad-fg);
   background: var(--bad-bg);
   font-size: 0.8rem;
 }

@@ -16,19 +16,6 @@ interface P {
   y: number;
 }
 
-const C = {
-  bg: '#0e1117',
-  line: '#2a323e',
-  lineSoft: '#212934',
-  fg: '#e6edf3',
-  muted: '#9aa7b5',
-  dim: '#6b7885',
-  ok: '#3fb950',
-  warn: '#e3a008',
-  bad: '#f85149',
-  accent: '#58a6ff',
-};
-
 /**
  * 은행 창구 비유 시각화.
  *   왼쪽에서 요청(손님)이 들어와 → 대기줄에 서고 → 빈 창구에서 처리되고 → 오른쪽으로 나간다.
@@ -55,6 +42,7 @@ const Stage = forwardRef<StageHandle, Props>(({ sim }, ref) => {
     }
     const g = cv.getContext('2d');
     if (!g) return;
+    const C = canvasPalette(cv);
     if (reduce.current === null) {
       reduce.current = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
     }
@@ -119,7 +107,7 @@ const Stage = forwardRef<StageHandle, Props>(({ sim }, ref) => {
       const x = p.x - boxW / 2,
         y = p.y - boxH / 2;
       const r = sim.servers[s];
-      g.fillStyle = '#151b24';
+      g.fillStyle = C.bgSoft;
       roundRect(g, x, y, boxW, boxH, 3);
       g.fill();
       if (r) {
@@ -131,10 +119,12 @@ const Stage = forwardRef<StageHandle, Props>(({ sim }, ref) => {
         g.fill();
         g.globalAlpha = 1;
       }
-      g.strokeStyle = r ? 'rgba(88,166,255,.5)' : C.lineSoft;
+      g.strokeStyle = r ? C.accent : C.lineSoft;
+      g.globalAlpha = r ? 0.5 : 1;
       g.lineWidth = 1;
       roundRect(g, x + 0.5, y + 0.5, boxW - 1, boxH - 1, 3);
       g.stroke();
+      g.globalAlpha = 1;
     }
     if (N > shown) {
       g.fillStyle = C.dim;
@@ -277,7 +267,11 @@ const Stage = forwardRef<StageHandle, Props>(({ sim }, ref) => {
   useEffect(() => {
     const onResize = () => drawRef.current();
     window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
+    window.addEventListener('themechange', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('themechange', onResize);
+    };
   }, []);
 
   return (
@@ -289,6 +283,21 @@ const Stage = forwardRef<StageHandle, Props>(({ sim }, ref) => {
     />
   );
 });
+
+function canvasPalette(element: HTMLElement) {
+  const style = getComputedStyle(element);
+  const token = (name: string) => style.getPropertyValue(name).trim();
+  return {
+    bgSoft: token('--bg-soft'),
+    lineSoft: token('--line-soft'),
+    muted: token('--fg-muted'),
+    dim: token('--fg-dim'),
+    ok: token('--ok'),
+    warn: token('--warn'),
+    bad: token('--bad'),
+    accent: token('--accent'),
+  };
+}
 
 function roundRect(
   g: CanvasRenderingContext2D,

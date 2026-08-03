@@ -9,14 +9,14 @@ export interface GraphTopic {
 }
 
 const COLORS: Record<string, string> = {
-  'CS 기초': '#7dd3fc',
-  개념: '#a7f3d0',
-  시스템: '#fbbf24',
-  운영: '#fb7185',
-  '개발 방식': '#c4b5fd',
-  Product: '#f9a8d4',
-  Design: '#fdba74',
-  'AI Engineering': '#67e8f9',
+  'CS 기초': 'var(--graph-cs)',
+  개념: 'var(--graph-concept)',
+  시스템: 'var(--graph-system)',
+  운영: 'var(--graph-ops)',
+  '개발 방식': 'var(--graph-practice)',
+  Product: 'var(--graph-product)',
+  Design: 'var(--graph-design)',
+  'AI Engineering': 'var(--graph-ai)',
 };
 
 export default function KnowledgeGraph({ topics }: { topics: GraphTopic[] }) {

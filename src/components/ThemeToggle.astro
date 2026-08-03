@@ -1,0 +1,69 @@
+<button class="theme-toggle" type="button" aria-label="다크 테마로 전환" title="테마 전환">
+  <span class="theme-icon" aria-hidden="true">☾</span>
+  <span class="theme-label">다크</span>
+</button>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('.theme-toggle');
+
+  const render = () => {
+    if (!button) return;
+    const dark = document.documentElement.dataset.theme === 'dark';
+    const icon = button.querySelector<HTMLElement>('.theme-icon');
+    const label = button.querySelector<HTMLElement>('.theme-label');
+    if (icon) icon.textContent = dark ? '☀' : '☾';
+    if (label) label.textContent = dark ? '라이트' : '다크';
+    button.setAttribute('aria-label', `${dark ? '라이트' : '다크'} 테마로 전환`);
+  };
+
+  button?.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem('breaking-point-theme', next);
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', next === 'dark' ? '#0e1117' : '#f8fafc');
+    render();
+    window.dispatchEvent(new CustomEvent('themechange', { detail: next }));
+  });
+
+  render();
+</script>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    min-height: 36px;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.58rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--bg-card);
+    color: var(--fg-muted);
+    font: 0.76rem var(--sans);
+    cursor: pointer;
+  }
+  .theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--fg);
+  }
+  .theme-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .theme-icon {
+    font-size: 0.92rem;
+    line-height: 1;
+  }
+  @media (max-width: 430px) {
+    .theme-label {
+      display: none;
+    }
+    .theme-toggle {
+      width: 36px;
+      justify-content: center;
+      padding: 0;
+    }
+  }
+</style>

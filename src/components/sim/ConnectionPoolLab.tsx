@@ -213,7 +213,8 @@ export default function ConnectionPoolLab({ initial }: { initial?: Partial<SimCo
           <span
             className="hl"
             style={{
-              color: health === 'over' ? '#f85149' : health === 'tight' ? '#e3a008' : '#3fb950',
+              color:
+                health === 'over' ? 'var(--bad)' : health === 'tight' ? 'var(--warn)' : 'var(--ok)',
             }}
           >
             {(th.rho * 100).toFixed(0)}%

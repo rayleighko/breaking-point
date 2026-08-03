@@ -2,24 +2,41 @@
 
 /* ── Breaking Point 디자인 토큰 ─────────────────────────────── */
 :root {
-  --bg: #0e1117;
-  --bg-soft: #151b24;
-  --bg-card: #1a2029;
-  --line: #2a323e;
-  --line-soft: #212934;
+  color-scheme: light;
+  --bg: #f8fafc;
+  --bg-soft: #f1f5f9;
+  --bg-card: #ffffff;
+  --line: #cbd5e1;
+  --line-soft: #e2e8f0;
 
-  --fg: #e6edf3;
-  --fg-muted: #9aa7b5;
-  --fg-dim: #808d9b; /* WCAG AA 4.5:1 확보 (작은 글씨에 쓰임) */
+  --fg: #172033;
+  --fg-muted: #4b5d73;
+  --fg-dim: #64748b;
 
-  --ok: #3fb950;
-  --ok-bg: rgba(63, 185, 80, 0.12);
-  --warn: #e3a008;
-  --warn-bg: rgba(227, 160, 8, 0.12);
-  --bad: #f85149;
-  --bad-bg: rgba(248, 81, 73, 0.12);
-  --accent: #58a6ff;
-  --accent-bg: rgba(88, 166, 255, 0.12);
+  --ok: #16794b;
+  --ok-bg: rgba(22, 121, 75, 0.1);
+  --ok-fg: #12633f;
+  --warn: #9a6700;
+  --warn-bg: rgba(154, 103, 0, 0.1);
+  --warn-fg: #765000;
+  --bad: #c7352d;
+  --bad-bg: rgba(199, 53, 45, 0.1);
+  --bad-fg: #a22d27;
+  --accent: #0969da;
+  --accent-bg: rgba(9, 105, 218, 0.1);
+  --on-accent: #ffffff;
+  --code-bg: #f6f8fa;
+  --code-fg: #1f2937;
+  --shadow-lg: 0 16px 40px rgba(28, 39, 54, 0.14);
+
+  --graph-cs: #0369a1;
+  --graph-concept: #047857;
+  --graph-system: #a16207;
+  --graph-ops: #be123c;
+  --graph-practice: #6d28d9;
+  --graph-product: #be185d;
+  --graph-design: #c2410c;
+  --graph-ai: #0e7490;
 
   --radius: 10px;
   --mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
@@ -28,12 +45,48 @@
     Segoe UI, Roboto, sans-serif;
 }
 
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0e1117;
+  --bg-soft: #151b24;
+  --bg-card: #1a2029;
+  --line: #2a323e;
+  --line-soft: #212934;
+  --fg: #e6edf3;
+  --fg-muted: #9aa7b5;
+  --fg-dim: #808d9b;
+  --ok: #3fb950;
+  --ok-bg: rgba(63, 185, 80, 0.12);
+  --ok-fg: #a5e8b0;
+  --warn: #e3a008;
+  --warn-bg: rgba(227, 160, 8, 0.12);
+  --warn-fg: #f2d492;
+  --bad: #f85149;
+  --bad-bg: rgba(248, 81, 73, 0.12);
+  --bad-fg: #ffb3ae;
+  --accent: #58a6ff;
+  --accent-bg: rgba(88, 166, 255, 0.12);
+  --on-accent: #04121f;
+  --code-bg: #0b0e13;
+  --code-fg: #e6edf3;
+  --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.4);
+  --graph-cs: #7dd3fc;
+  --graph-concept: #a7f3d0;
+  --graph-system: #fbbf24;
+  --graph-ops: #fb7185;
+  --graph-practice: #c4b5fd;
+  --graph-product: #f9a8d4;
+  --graph-design: #fdba74;
+  --graph-ai: #67e8f9;
+}
+
 * {
   box-sizing: border-box;
 }
 
 html {
   scroll-behavior: smooth;
+  background: var(--bg);
 }
 
 body {
@@ -46,6 +99,26 @@ body {
   -webkit-font-smoothing: antialiased;
   word-break: keep-all; /* 한국어 줄바꿈: 단어 단위 유지 */
   overflow-wrap: break-word;
+}
+
+main,
+section,
+article,
+div {
+  min-width: 0;
+}
+
+img,
+video,
+canvas {
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  max-width: 100%;
 }
 
 a {
@@ -132,6 +205,20 @@ th {
   font-weight: 600;
 }
 @media (max-width: 640px) {
+  body {
+    font-size: 16px;
+    word-break: normal;
+  }
+  h1 {
+    font-size: 1.8rem;
+  }
+  h2 {
+    margin-top: 2.4rem;
+  }
+  .wrap,
+  .wrap-wide {
+    padding-inline: 1rem;
+  }
   table {
     display: block;
     max-width: 100%;

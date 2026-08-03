@@ -1,4 +1,5 @@
 ---
+import ThemeToggle from '@/components/ThemeToggle.astro';
 import { url } from '@/lib/url';
 
 const path = Astro.url.pathname.replace(/\/$/, '');
@@ -11,7 +12,7 @@ const isActive = (href: string) => path.startsWith(url(href).replace(/\/$/, ''))
       <span class="brand-mark" aria-hidden="true"></span>
       <span class="brand-text">Breaking&nbsp;Point</span>
     </a>
-    <nav class="links">
+    <nav class="links" aria-label="주요 메뉴">
       <a href={url('/labs')} class:list={[{ on: isActive('/labs') }]}>실험실</a>
       <a href={url('/topics')} class:list={[{ on: isActive('/topics') }]}>주제</a>
       <a href={url('/playground')} class:list={[{ on: isActive('/playground') }]}>Playground</a>
@@ -21,8 +22,53 @@ const isActive = (href: string) => path.startsWith(url(href).replace(/\/$/, ''))
         >GitHub</a
       >
     </nav>
+    <div class="nav-actions">
+      <ThemeToggle />
+      <div class="mobile-menu">
+        <button type="button" aria-expanded="false" aria-controls="mobile-navigation">메뉴</button>
+        <nav id="mobile-navigation" aria-label="모바일 메뉴" hidden>
+          <a href={url('/labs')}>실험실</a>
+          <a href={url('/topics')}>주제</a>
+          <a href={url('/playground')}>Playground</a>
+          <a href={url('/ai')}>AI 코치</a>
+          <a href={url('/roadmap')}>로드맵</a>
+          <a href="https://github.com/rayleighko/breaking-point">GitHub ↗</a>
+        </nav>
+      </div>
+    </div>
   </div>
 </header>
+
+<script>
+  const menu = document.querySelector<HTMLElement>('.mobile-menu');
+  const button = menu?.querySelector<HTMLButtonElement>('button');
+  const panel = menu?.querySelector<HTMLElement>('nav');
+
+  const closeMenu = () => {
+    if (!button || !panel) return;
+    button.setAttribute('aria-expanded', 'false');
+    panel.hidden = true;
+  };
+
+  button?.addEventListener('click', () => {
+    if (!panel) return;
+    const open = button.getAttribute('aria-expanded') !== 'true';
+    button.setAttribute('aria-expanded', String(open));
+    panel.hidden = !open;
+  });
+  panel?.addEventListener('click', (event) => {
+    if ((event.target as HTMLElement).closest('a')) closeMenu();
+  });
+  document.addEventListener('click', (event) => {
+    if (menu && !menu.contains(event.target as Node)) closeMenu();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeMenu();
+      button?.focus();
+    }
+  });
+</script>
 
 <style>
   .nav {
@@ -38,6 +84,54 @@ const isActive = (href: string) => path.startsWith(url(href).replace(/\/$/, ''))
     align-items: center;
     justify-content: space-between;
     height: 54px;
+  }
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+  .mobile-menu {
+    display: none;
+    position: relative;
+  }
+  .mobile-menu > button {
+    display: grid;
+    place-items: center;
+    min-height: 36px;
+    padding: 0.3rem 0.65rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--bg-card);
+    color: var(--fg-muted);
+    font-size: 0.78rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .mobile-menu nav {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    display: grid;
+    width: min(220px, calc(100vw - 2rem));
+    padding: 0.45rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--bg-card);
+    box-shadow: var(--shadow-lg);
+  }
+  .mobile-menu nav[hidden] {
+    display: none;
+  }
+  .mobile-menu nav a {
+    padding: 0.55rem 0.65rem;
+    border-radius: 7px;
+    color: var(--fg-muted);
+    font-size: 0.86rem;
+  }
+  .mobile-menu nav a:hover {
+    background: var(--bg-soft);
+    color: var(--fg);
+    text-decoration: none;
   }
   .brand {
     display: flex;
@@ -80,13 +174,12 @@ const isActive = (href: string) => path.startsWith(url(href).replace(/\/$/, ''))
   .links a.on {
     color: var(--fg);
   }
-  @media (max-width: 620px) {
+  @media (max-width: 760px) {
     .links {
-      gap: 0.62rem;
-      font-size: 0.78rem;
+      display: none !important;
     }
-    .links a:last-child {
-      display: none;
+    .mobile-menu {
+      display: block;
     }
   }
 </style>

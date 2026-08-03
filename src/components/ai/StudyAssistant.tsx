@@ -146,7 +146,7 @@ export default function StudyAssistant() {
             >
               {message.role === 'assistant' && <span aria-hidden="true">🐾</span>}
               <p
-                className={`m-0 max-w-[85%] whitespace-pre-wrap rounded-xl px-3 py-2 text-sm leading-6 ${message.role === 'user' ? 'bg-[var(--accent)] text-[#071018]' : 'border border-[var(--line)] bg-[var(--bg-soft)]'}`}
+                className={`m-0 max-w-[85%] whitespace-pre-wrap rounded-xl px-3 py-2 text-sm leading-6 ${message.role === 'user' ? 'bg-[var(--accent)] text-[var(--on-accent)]' : 'border border-[var(--line)] bg-[var(--bg-soft)]'}`}
               >
                 {message.content}
               </p>
@@ -158,7 +158,7 @@ export default function StudyAssistant() {
           {error && (
             <div
               role="alert"
-              className="mb-3 rounded-md border border-[var(--bad)] bg-[var(--bad-bg)] p-2 text-sm text-[#ffb3ae]"
+              className="mb-3 rounded-md border border-[var(--bad)] bg-[var(--bad-bg)] p-2 text-sm text-[var(--bad-fg)]"
             >
               {error}
             </div>

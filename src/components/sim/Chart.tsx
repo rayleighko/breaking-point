@@ -17,8 +17,6 @@ interface Sample {
 }
 
 const WINDOW_MS = 30_000;
-const C = { line: '#212934', dim: '#6b7885', ok: '#3fb950', bad: '#f85149', accent: '#58a6ff' };
-
 /** 시간에 따른 응답시간(p50/p99)과 에러율 그래프. y축은 로그 스케일. */
 const Chart = forwardRef<ChartHandle, object>((_props, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -49,6 +47,7 @@ const Chart = forwardRef<ChartHandle, object>((_props, ref) => {
     }
     const g = cv.getContext('2d');
     if (!g) return;
+    const C = chartPalette(cv);
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
     g.clearRect(0, 0, W, H);
 
@@ -105,7 +104,7 @@ const Chart = forwardRef<ChartHandle, object>((_props, ref) => {
     for (const s of d) g.lineTo(xOf(s.t), padT + plotH - plotH * 0.32 * Math.min(1, s.err));
     g.lineTo(xOf(t1), padT + plotH);
     g.closePath();
-    g.fillStyle = 'rgba(248,81,73,.18)';
+    g.fillStyle = C.badBg;
     g.fill();
 
     // p50 / p99 라인
@@ -152,10 +151,26 @@ const Chart = forwardRef<ChartHandle, object>((_props, ref) => {
     draw();
     const onResize = () => draw();
     window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
+    window.addEventListener('themechange', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('themechange', onResize);
+    };
   }, []);
   return <canvas ref={canvasRef} className="stage" role="img" aria-label="응답시간 추이 그래프" />;
 });
+
+function chartPalette(element: HTMLElement) {
+  const style = getComputedStyle(element);
+  const token = (name: string) => style.getPropertyValue(name).trim();
+  return {
+    line: token('--line-soft'),
+    dim: token('--fg-dim'),
+    bad: token('--bad'),
+    badBg: token('--bad-bg'),
+    accent: token('--accent'),
+  };
+}
 
 function fmt(ms: number) {
   if (!ms) return '—';

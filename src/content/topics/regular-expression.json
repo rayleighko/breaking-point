@@ -1,0 +1,63 @@
+{
+  "name": "Regular Expression(정규표현식)",
+  "kind": "CS 기초",
+  "oneLiner": "문자열에서 반복되는 모양을 찾아 검사하고 뽑아내거나 바꾸는 패턴 언어",
+  "description": "로그에서 request ID만 뽑거나 입력 형식을 빠르게 검사할 때 문자열을 한 글자씩 비교하지 않고 패턴으로 표현합니다. `/error|timeout/i`는 대소문자를 구분하지 않고 error 또는 timeout을 찾는 JavaScript 정규표현식입니다. 짧은 검색과 치환에는 유용하지만 중첩된 반복이나 겹치는 선택지는 입력이 길어질수록 많은 backtracking을 만들 수 있습니다. 복잡한 문법 전체를 정규표현식 하나로 해석하거나 client 검증만으로 보안을 보장하는 도구는 아닙니다.",
+  "signals": [
+    "로그와 URL에서 일정한 형식의 값 추출",
+    "문자열 validation과 일괄 치환",
+    "복잡한 패턴에서 CPU 사용량과 처리시간 급증",
+    "사용자 입력으로 동적인 패턴 생성"
+  ],
+  "related": ["complexity", "code-smell", "timeout"],
+  "relations": [
+    {
+      "slug": "complexity",
+      "type": "선행 개념",
+      "note": "같은 결과를 내는 패턴도 engine이 탐색해야 하는 경로 수에 따라 비용이 크게 달라집니다."
+    },
+    {
+      "slug": "code-smell",
+      "type": "함께 보기",
+      "note": "정규표현식이 길어질수록 이름을 붙인 작은 단계나 parser가 의도를 더 잘 드러낼 수 있습니다."
+    },
+    {
+      "slug": "timeout",
+      "type": "적용 사례",
+      "note": "외부 입력을 검사하는 비싼 패턴은 request 처리시간을 소모하고 ReDoS로 이어질 수 있습니다."
+    }
+  ],
+  "keywords": [
+    "Regex",
+    "RegExp",
+    "정규식",
+    "pattern matching",
+    "character class",
+    "quantifier",
+    "capture group",
+    "backtracking",
+    "ReDoS"
+  ],
+  "context": {
+    "standing": "국제 표준",
+    "attribution": "ECMA-262 RegExp",
+    "note": "Regular Expression은 여러 언어와 도구에서 쓰이는 일반 개념입니다. 이 문서의 문법 예시는 ECMAScript RegExp를 기준으로 하며 Go, Rust, Java와 다른 engine에서는 지원 기능과 성능 특성이 달라질 수 있습니다."
+  },
+  "sources": [
+    {
+      "title": "ECMAScript Language Specification — RegExp Objects",
+      "url": "https://tc39.es/ecma262/multipage/text-processing.html#sec-regexp-regular-expression-objects",
+      "type": "원전"
+    },
+    {
+      "title": "MDN JavaScript Guide — Regular expressions",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions",
+      "type": "공식 문서"
+    },
+    {
+      "title": "OWASP — Regular expression Denial of Service",
+      "url": "https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS",
+      "type": "참고 자료"
+    }
+  ]
+}

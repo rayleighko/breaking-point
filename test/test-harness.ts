@@ -10,7 +10,14 @@ const requiredReferences: Record<string, string[]> = {
   'README.md': ['docs/GLOBAL_STANDARD.md'],
   'docs/DOMAIN_AI.md': ['docs/RETRIEVAL_COST_POLICY.md'],
   'docs/SEARCH_ARCHITECTURE.md': ['docs/RETRIEVAL_COST_POLICY.md'],
-  'docs/AI_HARNESS.md': ['docs/DECISIONS.md', 'CHANGELOG.md', 'HANDOFF.md'],
+  'docs/AI_HARNESS.md': [
+    'docs/DECISIONS.md',
+    'CHANGELOG.md',
+    'HANDOFF.md',
+    'docs/AI_DEVELOPMENT_LOOP.md',
+  ],
+  'docs/AI_DEVELOPMENT_LOOP.md': ['docs/GITFLOW.md', 'docs/GLOBAL_STANDARD.md'],
+  'docs/GITFLOW.md': ['Rebase and merge', 'docs/AI_DEVELOPMENT_LOOP.md'],
 };
 
 for (const [file, references] of Object.entries(requiredReferences)) {

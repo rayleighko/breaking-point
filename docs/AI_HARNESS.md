@@ -30,12 +30,16 @@ Evidence: test, browser state, measurement 또는 screenshot
 
 ## Agent loop
 
+상세 delivery·review·rebase 순환은 [`docs/AI_DEVELOPMENT_LOOP.md`](./AI_DEVELOPMENT_LOOP.md)를 따릅니다.
+공개 설명은 `/process` 페이지를 봅니다.
+
 1. **Orient** — 관련 `AGENTS.md`, contract, current implementation과 test를 읽습니다.
 2. **Predict** — 변경될 behavior, 영향 surface와 실패 가능성을 짧게 기록합니다.
 3. **Change** — acceptance에 필요한 가장 작은 coherent change를 만듭니다.
 4. **Verify** — 가까운 test부터 실행하고 마지막에 `pnpm quality`를 실행합니다.
-5. **Observe** — UI면 browser, performance면 raw measurement로 실제 결과를 확인합니다.
-6. **Handoff** — 변경, evidence, 남은 risk와 다음 결정을 분리해 보고합니다.
+5. **Review** — Standards와 Spec 축을 분리해 검토합니다. 외부 CLI는 권장 참고일 뿐입니다.
+6. **Observe** — UI면 browser, performance면 raw measurement로 실제 결과를 확인합니다.
+7. **Handoff** — 변경, evidence, 남은 risk와 다음 결정을 분리해 보고합니다.
 
 ## Cost and retrieval gate
 
@@ -78,7 +82,14 @@ required checks were actually run.
 - **Drift control:** adapter에는 canonical rule을 복사하지 않고 경로만 둡니다.
 - **Human ownership:** contributor는 선택한 대안과 포기한 대안을 설명할 수 있어야 합니다.
 
+## Optional tooling
+
+mattpocock/skills, Alibaba Open Code Review, Ouroboros 같은 외부 도구는 **권장 참고**입니다. 설치나
+CI 통과를 merge 조건으로 두지 않습니다. 필수 게이트는 `pnpm quality`와 해당 UI evidence입니다. 언제
+쓰면 좋은지는 [`docs/AI_DEVELOPMENT_LOOP.md`](./AI_DEVELOPMENT_LOOP.md)를 봅니다.
+
 ## PR handoff
 
 AI를 사용한 PR은 사용자 관점의 변경 결과, 변경한 contract, 정확한 검증 명령, browser 관찰, 선택하지 않은
 대안과 알려진 limitation을 포함합니다. model 이름과 prompt 전문보다 결과에 대한 이해와 evidence를 우선합니다.
+feature → `develop`과 release → `main`은 rebase merge로 선형 이력을 유지합니다.

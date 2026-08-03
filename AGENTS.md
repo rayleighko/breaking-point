@@ -56,5 +56,7 @@ Breaking Point는 system behavior를 browser simulation으로 부수며 배우�
   저장소로 요구사항을 충족할 수 있으면 그것을 우선합니다.
 - commit message는 `영역: 변경 내용` 형식의 한국어로 작성합니다.
 
-상세 harness contract와 제품별 사용법은 `docs/AI_HARNESS.md`, 프로젝트 skill은
-`skills/breaking-point-maintainer/SKILL.md`에 있습니다.
+상세 harness contract와 제품별 사용법은 `docs/AI_HARNESS.md`, delivery·review 순환은
+`docs/AI_DEVELOPMENT_LOOP.md`, 브랜치·rebase 규칙은 `docs/GITFLOW.md`, 프로젝트 skill은
+`skills/breaking-point-maintainer/SKILL.md`에 있습니다. 외부 Agent OS·리뷰 CLI는 권장 참고이며
+필수 merge 조건이 아닙니다.

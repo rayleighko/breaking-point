@@ -5,13 +5,13 @@ Breaking Point는 GitHub Pages의 `main` 배포를 보호하기 위해 축소형
 
 ## Branches
 
-| 브랜치 | 역할 | 배포 |
-| ------ | ---- | ---- |
-| `main` | 공개 가능한 안정 버전 | push 시 GitHub Pages 배포 |
-| `develop` | 다음 공개를 모으는 통합 브랜치 | 배포하지 않음 |
-| `feature/<slug>` | 로드맵 lab·기능 단위 작업 | PR로만 `develop`에 합침 |
-| `release/<yyyy-mm-dd>` | 공개 전 최종 점검 | PR로 `main`과 `develop`에 합침 |
-| `hotfix/<slug>` | 공개 사이트 긴급 수정 | `main`에서 분기 후 `main`·`develop`에 합침 |
+| 브랜치                 | 역할                           | 배포                                       |
+| ---------------------- | ------------------------------ | ------------------------------------------ |
+| `main`                 | 공개 가능한 안정 버전          | push 시 GitHub Pages 배포                  |
+| `develop`              | 다음 공개를 모으는 통합 브랜치 | 배포하지 않음                              |
+| `feature/<slug>`       | 로드맵 lab·기능 단위 작업      | PR로만 `develop`에 합침                    |
+| `release/<yyyy-mm-dd>` | 공개 전 최종 점검              | PR로 `main`과 `develop`에 합침             |
+| `hotfix/<slug>`        | 공개 사이트 긴급 수정          | `main`에서 분기 후 `main`·`develop`에 합침 |
 
 ## Feature 크기
 

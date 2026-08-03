@@ -6,6 +6,8 @@
 
 ### Added
 
+- 공개 `/process` 페이지와 로드맵의 시스템·delivery 구조 시각화
+- AI development loop 문서와 rebase 기반 GitFlow 규칙
 - p50과 p99 lab: 같은 평균·다른 꼬리 나란히 비교와 평균만 맞추기 챌린지
 - Queue의 감각 lab: 이용률 슬라이더와 대기시간 곡선, 피크 여유 챌린지
 - Bug, Lab, Knowledge, Feature/Architecture용 GitHub Issue Form과 evidence 중심 PR template

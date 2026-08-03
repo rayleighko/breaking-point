@@ -38,12 +38,15 @@ maintainer와 contributor 모두의 시간을 보호하기 위한 규칙입니�
 
 ## Branch strategy
 
-축소형 GitFlow를 사용합니다. 상세는 [`docs/GITFLOW.md`](./docs/GITFLOW.md)를 봅니다.
+축소형 GitFlow와 **rebase merge**를 사용합니다. 상세는 [`docs/GITFLOW.md`](./docs/GITFLOW.md)와
+[`docs/AI_DEVELOPMENT_LOOP.md`](./docs/AI_DEVELOPMENT_LOOP.md)를 봅니다. 공개 온보딩은
+[프로세스 페이지](https://rayleighko.github.io/breaking-point/process/)를 봅니다.
 
 - `main` — 공개 사이트. 직접 feature 커밋을 올리지 않습니다.
 - `develop` — 다음 공개를 모으는 통합 브랜치
-- `feature/<slug>` — 로드맵 lab·기능 단위. PR 대상은 `develop`입니다.
-- `release/<date>` 또는 `develop` → `main` PR로만 배포합니다.
+- `feature/<slug>` — 로드맵 lab·기능 단위. PR 대상은 `develop`이며 **Rebase and merge**합니다.
+- `release/<date>` → `main`도 rebase로 공개합니다.
+- Open Code Review, external skills, Agent OS는 권장 참고이며 CI 필수 게이트가 아닙니다.
 
 ## Pull request checklist
 

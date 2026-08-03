@@ -7,6 +7,7 @@
 - Related Issue/Proposal:
 - Change type: <!-- content / engine / challenge / frontend / infrastructure / documentation -->
 - Read first: <!-- 실제로 확인한 contract 문서 -->
+- Merge plan: Rebase and merge into `develop` (release → `main`도 rebase)
 
 ## What changed
 

@@ -7,8 +7,12 @@
 
 ## 프로젝트 컨텍스트
 
-`breaking-point` — 백엔드 엔지니어링을 **브라우저에서 직접 시뮬레이션을 부숴보며** 배우는
-공개 학습 사이트. Astro 5 + React 19 아일랜드, GitHub Pages 정적 배포, 한국어.
+`breaking-point` — AI 시대의 software engineer가 시스템을 **브라우저 simulation으로 직접
+부숴보며** 배우는 공개 학습 사이트. Astro 5 + React 19 island, GitHub Pages 정적 배포, 한국어.
+
+- 공개 주소: <https://rayleighko.github.io/breaking-point/>
+- repository: <https://github.com/rayleighko/breaking-point>
+- package manager: pnpm 10 (`pnpm-lock.yaml`을 source of truth로 사용)
 
 **설계 원칙 4가지** (모든 판단의 기준. 어길 때는 이유를 명시할 것):
 
@@ -33,6 +37,13 @@
   - 챌린지(`Challenge.tsx` — 트래픽 스파이크 방어)
   - 확인 문제(`Quiz.tsx`)
 - 엔진 테스트 3종 (`test/`, `pnpm test`)
+- 정적 Wiki content collection과 knowledge graph (`src/content/topics/*.json`)
+- Pagefind 기반 통합 검색: lab·Wiki·roadmap·resource 검색
+- JSON scenario playground와 공유 가능한 URL
+- 라이트/다크 테마, 반응형 navigation, 375px mobile 기준
+- 전역 AI Pet Coach beta UI와 OpenRouter용 Cloudflare Worker proxy 뼈대
+- ESLint·Prettier·TypeScript·engine test·build를 묶은 `pnpm quality`
+- Chromium·Firefox·WebKit용 Playwright compatibility/performance test
 
 **검증된 것**
 
@@ -78,12 +89,18 @@
 
 ### C. 알려진 개선 과제
 
-- [ ] `Stage.tsx` — 요청 수가 많을 때 캔버스 성능 프로파일링. 60fps 유지되는지 확인.
-      (현재 대기줄은 최대 120개까지만 렌더하고 나머지는 숫자로 표시)
-- [ ] 시뮬레이터 상태를 URL 쿼리에 직렬화 — 특정 설정을 링크로 공유 가능하게
+- [x] `Stage.tsx` — browser performance budget과 자동 회귀 검수 추가
+      (`test/browser/performance.spec.ts`, 상세 기준은 `docs/PERFORMANCE.md`)
+- [x] scenario 상태를 URL query에 직렬화 — playground 설정 공유 가능
 - [ ] `Chart.tsx`에 처리량(throughput) 라인 추가 검토 (현재는 지연시간과 에러율만)
-- [ ] 다크/라이트 테마 토글 (현재 다크 고정)
+- [x] 다크/라이트 테마 토글과 system preference 지원 (기본은 라이트)
 - [ ] OG 이미지 자동 생성
+- [ ] AI Gateway 실제 배포: OpenRouter key, Cloudflare Worker, `PUBLIC_AI_API_URL` 연결
+- [ ] 최종 고양이 sprite asset 제작과 상태별 animation 연결
+- [ ] Wiki 규모가 수천 건을 넘을 때 build 시간·검색 index 크기를 측정하고 외부 검색 전환 판단
+
+Cloudflare는 정적 site hosting이 아니라 AI API key를 보호하는 proxy에만 사용합니다. 설정과 수동 작업은
+`docs/AI_GATEWAY.md`를 따릅니다. API key를 repository나 `PUBLIC_` 환경 변수에 넣지 않습니다.
 
 ### D. 다음 콘텐츠 (`src/lib/roadmap.ts`가 전체 목차 = 진행 상황판)
 
@@ -114,3 +131,12 @@
   코드로 확인한 뒤에 배포한다.
 - **콘텐츠를 쓰기 전에 `CONTENT_GUIDE.md`의 9단 구조와 발행 전 체크리스트를 확인한다.**
 - 커밋 메시지는 한국어로, `랩: 캐시 스탬피드 추가` / `엔진: 캐시 계층 지원` 식으로.
+
+## 다음 작업 시작점
+
+1. 일반 변경은 `AGENTS.md` → 관련 문서 → 관련 test 순으로 읽습니다.
+2. 현재 상태 확인은 `git status --short --branch`와 `pnpm quality`로 시작합니다.
+3. UI 변경은 `docs/FRONTEND_GUIDELINES.md`, simulation 변경은 `docs/ENGINE_GUIDE.md`, 새 콘텐츠는
+   `CONTENT_GUIDE.md`를 먼저 읽습니다.
+4. 완료 후 `main`에 push하면 GitHub Pages가 자동 배포됩니다. Actions와 공개 URL을 모두 확인합니다.
+5. AI Coach를 활성화하려면 먼저 `docs/AI_GATEWAY.md`의 Cloudflare 단계와 수동 secret 등록을 완료합니다.

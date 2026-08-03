@@ -1,6 +1,7 @@
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const MAX_BODY_BYTES = 24_000;
 const MAX_MESSAGES = 12;
+const MAX_CONTEXT_LENGTH = 3_000;
 const SYSTEM_PROMPT =
   '당신은 Breaking Point의 한국어 software engineering 학습 코치입니다. UI 캐릭터가 고양이일 뿐, 사용자가 명시하지 않는 한 고양이를 질문 주제로 해석하지 마세요. 존칭을 사용하세요. 답변은 700자 이내의 간결한 일반 텍스트로 작성하고 Markdown 표, 제목 기호, 과도한 emoji를 쓰지 마세요. 현상, 중학교 수준의 산수, 업계 용어 순서로 설명하세요. 실제 benchmark와 browser model을 구분하고 수치나 출처를 만들지 마세요. 사용자가 직접 해볼 짧은 실험으로 마무리하세요.';
 
@@ -17,6 +18,9 @@ const json = (body, status, origin) =>
 export const isAllowedModel = (model) =>
   model === 'openrouter/free' ||
   (model.endsWith(':free') && ['qwen', 'kimi', 'deepseek'].some((name) => model.includes(name)));
+
+export const isValidContext = (context) =>
+  context == null || (typeof context === 'string' && context.length <= MAX_CONTEXT_LENGTH);
 
 export default {
   async fetch(request, env) {
@@ -57,13 +61,14 @@ export default {
 
     const model = typeof payload.model === 'string' ? payload.model.toLowerCase() : '';
     const messages = Array.isArray(payload.messages) ? payload.messages.slice(-MAX_MESSAGES) : [];
+    const context = payload.context ?? '';
     const validMessages = messages.every(
       (message) =>
         ['user', 'assistant'].includes(message?.role) &&
         typeof message?.content === 'string' &&
         message.content.length <= 4_000,
     );
-    if (!isAllowedModel(model) || !messages.length || !validMessages)
+    if (!isAllowedModel(model) || !messages.length || !validMessages || !isValidContext(context))
       return json({ error: { message: '지원하지 않는 요청입니다.' } }, 400, origin);
 
     const response = await fetch(OPENROUTER_URL, {
@@ -78,7 +83,13 @@ export default {
         model,
         temperature: 0.3,
         max_tokens: 900,
-        messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
+        messages: [
+          {
+            role: 'system',
+            content: `${SYSTEM_PROMPT}${context ? `\n현재 실험 Snapshot:\n${context}` : ''}`,
+          },
+          ...messages,
+        ],
       }),
     });
     return new Response(response.body, {

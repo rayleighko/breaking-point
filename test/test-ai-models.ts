@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 
 import { selectFreeStudyModels } from '../src/lib/ai/openrouter.ts';
-import { isAllowedModel } from '../workers/ai-proxy/src/index.js';
+import { isAllowedModel, isValidContext } from '../workers/ai-proxy/src/index.js';
 
 const selected = selectFreeStudyModels({
   data: [
@@ -24,3 +24,8 @@ assert.equal(isAllowedModel('qwen/example:free'), true);
 assert.equal(isAllowedModel('deepseek/example:paid'), false);
 assert.equal(isAllowedModel('openai/frontier:free'), false);
 console.log('PASS  AI gateway 무료 model allowlist');
+
+assert.equal(isValidContext('{"lab":"connection-pool"}'), true);
+assert.equal(isValidContext('x'.repeat(3_001)), false);
+assert.equal(isValidContext({ lab: 'connection-pool' }), false);
+console.log('PASS  AI gateway 실험 Snapshot 크기와 형식 제한');

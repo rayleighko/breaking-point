@@ -61,6 +61,7 @@ test.describe('브라우저 호환성', () => {
   test('한글 조합 중 Enter는 질문을 전송하지 않습니다', async ({ page }) => {
     await page.goto(`${BASE}/`, { waitUntil: 'networkidle' });
     await page.getByRole('button', { name: 'AI 학습 코치 열기' }).click();
+    await page.getByRole('tab', { name: '코칭' }).click();
 
     const input = page.getByRole('textbox', { name: 'AI 학습 코치에게 질문' });
     await input.dispatchEvent('compositionstart', { data: '녕' });
@@ -92,6 +93,39 @@ test.describe('브라우저 호환성', () => {
     expect(after!.x).toBeLessThan(before!.x - 80);
     await launcher.press('Enter');
     await expect(page.getByRole('dialog', { name: 'AI 학습 코치' })).toBeVisible();
+  });
+
+  test('Mini Lab에서 제안한 변경은 승인한 뒤 본문 실험에 적용됩니다', async ({ page }) => {
+    await page.goto(`${BASE}/labs/connection-pool`, { waitUntil: 'networkidle' });
+    const simulator = page.locator('.sim');
+    await simulator.scrollIntoViewIfNeeded();
+    await page.locator('.sim[data-hydrated="true"]').waitFor();
+    await page.getByRole('button', { name: /커넥션 고갈/ }).click();
+
+    await page.getByRole('heading', { name: '왜 이렇게 되는지, 산수로' }).scrollIntoViewIfNeeded();
+    await page.getByRole('button', { name: 'AI 학습 코치 열기' }).click();
+    const dialog = page.getByRole('dialog', { name: 'AI 학습 코치' });
+    await expect(dialog.getByRole('tab', { name: 'Mini Lab' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+    await expect(dialog.locator('canvas')).toHaveCount(0);
+
+    const suggestion = dialog.getByRole('radio', { name: /쿼리 시간을 25ms로 줄이기/ });
+    await suggestion.check();
+    await expect(
+      dialog.getByText('선택한 변경안은 승인하기 전까지 실험에 적용되지 않습니다.'),
+    ).toBeVisible();
+    await dialog.getByRole('button', { name: '변경하고 다시 실행' }).click();
+    await expect(page.getByRole('slider', { name: /한 명 처리하는 시간/ })).toHaveValue('25');
+  });
+
+  test('라이트 테마의 수식이 명확한 전경색으로 표시됩니다', async ({ page }) => {
+    await page.goto(`${BASE}/labs/connection-pool`, { waitUntil: 'networkidle' });
+    const formula = page
+      .locator('pre[data-language="plaintext"]')
+      .filter({ hasText: '필요한 커넥션 = 초당 요청 수' });
+    await expect(formula).toHaveCSS('color', 'rgb(31, 41, 55)');
   });
 });
 

@@ -18,6 +18,8 @@ Base.astro
 - 대화는 같은 tab의 sessionStorage에 최대 20개만 저장합니다.
 - API key는 저장하지 않고 React memory에만 둡니다.
 - Mobile에서는 drag를 끄고 viewport 안에 고정합니다.
+- Connection Pool Lab에서는 같은 Snapshot을 읽는 Mini Lab을 제공하며 자세한 계약은
+  [`LAB_COMPANION.md`](./LAB_COMPANION.md)를 따릅니다.
 
 ## Visual state contract
 
@@ -36,7 +38,7 @@ Base.astro
 
 - 기본은 접힌 상태이며 콘텐츠와 simulation을 가리지 않습니다.
 - 별도 AI page와 navigation item을 두지 않습니다. 모든 page 우측 하단 launcher와 panel 안의 control만
-  사용합니다. 완전히 숨겨 복구 경로가 사라지는 상태는 두지 않고 접기만 지원합니다.
+  사용합니다. 숨기기를 지원하되 화면 가장자리에 `Cat 다시 보기` 복구 control을 남깁니다.
 - 외부 desktop pet과의 충돌은 감지할 수 없으므로 자동 회피를 주장하지 않습니다.
 - Desktop drag는 viewport 밖으로 나가지 않게 clamp합니다.
 - `prefers-reduced-motion`이면 pose와 stripe animation을 중단합니다.

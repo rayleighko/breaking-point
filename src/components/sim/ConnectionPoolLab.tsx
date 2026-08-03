@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { DEFAULT_CONFIG, Sim, theory, type SimConfig, type Stats } from '@/lib/engine';
+import { useLabSession } from '@/stores/lab-session';
 import '@/styles/sim.css';
 
 import Chart, { type ChartHandle } from './Chart';
@@ -93,6 +94,9 @@ export default function ConnectionPoolLab({ initial }: { initial?: Partial<SimCo
   const [running, setRunning] = useState(true);
   const [speed, setSpeed] = useState(1);
   const [stats, setStats] = useState<Stats>(EMPTY);
+  const publishLab = useLabSession((state) => state.publish);
+  const connectLab = useLabSession((state) => state.connect);
+  const clearLab = useLabSession((state) => state.clear);
 
   const [sim] = useState(() => new Sim(cfg));
   const stageRef = useRef<StageHandle>(null);
@@ -113,8 +117,9 @@ export default function ConnectionPoolLab({ initial }: { initial?: Partial<SimCo
     stageRef.current?.draw(); // 일시정지 중에도 창구 개수 변경이 바로 보이도록
   }, [cfg, sim]);
 
-  // 화면 밖으로 나가면 시뮬레이션을 멈춘다 (배터리/CPU 낭비 방지)
+  // 화면 밖이거나 background tab이면 계산과 Canvas rendering을 멈춘다.
   const [onScreen, setOnScreen] = useState(true);
+  const [pageVisible, setPageVisible] = useState(true);
   useEffect(() => {
     const el = rootRef.current;
     if (!el || typeof IntersectionObserver === 'undefined') return;
@@ -122,10 +127,16 @@ export default function ConnectionPoolLab({ initial }: { initial?: Partial<SimCo
     io.observe(el);
     return () => io.disconnect();
   }, []);
+  useEffect(() => {
+    const update = () => setPageVisible(document.visibilityState === 'visible');
+    update();
+    document.addEventListener('visibilitychange', update);
+    return () => document.removeEventListener('visibilitychange', update);
+  }, []);
 
   useSimLoop({
     sim,
-    running: running && onScreen,
+    running: running && onScreen && pageVisible,
     speed,
     onFrame: () => stageRef.current?.draw(),
     onSample: (t, s) => {
@@ -138,20 +149,49 @@ export default function ConnectionPoolLab({ initial }: { initial?: Partial<SimCo
   const th = useMemo(() => theory(cfg), [cfg]);
   const maxThroughput = (cfg.poolSize / cfg.serviceTime) * 1000;
 
-  const reset = () => {
+  const reset = useCallback(() => {
     sim.reset();
     stageRef.current?.reset(); // Sim 객체는 그대로라 좌표 캐시를 따로 비워야 한다
     chartRef.current?.clear();
     setStats(EMPTY);
-  };
+  }, [sim]);
   const apply = (p: Preset) => {
     setCfg((c) => ({ ...c, ...p.cfg }));
     reset();
     setRunning(true);
   };
-  const patch = (v: Partial<SimConfig>) => setCfg((c) => ({ ...c, ...v }));
+  const patch = useCallback((v: Partial<SimConfig>) => setCfg((c) => ({ ...c, ...v })), []);
 
   const health = th.verdict;
+
+  useEffect(
+    () =>
+      connectLab({
+        patch,
+        setRunning,
+        reset,
+        focus: () => rootRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }),
+      }),
+    [connectLab, patch, reset],
+  );
+
+  useEffect(() => {
+    publishLab({
+      labId: 'connection-pool',
+      title: '커넥션 풀 실험실',
+      config: cfg,
+      stats,
+      running,
+      visible: onScreen && pageVisible,
+      health,
+      needed: th.needed,
+      utilization: th.rho,
+      maxThroughput,
+      updatedAt: Date.now(),
+    });
+  }, [cfg, health, maxThroughput, onScreen, pageVisible, publishLab, running, stats, th]);
+
+  useEffect(() => () => clearLab('connection-pool'), [clearLab]);
 
   return (
     <div className="sim bleed" data-health={health} ref={rootRef}>

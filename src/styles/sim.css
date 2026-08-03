@@ -270,8 +270,8 @@
   font-family: var(--mono);
   font-size: 0.84rem;
   line-height: 1.9;
-  color: var(--fg-muted);
-  background: var(--bg);
+  color: var(--fg);
+  background: var(--bg-soft);
 }
 .math .hl {
   color: var(--fg);

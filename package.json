@@ -16,7 +16,7 @@
     "quality": "pnpm format:check && pnpm lint && pnpm check && pnpm test && pnpm build",
     "test:browser": "playwright test",
     "test:browser:install": "playwright install --with-deps chromium firefox webkit",
-    "test": "node --experimental-strip-types --no-warnings test/test-engine.ts && node --experimental-strip-types --no-warnings test/test-inv.ts && node --experimental-strip-types --no-warnings test/test-chal.ts && node --experimental-strip-types --no-warnings test/test-scenario.ts && node --experimental-strip-types --no-warnings test/test-harness.ts && node --experimental-strip-types --no-warnings test/test-ai-models.ts && node --experimental-strip-types --no-warnings test/test-knowledge.ts"
+    "test": "node --experimental-strip-types --no-warnings test/test-engine.ts && node --experimental-strip-types --no-warnings test/test-inv.ts && node --experimental-strip-types --no-warnings test/test-chal.ts && node --experimental-strip-types --no-warnings test/test-queue-sense.ts && node --experimental-strip-types --no-warnings test/test-scenario.ts && node --experimental-strip-types --no-warnings test/test-harness.ts && node --experimental-strip-types --no-warnings test/test-ai-models.ts && node --experimental-strip-types --no-warnings test/test-knowledge.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.0",

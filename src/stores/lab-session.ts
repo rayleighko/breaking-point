@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 import type { SimConfig, Stats } from '@/lib/engine';
 
-export type LabId = 'connection-pool';
+export type LabId = 'connection-pool' | 'queue-sense';
 
 export interface LabSnapshot {
   labId: LabId;

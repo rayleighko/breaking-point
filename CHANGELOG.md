@@ -6,6 +6,7 @@
 
 ### Added
 
+- Queue의 감각 lab: 이용률 슬라이더와 대기시간 곡선, 피크 여유 챌린지
 - Bug, Lab, Knowledge, Feature/Architecture용 GitHub Issue Form과 evidence 중심 PR template
 - Connection Pool Lab의 상태를 공유하는 전역 Breaking Point Cat Mini Lab
 - 세 가지 변경안 선택 후 명시적으로 승인하는 AI coaching flow

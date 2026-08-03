@@ -256,11 +256,54 @@
   border-color: var(--accent);
   color: var(--fg);
 }
+.preset[aria-pressed='true'] {
+  border-color: var(--accent);
+  color: var(--fg);
+  background: var(--accent-bg);
+}
 .preset b {
   display: block;
   color: var(--fg);
   font-size: 0.87rem;
   font-weight: 600;
+}
+
+/* p50/p99 나란히 비교 */
+.dist-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--line-soft);
+}
+.dist-panel {
+  min-width: 0;
+  border-right: 1px solid var(--line-soft);
+}
+.dist-panel:last-child {
+  border-right: 0;
+}
+.dist-panel-head {
+  padding: 0.7rem 0.9rem 0.35rem;
+}
+.dist-panel-head h4 {
+  margin: 0;
+  font-size: 0.9rem;
+}
+.dist-panel-head p {
+  margin: 0.15rem 0 0;
+  font-size: 0.78rem;
+  color: var(--fg-dim);
+  line-height: 1.45;
+}
+.dist-panel-note {
+  margin: 0;
+  padding: 0.45rem 0.9rem 0.7rem;
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+  border-top: 1px solid var(--line-soft);
+}
+.dist-panel .metrics {
+  border-top: 1px solid var(--line-soft);
 }
 
 /* 계산식 패널 */
@@ -395,6 +438,16 @@
   }
   .preset:last-child {
     grid-column: 1 / -1;
+  }
+  .dist-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .dist-panel {
+    border-right: 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .dist-panel:last-child {
+    border-bottom: 0;
   }
   .toggles {
     align-items: stretch;

@@ -92,7 +92,8 @@ export const ROADMAP: Stage[] = [
       {
         title: 'p50과 p99',
         question: '평균 응답시간은 멀쩡한데 왜 사용자는 느리다고 할까?',
-        status: 'planned',
+        status: 'done',
+        slug: 'p50-p99',
         sim: '같은 평균, 다른 분포 두 개를 나란히 놓고 체감 비교',
       },
       {

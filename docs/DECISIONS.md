@@ -2,6 +2,14 @@
 
 대화가 아니라 이 문서가 현재 결정의 요약입니다. 새 결정은 날짜, 상태, 이유, 결과와 재검토 조건을 남깁니다.
 
+## 2026-08-03 — GitFlow for stable Pages delivery
+
+**Status:** Accepted
+
+`main`은 GitHub Pages 배포 전용 안정 브랜치로 둡니다. 일상 통합은 `develop`, 로드맵 작업은
+`feature/<slug>`에서 진행하고 release PR로만 `main`에 올립니다. 한 feature는 한 lab 또는 한 사용자
+결과만 담아 quality gate를 통과시킨 뒤 합칩니다. 상세는 `docs/GITFLOW.md`를 따릅니다.
+
 ## 2026-08-03 — AI retrieval source policy
 
 **Status:** Accepted

@@ -36,13 +36,20 @@ maintainer와 contributor 모두의 시간을 보호하기 위한 규칙입니�
 유지하고, 관련 주제 slug와 출처 URL이 유효한지 `pnpm test`와 `pnpm build`로 확인해 주세요. 여러 주제를
 한 PR에서 일괄 재작성하기보다 하나의 개념과 근거에 집중해 주세요.
 
+## Branch strategy
+
+축소형 GitFlow를 사용합니다. 상세는 [`docs/GITFLOW.md`](./docs/GITFLOW.md)를 봅니다.
+
+- `main` — 공개 사이트. 직접 feature 커밋을 올리지 않습니다.
+- `develop` — 다음 공개를 모으는 통합 브랜치
+- `feature/<slug>` — 로드맵 lab·기능 단위. PR 대상은 `develop`입니다.
+- `release/<date>` 또는 `develop` → `main` PR로만 배포합니다.
+
 ## Pull request checklist
 
 ```bash
 pnpm install --frozen-lockfile
-pnpm check
-pnpm test
-pnpm build
+pnpm quality
 ```
 
 UI를 바꿨다면 desktop과 375px viewport에서 직접 확인하고 PR에 결과를 적습니다.

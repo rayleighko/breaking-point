@@ -18,6 +18,7 @@ import { useCoachPreferences } from '@/stores/coach-preferences';
 const AUTO_MODEL: OpenRouterModel = { id: 'openrouter/free', name: '무료 model 자동 선택' };
 const SERVICE_API_URL = import.meta.env.PUBLIC_AI_API_URL?.trim();
 const SESSION_KEY = 'breaking-point-coach-messages';
+const REQUEST_TIMEOUT_MS = 45_000;
 const WELCOME: StudyMessage = {
   role: 'assistant',
   content:
@@ -107,7 +108,7 @@ export default function PetCoach() {
             onPointerUp={onPointerUp}
           >
             <div>
-              <b>Breakpoint Cat</b>
+              <b>Breaking Point Cat</b>
               <span>AI 학습 코치 · Beta</span>
             </div>
             <div className="pet-panel__actions">
@@ -154,6 +155,7 @@ function CoachChat() {
   const [loading, setLoading] = useState(false);
   const [activity, setActivity] = useState<PetActivity>('idle');
   const doneTimer = useRef<number | null>(null);
+  const requestController = useRef<AbortController | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -177,6 +179,7 @@ function CoachChat() {
   useEffect(
     () => () => {
       if (doneTimer.current) window.clearTimeout(doneTimer.current);
+      requestController.current?.abort();
     },
     [],
   );
@@ -200,20 +203,32 @@ function CoachChat() {
     setQuestion('');
     setLoading(true);
     setActivity('working');
+    const controller = new AbortController();
+    requestController.current = controller;
+    const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
     try {
       const answer = await askStudyAssistant({
         apiKey: apiKey.trim() || undefined,
         endpoint: SERVICE_API_URL,
         model,
         messages: next,
+        signal: controller.signal,
       });
       setMessages((current) => [...current, { role: 'assistant', content: answer }]);
       setActivity('done');
       doneTimer.current = window.setTimeout(() => setActivity('idle'), 3500);
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : '답변을 가져오지 못했습니다.');
+      setError(
+        controller.signal.aborted
+          ? '응답이 45초 안에 도착하지 않았습니다. 무료 model이 혼잡할 수 있으니 다시 보내주세요.'
+          : cause instanceof Error
+            ? cause.message
+            : '답변을 가져오지 못했습니다.',
+      );
       setActivity('error');
     } finally {
+      window.clearTimeout(timeout);
+      if (requestController.current === controller) requestController.current = null;
       setLoading(false);
     }
   };
@@ -256,6 +271,7 @@ function CoachChat() {
             value={question}
             onChange={(event) => setQuestion(event.currentTarget.value)}
             onKeyDown={(event) => {
+              if (event.nativeEvent.isComposing) return;
               if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault();
                 void submit();
@@ -264,7 +280,7 @@ function CoachChat() {
             placeholder="현재 페이지에서 궁금한 점을 적어주세요…"
           />
           <Button onClick={submit} disabled={loading || !question.trim()}>
-            보내기
+            {loading ? '기다리는 중' : '보내기'}
           </Button>
         </div>
         <details>

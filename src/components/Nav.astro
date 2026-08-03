@@ -17,7 +17,6 @@ const isActive = (href: string) => path.startsWith(url(href).replace(/\/$/, ''))
       <a href={url('/topics')} class:list={[{ on: isActive('/topics') }]}>주제</a>
       <a href={url('/playground')} class:list={[{ on: isActive('/playground') }]}>Playground</a>
       <a href={url('/search')} class:list={[{ on: isActive('/search') }]}>검색</a>
-      <a href={url('/ai')} class:list={[{ on: isActive('/ai') }]}>AI 코치</a>
       <a href={url('/roadmap')} class:list={[{ on: isActive('/roadmap') }]}>로드맵</a>
       <a href="https://github.com/rayleighko/breaking-point" target="_blank" rel="noopener"
         >GitHub</a
@@ -32,7 +31,6 @@ const isActive = (href: string) => path.startsWith(url(href).replace(/\/$/, ''))
           <a href={url('/topics')}>주제</a>
           <a href={url('/playground')}>Playground</a>
           <a href={url('/search')}>검색</a>
-          <a href={url('/ai')}>AI 코치</a>
           <a href={url('/roadmap')}>로드맵</a>
           <a href="https://github.com/rayleighko/breaking-point">GitHub ↗</a>
         </nav>

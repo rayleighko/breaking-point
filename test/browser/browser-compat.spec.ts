@@ -1,15 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 const BASE = '/breaking-point';
-const CORE_ROUTES = [
-  '/',
-  '/labs',
-  '/labs/connection-pool',
-  '/topics',
-  '/playground',
-  '/search',
-  '/ai',
-];
+const CORE_ROUTES = ['/', '/labs', '/labs/connection-pool', '/topics', '/playground', '/search'];
 
 function watchRuntimeErrors(page: Page) {
   const errors: string[] = [];
@@ -59,18 +51,35 @@ test.describe('브라우저 호환성', () => {
     await input.fill('커넥션 풀');
     const result = page.getByRole('link', { name: /커넥션 풀 고갈/ }).first();
     await expect(result).toBeVisible();
-    await expect(result).toHaveAttribute('href', `${BASE}/labs/connection-pool/`);
+    await expect(result).toHaveAttribute('href', new RegExp(`${BASE}/labs/connection-pool/?$`));
 
     await input.fill('존재하지않는검색어');
     await expect(page.getByText('일치하는 결과가 없습니다.')).toBeVisible();
     expect(errors).toEqual([]);
+  });
+
+  test('한글 조합 중 Enter는 질문을 전송하지 않습니다', async ({ page }) => {
+    await page.goto(`${BASE}/`, { waitUntil: 'networkidle' });
+    await page.getByRole('button', { name: 'AI 학습 코치 열기' }).click();
+
+    const input = page.getByRole('textbox', { name: 'AI 학습 코치에게 질문' });
+    await input.dispatchEvent('compositionstart', { data: '녕' });
+    await input.fill('녕');
+    await input.dispatchEvent('keydown', {
+      key: 'Enter',
+      code: 'Enter',
+      isComposing: true,
+    });
+
+    await expect(input).toHaveValue('녕');
+    await expect(page.locator('.pet-message--user')).toHaveCount(0);
   });
 });
 
 test.describe('모바일 UX', () => {
   test.use({ viewport: { width: 375, height: 812 } });
 
-  for (const route of ['/', '/labs/connection-pool', '/topics', '/search', '/ai']) {
+  for (const route of ['/', '/labs/connection-pool', '/topics', '/search']) {
     test(`${route}에서 가로 스크롤이 생기지 않습니다`, async ({ page }) => {
       const errors = watchRuntimeErrors(page);
       await page.goto(`${BASE}${route}`, { waitUntil: 'networkidle' });

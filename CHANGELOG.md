@@ -6,6 +6,7 @@
 
 ### Added
 
+- p50과 p99 lab: 같은 평균·다른 꼬리 나란히 비교와 평균만 맞추기 챌린지
 - Queue의 감각 lab: 이용률 슬라이더와 대기시간 곡선, 피크 여유 챌린지
 - Bug, Lab, Knowledge, Feature/Architecture용 GitHub Issue Form과 evidence 중심 PR template
 - Connection Pool Lab의 상태를 공유하는 전역 Breaking Point Cat Mini Lab

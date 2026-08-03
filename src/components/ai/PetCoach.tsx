@@ -36,10 +36,8 @@ const ACTIVITY_LABEL: Record<PetActivity, string> = {
 };
 
 export default function PetCoach() {
-  const enabled = useCoachPreferences((state) => state.enabled);
   const open = useCoachPreferences((state) => state.open);
   const position = useCoachPreferences((state) => state.position);
-  const setEnabled = useCoachPreferences((state) => state.setEnabled);
   const setOpen = useCoachPreferences((state) => state.setOpen);
   const setPosition = useCoachPreferences((state) => state.setPosition);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -59,8 +57,6 @@ export default function PetCoach() {
     const clamped = clampPosition(position, rootRef.current);
     if (clamped.x !== position.x || clamped.y !== position.y) setPosition(clamped);
   }, [mobile, position, setPosition]);
-
-  if (!enabled) return null;
 
   const style =
     !mobile && position
@@ -117,13 +113,6 @@ export default function PetCoach() {
               </button>
               <button type="button" onClick={() => setOpen(false)} aria-label="AI 학습 코치 접기">
                 −
-              </button>
-              <button
-                type="button"
-                onClick={() => setEnabled(false)}
-                aria-label="AI 학습 코치 끄기"
-              >
-                ×
               </button>
             </div>
           </header>

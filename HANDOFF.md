@@ -140,11 +140,14 @@ AI retrieval은 내부 검수 자료를 먼저 사용하고, 부족할 때만 �
 ## 다음 작업 시작점
 
 1. 일반 변경은 `AGENTS.md` → 관련 문서 → 관련 test 순으로 읽습니다.
-2. 현재 상태 확인은 `git status --short --branch`와 `pnpm quality`로 시작합니다.
-3. UI 변경은 `docs/FRONTEND_GUIDELINES.md`, simulation 변경은 `docs/ENGINE_GUIDE.md`, 새 콘텐츠는
+2. 브랜치는 `docs/GITFLOW.md`를 따릅니다. `develop`에서 `feature/<slug>`를 만들고, 공개는
+   `develop` → `main` release PR로만 합니다.
+3. 현재 상태 확인은 `git status --short --branch`와 `pnpm quality`로 시작합니다.
+4. UI 변경은 `docs/FRONTEND_GUIDELINES.md`, simulation 변경은 `docs/ENGINE_GUIDE.md`, 새 콘텐츠는
    `CONTENT_GUIDE.md`를 먼저 읽습니다.
-4. 완료 후 `main`에 push하면 GitHub Pages가 자동 배포됩니다. Actions와 공개 URL을 모두 확인합니다.
-5. AI Gateway는 배포되어 있습니다. Worker를 변경하면 `docs/AI_GATEWAY.md`에 따라 dry-run, deploy와 공개
+5. feature를 `develop`에 합친 뒤 release PR로 `main`에 올리면 GitHub Pages가 배포됩니다. Actions와
+   공개 URL을 모두 확인합니다.
+6. AI Gateway는 배포되어 있습니다. Worker를 변경하면 `docs/AI_GATEWAY.md`에 따라 dry-run, deploy와 공개
    endpoint를 검증합니다.
-6. 완료된 제품 변경은 `CHANGELOG.md`, architecture 결정은 `docs/DECISIONS.md`, 다음 실행 상태는 이 문서에
+7. 완료된 제품 변경은 `CHANGELOG.md`, architecture 결정은 `docs/DECISIONS.md`, 다음 실행 상태는 이 문서에
    반영합니다.

@@ -60,6 +60,8 @@ Local Lab 자동화의 장기 방향과 CLI contract는 [`docs/CLI_VISION.md`](.
 [`docs/GLOBAL_STANDARD.md`](./docs/GLOBAL_STANDARD.md)에 있습니다.
 지원 브라우저와 자동 성능 검수 범위는
 [`docs/BROWSER_SUPPORT.md`](./docs/BROWSER_SUPPORT.md)에 있습니다.
+정적 검색과 대규모 knowledge base 전환 기준은
+[`docs/SEARCH_ARCHITECTURE.md`](./docs/SEARCH_ARCHITECTURE.md)에 있습니다.
 
 ## 배포 (GitHub Pages)
 

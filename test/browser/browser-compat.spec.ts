@@ -1,7 +1,15 @@
 import { expect, test, type Page } from '@playwright/test';
 
 const BASE = '/breaking-point';
-const CORE_ROUTES = ['/', '/labs', '/labs/connection-pool', '/topics', '/playground', '/ai'];
+const CORE_ROUTES = [
+  '/',
+  '/labs',
+  '/labs/connection-pool',
+  '/topics',
+  '/playground',
+  '/search',
+  '/ai',
+];
 
 function watchRuntimeErrors(page: Page) {
   const errors: string[] = [];
@@ -40,12 +48,29 @@ test.describe('브라우저 호환성', () => {
     await expect(page.getByText('100%를 넘으면 줄이 무한히 길어집니다')).toBeVisible();
     expect(errors).toEqual([]);
   });
+
+  test('검색으로 실험실과 Wiki에 접근할 수 있습니다', async ({ page }) => {
+    const errors = watchRuntimeErrors(page);
+    await page.goto(`${BASE}/search`, { waitUntil: 'networkidle' });
+
+    const input = page.getByRole('searchbox', {
+      name: '찾고 싶은 개념이나 문제를 입력해 주세요',
+    });
+    await input.fill('커넥션 풀');
+    const result = page.getByRole('link', { name: /커넥션 풀 고갈/ }).first();
+    await expect(result).toBeVisible();
+    await expect(result).toHaveAttribute('href', `${BASE}/labs/connection-pool/`);
+
+    await input.fill('존재하지않는검색어');
+    await expect(page.getByText('일치하는 결과가 없습니다.')).toBeVisible();
+    expect(errors).toEqual([]);
+  });
 });
 
 test.describe('모바일 UX', () => {
   test.use({ viewport: { width: 375, height: 812 } });
 
-  for (const route of ['/', '/labs/connection-pool', '/topics', '/ai']) {
+  for (const route of ['/', '/labs/connection-pool', '/topics', '/search', '/ai']) {
     test(`${route}에서 가로 스크롤이 생기지 않습니다`, async ({ page }) => {
       const errors = watchRuntimeErrors(page);
       await page.goto(`${BASE}${route}`, { waitUntil: 'networkidle' });

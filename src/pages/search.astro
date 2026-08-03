@@ -1,0 +1,21 @@
+---
+import SearchPage from '@/components/search/SearchPage';
+import Base from '@/layouts/Base.astro';
+import '@/styles/search.css';
+---
+
+<Base
+  title="검색 — Breaking Point"
+  description="실험실, Wiki, 로드맵과 학습 자료를 한 번에 검색합니다."
+>
+  <div class="wrap search-page">
+    <header>
+      <p class="eyebrow">Search</p>
+      <h1 id="search-heading">어떤 문제를 해결하고 계신가요?</h1>
+      <p class="lead">
+        기술 이름을 몰라도 괜찮습니다. 지금 겪는 현상이나 궁금한 도구를 검색해 보세요.
+      </p>
+    </header>
+    <SearchPage client:only="react" />
+  </div>
+</Base>

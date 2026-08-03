@@ -19,6 +19,9 @@ challenge처럼 상호작용이 필요한 부분에만 사용합니다.
 SSR은 지금 필요하지 않습니다. SSR이 필요한 조건은 사용자별 권한, 자주 바뀌는 server data,
 cookie/session, 비공개 API credential 또는 request마다 만들어야 하는 HTML이 생길 때입니다.
 
+검색은 정적 HTML을 build 후 색인하는 Pagefind를 사용합니다. UI와 검색 engine 사이의 전환 경계와
+대규모 지식 base로의 migration 기준은 [`SEARCH_ARCHITECTURE.md`](./SEARCH_ARCHITECTURE.md)를 따릅니다.
+
 ## Simulation fidelity levels
 
 모든 simulation 입력은 version이 있는 Scenario JSON으로 표현합니다. UI는 JSON을 만들고 검증하는

@@ -178,7 +178,7 @@ export function challengePass(summary: Pick<LatencySummary, 'mean' | 'p99'>, cfg
   if (cfg.slowPct < 0 || cfg.slowPct > slowPctMax) return false;
   if (cfg.fastMs < fastMsMin || cfg.fastMs > fastMsMax) return false;
   if (cfg.slowMs < slowMsMin || cfg.slowMs > slowMsMax) return false;
-  return summary.mean <= meanLimitMs + 1e-6 && summary.p99 <= p99LimitMs + 1e-6;
+  return summary.mean <= meanLimitMs + 1e-6 && summary.p99 < p99LimitMs + 1e-6;
 }
 
 /** 순진한 해법: 평균만 맞추고 1% 꼬리를 극단적으로 키움 */

@@ -66,7 +66,11 @@ export default function P50P99Lab() {
   const meanGap = Math.abs(leftSum.mean - rightSum.mean);
   const p99Gap = rightSum.p99 - leftSum.p99;
   const health =
-    rightSum.p99 > TARGET_MEAN_MS * 8 ? 'over' : rightSum.p99 > TARGET_MEAN_MS * 3 ? 'tight' : 'safe';
+    rightSum.p99 > TARGET_MEAN_MS * 8
+      ? 'over'
+      : rightSum.p99 > TARGET_MEAN_MS * 3
+        ? 'tight'
+        : 'safe';
 
   useEffect(() => {
     const root = rootRef.current;
@@ -141,8 +145,8 @@ export default function P50P99Lab() {
         <div>
           {impossible ? (
             <>
-              그 꼬리 높이로는 평균 <b>{TARGET_MEAN_MS}ms</b>를 맞출 수 없습니다. 느린 요청을 줄이거나
-              비율을 낮춰 보세요.
+              그 꼬리 높이로는 평균 <b>{TARGET_MEAN_MS}ms</b>를 맞출 수 없습니다. 느린 요청을
+              줄이거나 비율을 낮춰 보세요.
             </>
           ) : (
             <>

@@ -170,9 +170,14 @@ export function histogram(samples: number[], edges: number[]): HistBin[] {
 }
 
 /** 로그에 가까운 고정 bin 경계 (ms). UI와 test가 공유한다. */
-export const DEFAULT_HIST_EDGES = [0, 25, 50, 75, 100, 150, 200, 400, 800, 1600, 3200, 6400] as const;
+export const DEFAULT_HIST_EDGES = [
+  0, 25, 50, 75, 100, 150, 200, 400, 800, 1600, 3200, 6400,
+] as const;
 
-export function challengePass(summary: Pick<LatencySummary, 'mean' | 'p99'>, cfg: MixtureConfig): boolean {
+export function challengePass(
+  summary: Pick<LatencySummary, 'mean' | 'p99'>,
+  cfg: MixtureConfig,
+): boolean {
   const { meanLimitMs, p99LimitMs, slowPctMax, fastMsMin, fastMsMax, slowMsMin, slowMsMax } =
     P50_P99_CHALLENGE;
   if (cfg.slowPct < 0 || cfg.slowPct > slowPctMax) return false;

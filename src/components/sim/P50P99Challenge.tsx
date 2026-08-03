@@ -37,10 +37,7 @@ export default function P50P99Challenge() {
   );
   const theoryMean = mixtureMean(cfg);
 
-  const samples = useMemo(
-    () => sampleMixture(cfg, sampleCount, seed + attempt),
-    [attempt, cfg],
-  );
+  const samples = useMemo(() => sampleMixture(cfg, sampleCount, seed + attempt), [attempt, cfg]);
   const summary = useMemo(() => summarizeLatencies(samples), [samples]);
 
   const run = () => {
@@ -86,9 +83,9 @@ export default function P50P99Challenge() {
         <h4>🎯 챌린지 — 평균은 지켜도 꼬리는 자르라</h4>
         <p>
           대시보드 평균은 <b>{meanLimitMs}ms 이하</b>로 유지해야 합니다. 동시에 사용자 체감인{' '}
-          <b>p99는 {p99LimitMs}ms 미만</b>이어야 합니다. 느린 요청 비율은{' '}
-          <b>{slowPctMax}%까지만</b> 허용됩니다. 평균만 맞추려고 1%를 극단적으로 늘리는 해법은
-          일부러 실패하게 만들어 두었습니다.
+          <b>p99는 {p99LimitMs}ms 미만</b>이어야 합니다. 느린 요청 비율은 <b>{slowPctMax}%까지만</b>{' '}
+          허용됩니다. 평균만 맞추려고 1%를 극단적으로 늘리는 해법은 일부러 실패하게 만들어
+          두었습니다.
         </p>
       </div>
 

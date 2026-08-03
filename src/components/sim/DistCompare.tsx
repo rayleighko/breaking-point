@@ -1,11 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import {
-  DEFAULT_HIST_EDGES,
-  histogram,
-  type HistBin,
-  type LatencySummary,
-} from '@/lib/p50-p99';
+import { DEFAULT_HIST_EDGES, histogram, type HistBin, type LatencySummary } from '@/lib/p50-p99';
 
 interface Props {
   samples: number[];

@@ -33,11 +33,7 @@ const naiveMean = mixtureMean(NAIVE_MIXTURE);
 check('순진한 혼합 평균 = 100', Math.abs(naiveMean - 100) < 1e-9, `mean=${naiveMean}`);
 
 const intendedMean = mixtureMean(INTENDED_MIXTURE);
-check(
-  '의도한 혼합 평균 = 100',
-  Math.abs(intendedMean - 100) < 1e-9,
-  `mean=${intendedMean}`,
-);
+check('의도한 혼합 평균 = 100', Math.abs(intendedMean - 100) < 1e-9, `mean=${intendedMean}`);
 
 // 3) 같은 평균, 다른 꼬리 프리셋
 const tight = presetMixture('tight');
@@ -75,10 +71,7 @@ check('불가능한 꼬리는 null', fastForTargetMean(100, 10_000, 5) == null);
 // 5) 재현성
 const a = sampleMixture(heavy, 200, 42);
 const b = sampleMixture(heavy, 200, 42);
-check(
-  '같은 시드 → 같은 표본',
-  a.length === b.length && a.every((v, i) => v === b[i]),
-);
+check('같은 시드 → 같은 표본', a.length === b.length && a.every((v, i) => v === b[i]));
 
 // 6) histogram
 const bins = histogram([10, 60, 90, 500, 2000], [...DEFAULT_HIST_EDGES]);

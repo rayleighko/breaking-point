@@ -85,7 +85,8 @@ export const ROADMAP: Stage[] = [
       {
         title: 'Queue의 감각',
         question: '이용률 70%와 95%는 뭐가 그렇게 다른가?',
-        status: 'planned',
+        status: 'done',
+        slug: 'queue-sense',
         sim: '이용률 슬라이더를 올리며 대기시간 곡선이 수직으로 꺾이는 걸 관찰',
       },
       {

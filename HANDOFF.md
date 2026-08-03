@@ -31,11 +31,17 @@
 - `src/lib/engine.ts` — Queue 시뮬레이션 엔진. 앞으로의 랩 대부분이 이걸 재사용한다.
   도착(포아송) / 창구(커넥션 풀) / 대기열 / acquire 타임아웃 / 재시도 / 리틀의 법칙 계산.
   시드 고정이라 재현 가능.
-- 랩 1개 완성: `커넥션 풀 고갈` (`src/content/labs/connection-pool.mdx`)
-  - 시각화(`Stage.tsx` — 은행 창구 비유 캔버스 애니메이션)
-  - 응답시간 그래프(`Chart.tsx` — 로그 스케일 p50/p99 + 에러율)
-  - 챌린지(`Challenge.tsx` — 트래픽 스파이크 방어)
-  - 확인 문제(`Quiz.tsx`)
+- 랩 2개 완성:
+  - `커넥션 풀 고갈` (`src/content/labs/connection-pool.mdx`)
+    - 시각화(`Stage.tsx` — 은행 창구 비유 캔버스 애니메이션)
+    - 응답시간 그래프(`Chart.tsx` — 로그 스케일 p50/p99 + 에러율)
+    - 챌린지(`Challenge.tsx` — 트래픽 스파이크 방어)
+    - 확인 문제(`Quiz.tsx`)
+  - `Queue의 감각` (`src/content/labs/queue-sense.mdx`)
+    - 이용률→대기시간 곡선(`WaitCurve.tsx` + `queue-sense.ts`)
+    - 실시간 Stage/Chart와 70%/95% 비교
+    - 챌린지(`QueueSenseChallenge.tsx` — 피크에서도 70% 여유)
+    - 확인 문제(`Quiz.tsx`)
 - 엔진 테스트 3종 (`test/`, `pnpm test`)
 - 정적 Wiki content collection과 knowledge graph (`src/content/topics/*.json`)
 - Pagefind 기반 통합 검색: lab·Wiki·roadmap·resource 검색
@@ -55,9 +61,9 @@
 
 **검증 완료 (2026-08-03)**
 
-> `pnpm install`, `astro sync`, `pnpm check`, `pnpm build`, `pnpm test`를 모두 통과했습니다.
-> 로컬 개발 서버에서 홈·랩 시뮬레이터, 프리셋 5개, 슬라이더, 챌린지 판정,
-> 375px 모바일 레이아웃과 가로 스크롤 여부를 확인했습니다.
+> `pnpm quality` 통과. Queue의 감각 lab은 preview에서 70%→95% 프리셋(대기 약 14배),
+> 375px overflow 없음, console error 없음을 확인했습니다.
+> 챌린지는 `test/test-queue-sense.ts`로 순진한 해법 실패·의도한 해법 통과를 검증했습니다.
 
 ---
 
@@ -111,15 +117,17 @@ AI retrieval은 내부 검수 자료를 먼저 사용하고, 부족할 때만 �
 
 우선순위 순:
 
-1. **Queue의 감각** — 이용률 70%와 95%는 뭐가 그렇게 다른가
-   시뮬: 이용률 슬라이더를 올리며 대기시간 곡선이 수직으로 꺾이는 걸 관찰.
-   → 기존 `engine.ts`로 충분. 새 시뮬레이터는 곡선 플롯만 만들면 됨.
+1. ~~**Queue의 감각**~~ — 완료 (`queue-sense`, roadmap status `done`)
 
-2. **캐시 스탬피드** — 캐시를 넣었는데 왜 5분마다 DB가 죽을까
+2. **p50과 p99** — 평균 응답시간은 멀쩡한데 왜 사용자는 느리다고 할까
+   시뮬: 같은 평균, 다른 분포 두 개를 나란히 놓고 체감 비교.
+   → 기존 engine 통계로 충분. 분포 시각화 UI가 핵심.
+
+3. **캐시 스탬피드** — 캐시를 넣었는데 왜 5분마다 DB가 죽을까
    시뮬: TTL 동시 만료 순간 요청이 DB로 쏟아지는 장면 + 지터/뮤텍스 적용 비교.
    → `engine.ts`에 캐시 계층(히트 시 즉시 반환, 미스 시 창구 점유) 추가 필요.
 
-3. **리트라이 스톰** — 백오프 없음 / 고정 / 지수+지터 3가지를 나란히 실행
+4. **리트라이 스톰** — 백오프 없음 / 고정 / 지수+지터 3가지를 나란히 실행
    → `engine.ts`의 `retryBackoff`를 전략 함수로 일반화.
 
 랩을 완성하면 `src/lib/roadmap.ts`에서 해당 항목의 `status`를 `'done'`으로,

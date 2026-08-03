@@ -2,7 +2,7 @@
 name: Simulation result report
 about: 재현 가능한 Scenario JSON과 관찰값으로 simulation 문제를 제보합니다.
 title: '[Simulation] '
-labels: bug, simulation, triage
+labels: bug
 assignees: ''
 ---
 

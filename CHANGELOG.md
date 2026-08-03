@@ -6,6 +6,7 @@
 
 ### Added
 
+- Bug, Lab, Knowledge, Feature/Architecture용 GitHub Issue Form과 evidence 중심 PR template
 - Connection Pool Lab의 상태를 공유하는 전역 Breaking Point Cat Mini Lab
 - 세 가지 변경안 선택 후 명시적으로 승인하는 AI coaching flow
 - `단서 하나 → 선택지 세 개 → 직접 설명`의 단계형 Hint

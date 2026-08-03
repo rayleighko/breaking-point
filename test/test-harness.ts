@@ -32,4 +32,28 @@ for (const skill of ['breaking-point-maintainer', 'review-learning-ux']) {
   );
 }
 
-console.log('PASS  AI harness adapter와 project skill reference');
+const contributionTemplates: Record<string, string[]> = {
+  '.github/PULL_REQUEST_TEMPLATE.md': [
+    '## Outcome',
+    '## Decision and trade-offs',
+    'pnpm quality',
+    'Contributor ownership',
+  ],
+  '.github/ISSUE_TEMPLATE/bug.yml': ['Environment', 'Safety check'],
+  '.github/ISSUE_TEMPLATE/lab-proposal.yml': ['Sources', 'Recall card'],
+  '.github/ISSUE_TEMPLATE/knowledge-improvement.yml': ['Sources', 'Originality'],
+  '.github/ISSUE_TEMPLATE/feature-proposal.yml': [
+    'Cost and operation',
+    'Privacy and safety',
+    'Validation plan',
+  ],
+};
+
+for (const [file, markers] of Object.entries(contributionTemplates)) {
+  const contents = readFileSync(file, 'utf8');
+  for (const marker of markers) {
+    assert.ok(contents.includes(marker), `${file}에서 ${marker} 항목을 찾을 수 없습니다.`);
+  }
+}
+
+console.log('PASS  AI harness adapter, project skill과 contribution template reference');

@@ -1,19 +1,24 @@
 name: Bug or content error
-description: 동작 오류, 기술적 오류, 현실과 다른 simulation model을 제보합니다.
+description: 동작 오류, 접근성 문제, 기술적 오류 또는 현실과 다른 simulation model을 제보합니다.
 title: '[Bug] '
-labels: [bug, triage]
+labels: [bug]
 body:
   - type: dropdown
     id: kind
     attributes:
       label: Type
-      options: [Simulation behavior, Technical content, UI or accessibility, Broken link]
+      options:
+        - Simulation behavior
+        - Technical content
+        - UI or accessibility
+        - Performance
+        - Broken link
     validations: { required: true }
   - type: textarea
     id: observed
     attributes:
       label: What happened?
-      description: 설정값과 관찰한 결과를 적어 주세요.
+      description: URL, 설정값, 실행 순서와 관찰한 결과를 적어 주세요. 실제 benchmark와 browser model을 구분해 주세요.
     validations: { required: true }
   - type: textarea
     id: expected
@@ -24,4 +29,17 @@ body:
     id: evidence
     attributes:
       label: Evidence
-      description: 가능하면 공식 문서, 재현 영상, screenshot을 첨부해 주세요.
+      description: 가능하면 Scenario JSON, console error, 공식 문서, 재현 영상 또는 screenshot을 첨부해 주세요. Secret이나 실제 요청 본문은 제거해 주세요.
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, browser와 version, viewport 또는 device를 적어 주세요.
+      placeholder: macOS 15 / Safari 19 / 375px
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety check
+      options:
+        - label: 공개하면 안 되는 API key, 개인정보와 실제 서비스 요청 본문을 제거했습니다.
+          required: true

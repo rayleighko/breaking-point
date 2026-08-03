@@ -1,0 +1,48 @@
+name: Feature or architecture proposal
+description: Lab 외의 기능, infrastructure, AI, 검색 또는 architecture 변경을 제안합니다.
+title: '[Proposal] '
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: User problem
+      description: 구현 방법보다 먼저 어떤 사용자가 무엇 때문에 막히는지 적어 주세요.
+    validations: { required: true }
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: 사용자가 얻게 될 결과와 관찰 가능한 acceptance criteria를 적어 주세요.
+    validations: { required: true }
+  - type: textarea
+    id: options
+    attributes:
+      label: Options and trade-offs
+      description: 최소 두 가지 선택지, 현재 방식 유지, 선택하지 않을 대안을 함께 적어 주세요.
+    validations: { required: true }
+  - type: textarea
+    id: cost
+    attributes:
+      label: Cost and operation
+      description: 무료·정적·local-first 대안, 예상 월 비용 상한, quota 초과 시 fallback과 제거 경로를 적어 주세요.
+    validations: { required: true }
+  - type: textarea
+    id: privacy
+    attributes:
+      label: Privacy and safety
+      description: 저장하거나 전송하는 사용자 데이터, Secret, abuse surface와 opt-out을 적어 주세요. 해당 없으면 이유를 적어 주세요.
+    validations: { required: true }
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Validation plan
+      description: 어떤 test, browser observation, performance measurement 또는 eval로 결정할지 적어 주세요.
+    validations: { required: true }
+  - type: checkboxes
+    id: agreement
+    attributes:
+      label: Proposal agreement
+      options:
+        - label: 큰 구현은 방향과 acceptance criteria가 합의된 뒤 시작하겠습니다.
+          required: true

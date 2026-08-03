@@ -1,7 +1,7 @@
 name: Lab proposal
 description: 새 학습 주제와 simulation을 구현하기 전에 검증 가능한 문제를 제안합니다.
 title: '[Lab] '
-labels: [proposal, needs-review]
+labels: [enhancement]
 body:
   - type: textarea
     id: phenomenon
@@ -32,3 +32,22 @@ body:
     attributes:
       label: Technology lenses
       description: Generic pattern, TypeScript stack, Kubernetes/Serverless/AWS 중 실제로 관련 있는 연결만 적어 주세요.
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources
+      description: 내부 Topic/Lab을 먼저 적고, 부족하면 표준·원 논문·공식 문서를 적어 주세요. 모든 사실 주장에 출처가 필요합니다.
+    validations: { required: true }
+  - type: textarea
+    id: recall
+    attributes:
+      label: Recall card
+      description: Lab을 다시 방문했을 때 30초 안에 떠올려야 할 판단을 한두 문장으로 적어 주세요.
+    validations: { required: true }
+  - type: checkboxes
+    id: agreement
+    attributes:
+      label: Proposal agreement
+      options:
+        - label: Maintainer가 `accepted` label을 붙이기 전에는 큰 구현을 시작하지 않겠습니다.
+          required: true

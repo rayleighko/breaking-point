@@ -66,7 +66,9 @@ main
 3. 필요하면 권장 리뷰 도구로 diff를 보조 검토합니다. 필수 게이트는 아닙니다.
 4. feature → `develop` PR을 열고 CI 통과 후 **Rebase and merge**합니다.
 5. 공개할 준비가 되면 `develop`에서 `release/<date>`를 만들어 `main`으로 rebase merge합니다.
-6. `main` merge 후 Actions 배포와 공개 URL을 확인하고, `develop`을 `main`과 fast-forward 동기화합니다.
+6. `main` merge 후 Actions 배포와 공개 URL을 확인합니다. rebase merge는 커밋 SHA가 달라지므로
+   `develop`을 `main`에 **hard reset**으로 맞춥니다 (`git reset --hard origin/main` 후
+   `--force-with-lease` push). merge commit으로 동기화하지 않습니다.
 
 ## 안정 운영 규칙
 

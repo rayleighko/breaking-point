@@ -1,0 +1,236 @@
+---
+import Base from '@/layouts/Base.astro';
+import { DELIVERY_STEPS, LAB_OPS_LINKS, SYSTEM_LAYERS } from '@/lib/system-map';
+import { url } from '@/lib/url';
+---
+
+<Base
+  title="프로세스 — Breaking Point"
+  description="Breaking Point가 feature를 만들고 검증·공개하는 이터레이션과 시스템 구조를 설명합니다."
+>
+  <article class="wrap page">
+    <p class="eyebrow">How we build</p>
+    <h1>읽기만 하는 사이트가 아니라<br />검증 가능한 delivery loop입니다</h1>
+    <p class="lead">
+      Breaking Point는 AI 도구 이름을 나열하지 않습니다. Orient → Spec → Change → Verify → Review →
+      Integrate 순환을 반복해 lab과 인프라를 만듭니다. 특정 Agent OS나 CLI는
+      <strong>권장 참고</strong>일 뿐, merge 조건이 아닙니다.
+    </p>
+
+    <h2>Delivery loop</h2>
+    <p class="muted">
+      공개 URL에 올리기 전에 <code>develop</code>에서 통합하고, 공개는 release PR로만 합니다. 머지는
+      rebase로 선형 이력을 유지합니다.
+    </p>
+    <ol class="loop" aria-label="delivery loop 단계">
+      {
+        DELIVERY_STEPS.map((step, index) => (
+          <li>
+            <span class="loop-n">{index + 1}</span>
+            <div>
+              <b>{step.name}</b>
+              <span>{step.detail}</span>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <h2>이 서비스의 구조</h2>
+    <p class="muted">
+      아래는 현재 Breaking Point runtime 경계입니다. vendor 제품 이름을 정답처럼 쓰지 않고,
+      <a href="https://github.com/rayleighko/breaking-point/blob/main/docs/GLOBAL_STANDARD.md"
+        >GLOBAL_STANDARD</a
+      >에 따라 project contract / practice / vendor boundary를 구분합니다.
+    </p>
+    <div class="layers" role="list">
+      {
+        SYSTEM_LAYERS.map((layer) => (
+          <section class="layer" role="listitem">
+            <header>
+              <h3>{layer.name}</h3>
+              <span class="standing">{layer.standing}</span>
+            </header>
+            <p>{layer.role}</p>
+            <p class="examples">{layer.examples.join(' · ')}</p>
+          </section>
+        ))
+      }
+    </div>
+
+    <h2>랩에서 배운 감각을 운영에도</h2>
+    <p class="muted">
+      system design lab의 개념은 코드 안에만 있지 않습니다. 이 repository를 돌리는 방식에도 같은
+      언어로 연결합니다.
+    </p>
+    <div class="links">
+      {
+        LAB_OPS_LINKS.map((item) => (
+          <div class="link-card">
+            <b>
+              {item.labSlug ? (
+                <a href={url(`/labs/${item.labSlug}`)}>{item.concept}</a>
+              ) : (
+                item.concept
+              )}
+            </b>
+            <span>{item.opsAnalogy}</span>
+          </div>
+        ))
+      }
+    </div>
+
+    <h2>참고 도구 (비강제)</h2>
+    <ul class="tools">
+      <li>
+        <a href="https://github.com/mattpocock/skills">mattpocock/skills</a> — grill, TDD, code-review
+        같은 composable engineering loop
+      </li>
+      <li>
+        <a href="https://github.com/alibaba/open-code-review">Alibaba Open Code Review</a> — 로컬 diff
+        리뷰 보조 CLI. CI 필수 게이트가 아닙니다.
+      </li>
+      <li>
+        <a href="https://github.com/Q00/ouroboros">Ouroboros</a> — specification-first Agent OS 레퍼런스.
+        이 저장소의 필수 runtime이 아닙니다.
+      </li>
+    </ul>
+
+    <h2>기여자·에이전트를 위한 canonical 문서</h2>
+    <p>공개 페이지는 이야기이고, 실행 contract는 repository 문서입니다.</p>
+    <p class="actions">
+      <a href="https://github.com/rayleighko/breaking-point/blob/main/docs/AI_DEVELOPMENT_LOOP.md"
+        >AI development loop →</a
+      >
+      <a href="https://github.com/rayleighko/breaking-point/blob/main/docs/GITFLOW.md"
+        >GitFlow · rebase →</a
+      >
+      <a href="https://github.com/rayleighko/breaking-point/blob/main/docs/ARCHITECTURE.md"
+        >Architecture →</a
+      >
+      <a href={url('/roadmap')}>로드맵에서 구조 보기 →</a>
+    </p>
+  </article>
+</Base>
+
+<style>
+  .page {
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+  }
+  .eyebrow {
+    color: var(--accent);
+    font: 0.75rem var(--mono);
+    letter-spacing: 0.12em;
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    line-height: 1.25;
+  }
+  .lead {
+    color: var(--fg-muted);
+    font-size: 1.05rem;
+    max-width: 46rem;
+  }
+  .muted {
+    color: var(--fg-muted);
+  }
+  .loop {
+    list-style: none;
+    padding: 0;
+    margin: 1.2rem 0 2rem;
+    display: grid;
+    gap: 0.55rem;
+  }
+  .loop li {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--bg-card);
+  }
+  .loop-n {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    font: 0.75rem var(--mono);
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+  }
+  .loop b {
+    display: block;
+    font-size: 0.95rem;
+  }
+  .loop span {
+    color: var(--fg-muted);
+    font-size: 0.88rem;
+  }
+  .layers {
+    display: grid;
+    gap: 0.6rem;
+    margin: 1rem 0 2rem;
+  }
+  .layer {
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--bg-soft);
+  }
+  .layer header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.8rem;
+    align-items: baseline;
+    margin-bottom: 0.35rem;
+  }
+  .layer h3 {
+    margin: 0;
+    font-size: 1rem;
+  }
+  .standing {
+    font: 0.72rem var(--mono);
+    color: var(--fg-dim);
+  }
+  .layer p {
+    margin: 0.2rem 0;
+    font-size: 0.92rem;
+  }
+  .examples {
+    color: var(--fg-dim);
+    font-family: var(--mono);
+    font-size: 0.78rem !important;
+  }
+  .links {
+    display: grid;
+    gap: 0.55rem;
+    margin: 1rem 0 2rem;
+  }
+  .link-card {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.8rem 0.95rem;
+    border-left: 3px solid var(--accent);
+    background: var(--bg-card);
+    border-radius: 0 8px 8px 0;
+  }
+  .link-card span {
+    color: var(--fg-muted);
+    font-size: 0.9rem;
+  }
+  .tools {
+    color: var(--fg-muted);
+    line-height: 1.7;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+</style>

@@ -1,6 +1,7 @@
 ---
 import Base from '@/layouts/Base.astro';
 import { ROADMAP, STATUS_LABEL, counts } from '@/lib/roadmap';
+import { DELIVERY_STEPS, LAB_OPS_LINKS, SYSTEM_LAYERS } from '@/lib/system-map';
 import { url } from '@/lib/url';
 
 const { done, total } = counts();
@@ -17,6 +18,64 @@ const { done, total } = counts();
       <i style={`width:${(done / total) * 100}%`}></i>
     </div>
     <p class="dim count">{done} / {total} 완성</p>
+
+    <section class="sysmap" aria-labelledby="sysmap-title">
+      <h2 id="sysmap-title">이 서비스는 어떤 구조인가요?</h2>
+      <p class="goal muted">
+        Breaking Point 자체의 runtime 경계와 운영 loop입니다. lab에서 다루는 Queue, p99, overload
+        감각을 이 repository를 만드는 방식에도 같은 언어로 연결합니다. 자세한 설명은
+        <a href={url('/process')}>프로세스</a>와
+        <a href="https://github.com/rayleighko/breaking-point/blob/main/docs/ARCHITECTURE.md"
+          >Architecture</a
+        >를 봅니다.
+      </p>
+
+      <h3 class="sys-h">Runtime layers</h3>
+      <div class="arch" role="list">
+        {
+          SYSTEM_LAYERS.map((layer, index) => (
+            <div class="arch-node" role="listitem">
+              <span class="arch-n">{index + 1}</span>
+              <div>
+                <b>{layer.name}</b>
+                <span class="dim standing">{layer.standing}</span>
+                <p>{layer.role}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <h3 class="sys-h">Delivery loop</h3>
+      <ol class="flow" aria-label="feature 공개 흐름">
+        {
+          DELIVERY_STEPS.map((step) => (
+            <li>
+              <b>{step.name}</b>
+              <span>{step.detail}</span>
+            </li>
+          ))
+        }
+      </ol>
+
+      <h3 class="sys-h">랩 개념 → 운영 감각</h3>
+      <div class="ops">
+        {
+          LAB_OPS_LINKS.map((item) => (
+            <div class="ops-row">
+              <b>
+                {item.labSlug ? (
+                  <a href={url(`/labs/${item.labSlug}`)}>{item.concept}</a>
+                ) : (
+                  item.concept
+                )}
+              </b>
+              <span class="muted">{item.opsAnalogy}</span>
+            </div>
+          ))
+        }
+      </div>
+    </section>
 
     {
       ROADMAP.map((stage) => (
@@ -149,5 +208,102 @@ const { done, total } = counts();
   .contrib p {
     font-size: 0.93rem;
     color: var(--fg-muted);
+  }
+  .sysmap {
+    margin: 2.2rem 0 2.8rem;
+    padding: 1.2rem 1.1rem 1.4rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--bg-card);
+  }
+  .sysmap > .goal {
+    margin-top: 0.35rem;
+    margin-bottom: 1.1rem;
+  }
+  .sys-h {
+    font-size: 0.95rem;
+    margin: 1.1rem 0 0.55rem;
+  }
+  .arch {
+    display: grid;
+    gap: 0.45rem;
+  }
+  .arch-node {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+    padding: 0.65rem 0.75rem;
+    border-radius: 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--line-soft);
+  }
+  .arch-n {
+    flex-shrink: 0;
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    font: 0.72rem var(--mono);
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+  }
+  .arch-node b {
+    display: inline;
+    margin-right: 0.45rem;
+  }
+  .standing {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+  }
+  .arch-node p {
+    margin: 0.2rem 0 0;
+    font-size: 0.88rem;
+    color: var(--fg-muted);
+  }
+  .flow {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.45rem;
+  }
+  .flow li {
+    padding: 0.65rem 0.7rem;
+    border-radius: 8px;
+    border: 1px dashed var(--line);
+    background: var(--bg);
+  }
+  .flow b {
+    display: block;
+    font-size: 0.86rem;
+    margin-bottom: 0.2rem;
+  }
+  .flow span {
+    font-size: 0.78rem;
+    color: var(--fg-muted);
+    line-height: 1.45;
+  }
+  .ops {
+    display: grid;
+    gap: 0.45rem;
+  }
+  .ops-row {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.55rem 0.1rem;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .ops-row:last-child {
+    border-bottom: 0;
+  }
+  .ops-row span {
+    font-size: 0.88rem;
+  }
+  @media (max-width: 560px) {
+    .sysmap {
+      padding: 1rem 0.85rem;
+    }
   }
 </style>

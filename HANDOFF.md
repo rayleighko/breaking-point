@@ -73,10 +73,11 @@
 **진행 중 — feature/p50-p99 (2026-08-03)**
 
 > 브랜치: `feature/p50-p99` → PR target `develop` (main 직접 merge 금지).
-> 챌린지 난이도: `test/test-p50-p99.ts`에서 순진한 해법(평균 100·p99 5050) 실패,
-> 의도한 해법(평균 100·p99 290) 통과를 스크립트로 고정했습니다.
-> 남은 확인: 이 브랜치에서 `pnpm quality`, preview에서 375px overflow·console,
-> CI(browser) 녹색 확인 후 develop merge. Pet Coach `lab-session` 연동은 다음 slice.
+> 로컬 `pnpm quality` 통과 (format·lint·astro check·test·build).
+> 챌린지: `test/test-p50-p99.ts`에서 순진한 해법(평균 100·p99 5050) 실패,
+> 의도한 해법(평균 100·p99 290) 통과.
+> 남은 확인: preview 375px overflow·console, CI(browser) 녹색 후 develop merge.
+> 다음 slice: `engine.ts` Sim 좌우 체감 연결, Pet Coach `labId` 등록, browser smoke.
 
 ---
 

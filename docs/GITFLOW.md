@@ -39,14 +39,14 @@ Pull Requests:
 
 Branch protection (`main`, `develop`) — admin에게도 적용 (`enforce_admins`):
 
-| 규칙                         | `main` | `develop` | 의미                                      |
-| ---------------------------- | ------ | --------- | ----------------------------------------- |
-| Require a pull request       | on     | on        | 직접 push 금지 (승인 수 0, 솔로 유지자용) |
-| Required checks              | on     | on        | `quality`, `browser` 통과 필요            |
-| Require branches up to date  | on     | on        | base가 최신이어야 merge                   |
-| Require linear history       | on     | on        | merge commit 불가                         |
-| Allow force pushes           | off    | on        | release 후 develop을 main tip에 맞출 때   |
-| Allow deletions              | off    | off       | 브랜치 삭제 방지                          |
+| 규칙                        | `main` | `develop` | 의미                                      |
+| --------------------------- | ------ | --------- | ----------------------------------------- |
+| Require a pull request      | on     | on        | 직접 push 금지 (승인 수 0, 솔로 유지자용) |
+| Required checks             | on     | on        | `quality`, `browser` 통과 필요            |
+| Require branches up to date | on     | on        | base가 최신이어야 merge                   |
+| Require linear history      | on     | on        | merge commit 불가                         |
+| Allow force pushes          | off    | on        | release 후 develop을 main tip에 맞출 때   |
+| Allow deletions             | off    | off       | 브랜치 삭제 방지                          |
 
 ## Feature 크기
 

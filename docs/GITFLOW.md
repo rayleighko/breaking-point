@@ -28,20 +28,25 @@ AI 작업 순환과 리뷰 습관은 [`docs/AI_DEVELOPMENT_LOOP.md`](./AI_DEVELO
 Squash는 “실험 커밋이 너무 noisy해서 한 커밋으로 정리해야 할 때”만 예외적으로 씁니다. 평소에는
 계산 / UI / 콘텐츠처럼 의미 있는 커밋을 나눈 뒤 rebase로 합칩니다.
 
-### GitHub repository settings (maintainer)
+### GitHub repository settings (applied)
 
-Settings → General → Pull Requests에서 다음을 권장합니다.
+Pull Requests:
 
-- Allow rebase merging: 켜기 (기본 사용)
-- Allow squash merging: 예외용으로만 켜 두거나, 팀 합의 후 끕니다
-- Allow merge commits: 끄기 (linear history)
-- Automatically delete head branches: 켜기
+- Allow rebase merging: on (기본)
+- Allow squash merging: on (예외용)
+- Allow merge commits: off
+- Automatically delete head branches: on
 
-Branch protection(`main`, `develop`)이 있다면:
+Branch protection (`main`, `develop`) — admin에게도 적용 (`enforce_admins`):
 
-- Require a pull request before merging
-- Require status checks: `quality` (CI), 가능하면 `browser`
-- Require linear history
+| 규칙                         | `main` | `develop` | 의미                                      |
+| ---------------------------- | ------ | --------- | ----------------------------------------- |
+| Require a pull request       | on     | on        | 직접 push 금지 (승인 수 0, 솔로 유지자용) |
+| Required checks              | on     | on        | `quality`, `browser` 통과 필요            |
+| Require branches up to date  | on     | on        | base가 최신이어야 merge                   |
+| Require linear history       | on     | on        | merge commit 불가                         |
+| Allow force pushes           | off    | on        | release 후 develop을 main tip에 맞출 때   |
+| Allow deletions              | off    | off       | 브랜치 삭제 방지                          |
 
 ## Feature 크기
 

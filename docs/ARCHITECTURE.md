@@ -104,23 +104,28 @@ agent skill은 서로 다른 knowledge base를 만들지 않고 topic collection
 
 ## PR AI review boundary
 
-`review-action/`은 사이트 runtime이나 배포 dependency가 아니라 독립 repository로 추출 가능한 contribution
-infrastructure입니다. TypeScript·Go·Python 공통 policy와 프로젝트별 OpenCodeReview rule을 합성하고 PR에
-advisory finding을 게시합니다.
+[`rayleighko/engineering-review-action`](https://github.com/rayleighko/engineering-review-action)은 사이트
+runtime이나 배포 dependency와 분리된 contribution infrastructure입니다. TypeScript·Go·Python 공통 policy와
+Breaking Point의 OpenCodeReview rule을 합성하고 PR에 advisory finding을 게시합니다. 이 repository는 Action
+구현을 복제하지 않고 full commit SHA로 고정한 caller와 project-specific rule만 소유합니다.
 
 - lint, typecheck, test와 build는 deterministic CI가 담당합니다.
 - AI credential이 있는 review job은 PR code를 실행하지 않고 diff를 데이터로만 읽습니다.
 - project rule은 PR head가 아니라 신뢰한 base에서 읽습니다.
 - AI review 성공이나 comment 수는 사람의 Approve를 대신하지 않습니다.
-- 다른 repository에서 검증한 뒤 별도 public Action repository와 immutable release로 추출할 수 있습니다.
+- Action upgrade는 release tag가 아니라 검토한 full commit SHA로만 반영합니다.
 
 구체적인 위협 모델, 독립 실행, `needs: quality` 순차 실행과 언어 profile은
-[`review-action/README.md`](../review-action/README.md)를 따릅니다.
+외부 Action repository의
+[`README.md`](https://github.com/rayleighko/engineering-review-action/blob/66f5efffa411a355beebc5ba690c31154c580af5/README.md)를
+따릅니다.
 
 외부 reviewer나 review 지식을 추가할 때 runtime을 site code에 결합하지 않습니다. 모든 PR의 automatic advisory
 lane, 명시적으로 호출하는 sandbox specialist lane, provenance가 있는 portable review pack을 분리합니다. project
 rule은 pack보다 우선하고 external source는 license와 immutable revision 검토 없이 vendoring하지 않습니다. 자세한
-intake와 adapter 경계는 [`review-action/docs/ECOSYSTEM.md`](../review-action/docs/ECOSYSTEM.md)를 따릅니다.
+intake와 adapter 경계는 외부 Action repository의
+[`docs/ECOSYSTEM.md`](https://github.com/rayleighko/engineering-review-action/blob/66f5efffa411a355beebc5ba690c31154c580af5/docs/ECOSYSTEM.md)를
+따릅니다.
 
 ## Browser와 CLI의 책임
 

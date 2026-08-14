@@ -1,183 +1,225 @@
-# Codex 인수인계 프롬프트
+# Breaking Point — Codex 인수인계
 
-> 아래 내용을 그대로 Codex(또는 다른 코딩 에이전트)에 붙여넣고 이어서 작업하면 됩니다.
-> `[ ]` 항목을 위에서부터 처리하세요.
+이 문서는 다른 Codex 채팅이 과거 대화 없이 Breaking Point 작업을 이어가기 위한 현재 실행 상태입니다. 대화 원문보다 이 문서, GitHub Issue/PR, test와 browser evidence를 우선합니다.
 
----
+## 새 채팅에서 바로 사용할 프롬프트
 
-## 프로젝트 컨텍스트
+```text
+이 repository의 HANDOFF.md를 읽고 현재 작업의 실행 계약으로 사용해 주세요. 먼저 AGENTS.md와 skills/breaking-point-maintainer/SKILL.md를 끝까지 읽고, git status, 현재 branch, 연결된 GitHub Issue/PR과 Actions 상태를 확인해 주세요. 그다음 HANDOFF.md의 “즉시 수행할 작업 패킷”을 가장 작은 coherent change로 수행해 주세요. 변경 전 objective, scope, constraints, acceptance criteria와 evidence를 짧게 정리하고, 관련 contract와 기존 test만 읽어 주세요. PR code를 secret이 있는 job에서 checkout하거나 실행하지 말고, 실행하지 않은 검사를 통과했다고 표현하지 마세요. 완료 시 pnpm quality와 해당 추가 evidence를 실행하고, 변경·검증·남은 risk·다음 결정을 보고해 주세요.
+```
 
-`breaking-point` — AI 시대의 software engineer가 시스템을 **브라우저 simulation으로 직접
-부숴보며** 배우는 공개 학습 사이트. Astro 5 + React 19 island, GitHub Pages 정적 배포, 한국어.
+## 프로젝트 목적
 
-- 공개 주소: <https://rayleighko.github.io/breaking-point/>
-- repository: <https://github.com/rayleighko/breaking-point>
-- package manager: pnpm 10 (`pnpm-lock.yaml`을 source of truth로 사용)
+Breaking Point는 system behavior를 browser simulation으로 직접 부수며 배우는 한국어 공개 학습 사이트입니다.
 
-**설계 원칙 4가지** (모든 판단의 기준. 어길 때는 이유를 명시할 것):
+- 공개 사이트: <https://rayleighko.github.io/breaking-point/>
+- GitHub: <https://github.com/rayleighko/breaking-point>
+- Stack: Astro 5, React 19 islands, TypeScript, pnpm 10, GitHub Pages
+- 공개 shell은 정적으로 유지하며 interaction만 React island가 담당합니다.
+- generic system pattern을 먼저 설명하고 TypeScript, Go, Rust, JVM, AWS와 Kubernetes 구현으로 연결합니다.
 
-1. **읽지 말고 만진다** — 모든 개념에 실제로 돌아가는 시뮬레이터가 붙는다.
-2. **중학교 수학까지만** — 용어를 먼저 가르치지 않는다. 현상 → 산수 → 그다음 이름.
-3. **챌린지로 닫는다** — 제약이 있는 문제를 주고, 순진한 해법(자원만 늘리기)은 반드시 실패하게 만든다.
-4. **다시 왔을 때 30초** — 각 랩 끝에 리마인드 카드.
+모든 사용자 경험은 다음 순서로 닫습니다.
 
-자세한 작성 규격은 `CONTENT_GUIDE.md`. 새 랩을 쓸 때는 반드시 먼저 읽을 것.
+1. 현상을 직접 만집니다.
+2. 중학교 수준 산수로 원인을 설명합니다.
+3. 업계 용어를 연결합니다.
+4. constraint가 있는 challenge에서 순진한 해법을 실패시킵니다.
+5. Recall card로 30초 안에 복습합니다.
 
-## 현재 상태
+사용자 문장은 존칭 한국어를 사용하고 기술 고유명사는 통용되는 원어를 유지합니다. AI가 작성한 변경도 contributor가 설명하고 검증할 수 있어야 합니다.
 
-**완성**
+## Canonical context
 
-- 사이트 뼈대: 레이아웃, 네비, 디자인 토큰, 콘텐츠 컬렉션, 라우팅, GitHub Actions 배포 워크플로
-- `src/lib/engine.ts` — Queue 시뮬레이션 엔진. 앞으로의 랩 대부분이 이걸 재사용한다.
-  도착(포아송) / 창구(커넥션 풀) / 대기열 / acquire 타임아웃 / 재시도 / 리틀의 법칙 계산.
-  시드 고정이라 재현 가능.
-- 랩 3개 완성:
-  - `커넥션 풀 고갈` (`src/content/labs/connection-pool.mdx`)
-    - 시각화(`Stage.tsx` — 은행 창구 비유 캔버스 애니메이션)
-    - 응답시간 그래프(`Chart.tsx` — 로그 스케일 p50/p99 + 에러율)
-    - 챌린지(`Challenge.tsx` — 트래픽 스파이크 방어)
-    - 확인 문제(`Quiz.tsx`)
-  - `Queue의 감각` (`src/content/labs/queue-sense.mdx`)
-    - 이용률→대기시간 곡선(`WaitCurve.tsx` + `queue-sense.ts`)
-    - 실시간 Stage/Chart와 70%/95% 비교
-    - 챌린지(`QueueSenseChallenge.tsx` — 피크에서도 70% 여유)
-    - 확인 문제(`Quiz.tsx`)
-  - `p50과 p99` (`src/content/labs/p50-p99.mdx`) — **feature/p50-p99 브랜치**
-    - 혼합 분포 순수 계산(`src/lib/p50-p99.ts`)
-    - 나란히 비교 UI(`P50P99Lab.tsx` + `DistCompare.tsx`)
-    - 챌린지(`P50P99Challenge.tsx` — 평균만 맞추기 실패 / 꼬리 자르기 통과)
-    - 확인 문제(`Quiz.tsx`)
-- 엔진·랩 테스트 (`test/`, `pnpm test`에 `test-p50-p99.ts` 포함)
-- 정적 Wiki content collection과 knowledge graph (`src/content/topics/*.json`)
-- Pagefind 기반 통합 검색: lab·Wiki·roadmap·resource 검색
-- JSON scenario playground와 공유 가능한 URL
-- 라이트/다크 테마, 반응형 navigation, 375px mobile 기준
-- 전역 AI Pet Coach beta UI와 OpenRouter용 Cloudflare Worker proxy 뼈대
-- Connection Pool Lab과 상태를 공유하는 Mini Lab, 승인형 AI 제안과 단계형 Hint
-- ESLint·Prettier·TypeScript·engine test·build를 묶은 `pnpm quality`
-- Chromium·Firefox·WebKit용 Playwright compatibility/performance test
+작업을 시작할 때 전체 repository를 읽지 말고 변경 유형에 맞는 문서만 읽습니다.
 
-**검증된 것**
+| 항상 읽기                                   | 작업에 따라 추가로 읽기                                                     |
+| ------------------------------------------- | --------------------------------------------------------------------------- |
+| `AGENTS.md`                                 | 새 lab·교육 콘텐츠: `CONTENT_GUIDE.md`                                      |
+| `skills/breaking-point-maintainer/SKILL.md` | simulation·engine: `docs/ENGINE_GUIDE.md`와 관련 engine test                |
+| 이 `HANDOFF.md`                             | UI/UX: `docs/FRONTEND_GUIDELINES.md`와 `skills/review-learning-ux/SKILL.md` |
+| 관련 구현과 가장 가까운 test                | delivery·review: `docs/AI_DEVELOPMENT_LOOP.md`                              |
+|                                             | branch·release: `docs/GITFLOW.md`                                           |
+|                                             | AI harness: `docs/AI_HARNESS.md`                                            |
 
-- 엔진 물리: 풀 5개 × 50ms → 처리량 정확히 100 RPS 상한. 리틀의 법칙 일치.
-- 큐 불변식: 풀 크기를 실시간으로 바꿔도 `enqueuedAt` 오름차순 유지, 타임아웃 누락 없음.
-- 챌린지 난이도: 풀만 20개까지 올리는 순진한 해법은 p99 634ms로 실패(기준 500ms).
-  쿼리 시간을 줄이면 통과. 의도대로 작동함.
+Architecture 결정은 `docs/DECISIONS.md`, 사용자에게 전달된 변경은 `CHANGELOG.md`, 현재 실행 상태는 이 문서에 갱신합니다.
 
-**검증 완료 (2026-08-03)**
+## 현재 확인된 상태
 
-> `pnpm quality` 통과. Queue의 감각 lab은 preview에서 70%→95% 프리셋(대기 약 14배),
-> 375px overflow 없음, console error 없음을 확인했습니다.
-> 챌린지는 `test/test-queue-sense.ts`로 순진한 해법 실패·의도한 해법 통과를 검증했습니다.
+2026-08-14 로컬 기준입니다. 새 채팅은 아래 값을 그대로 가정하지 말고 다시 확인합니다.
 
-**완료 — p50-p99 (2026-08-03)**
+- 현재 branch: `feature/engineering-review-action`
+- 현재 HEAD는 새 채팅에서 `git rev-parse HEAD`로 다시 확인합니다.
+- base: `develop` (`9b5b714`)
+- 관련 Issue: [#13 — AI code review delivery loop](https://github.com/rayleighko/breaking-point/issues/13)
+- 관련 Draft PR: [#14](https://github.com/rayleighko/breaking-point/pull/14)
+- `main`과 `develop`은 GitHub branch protection과 `quality`, `browser` required check를 사용합니다.
+- `AI review`는 advisory이며 사람의 Approve를 대신하지 않습니다.
 
-> `develop`과 `main`에 반영되었고 roadmap status는 `done`입니다.
-> 로컬 `pnpm quality` 통과 (format·lint·astro check·test·build).
-> 챌린지: `test/test-p50-p99.ts`에서 순진한 해법(평균 100·p99 5050) 실패,
-> 의도한 해법(평균 100·p99 290) 통과.
+### 제품 baseline
 
-**운영 파이프라인 준비 (2026-08-14)**
+- Connection Pool, Queue Sense, p50/p99 세 lab이 완료되어 있습니다.
+- 공통 Queue simulation engine은 fixed seed로 재현 가능합니다.
+- challenge test는 순진한 해법 실패와 의도한 해법 통과를 script로 검증합니다.
+- Pagefind 검색, static knowledge graph, Scenario playground, light/dark theme와 mobile navigation이 있습니다.
+- AI Gateway는 Cloudflare Worker로 분리되어 있으며 AI secret을 static site에 넣지 않습니다.
+- 현재 로드맵의 다음 콘텐츠 후보는 Cache Stampede이고, 그다음은 Retry Storm입니다.
 
-> GitHub Issue → Draft PR → `pnpm quality`/browser → OpenCodeReview AI 1차 검수 → maintainer 최종 검토 →
-> rebase merge 계약을 `docs/AI_DEVELOPMENT_LOOP.md`에 정리했습니다. `.github/workflows/ai-review.yml`은
-> `review-action/`의 TypeScript profile을 사용하며 내부 OpenCodeReview는 `v1.7.16` commit에 고정되어 있습니다.
-> Action은 Go·Python profile, 독립 실행과 `needs: quality` 순차 실행도 지원하고 `.opencodereview/rule.json`의
-> 프로젝트 규칙을 먼저 적용합니다.
-> 활성화 전 repository secret/variable을 설정하고 작은 test PR로 comment·artifact·비용을 확인해야 합니다.
-> 로컬 unit/actionlint/OCR matcher 검증과 아직 필요한 live PR 항목은 `review-action/docs/VALIDATION.md`에 있습니다.
+### AI review 분리 상태
 
----
+Breaking Point는 독립 Action의 consumer이며 Action 구현을 repository 안에 복제하지 않습니다.
 
-## 작업 목록
+- Action repository: <https://github.com/rayleighko/engineering-review-action>
+- local checkout: `/Users/rayleighko/Development/engineering-review-action`
+- 첫 release: `v1.0.0`
+- caller가 고정한 full SHA: `66f5efffa411a355beebc5ba690c31154c580af5`
+- Breaking Point 소유 범위: `.github/workflows/ai-review.yml`, `.opencodereview/rule.json`, secret/variable 이름과 사람 review contract
 
-### A. 최우선 — 실제로 빌드시키기
+공통 TypeScript·Go·Python policy와 실행 코드는 외부 Action repository에서만 변경합니다. 두 repository를 한
+작업에서 동시에 수정하지 않습니다.
 
-- [x] `pnpm install` 실행 → `pnpm-lock.yaml` 생성
-      → `.github/workflows/deploy.yml`은 `pnpm install --frozen-lockfile` 사용
-- [x] `pnpm exec astro sync && pnpm check` — 타입 에러 전부 해결
-      (`astro:content`, `import.meta.env.BASE_URL` 타입은 `astro sync` 이후에 생성됨)
-- [x] `pnpm build` 성공시키기
-- [x] `pnpm dev`로 육안 확인:
-  - [x] 홈(`/`)의 시뮬레이터가 자동으로 돌아가는가
-  - [x] 캔버스 애니메이션에서 요청이 대기줄 → 창구 → 출구로 자연스럽게 흐르는가
-  - [x] 슬라이더를 움직이면 즉시 반응하는가 (일시정지 상태에서도 창구 격자가 바뀌는가)
-  - [x] 프리셋 5개가 각각 의도한 상황을 보여주는가
-  - [x] 챌린지 실행 → 45초 시뮬 → 판정이 정상 동작하는가
-  - [x] 모바일 폭(375px)에서 레이아웃이 깨지지 않는가
-  - [x] 랩 페이지에서 가로 스크롤이 생기지 않는가 (`.bleed` 관련)
-- [x] `pnpm test` 통과 확인
+### Consumer 전환 검증 (2026-08-14)
 
-### B. 배포
+- `.github/workflows/ai-review.yml`은 외부 Action을 immutable full SHA로 호출합니다.
+- caller에는 PR head checkout, dependency install, test와 arbitrary script 실행이 없습니다.
+- permissions는 `contents: read`, `pull-requests: write`입니다.
+- repository 내부 `review-action/`과 해당 package test를 제거했습니다.
+- 공식 `actionlint v1.7.12` Darwin arm64 binary의 checksum을 확인한 뒤 workflow lint를 통과했습니다.
+- `pnpm quality`를 통과했습니다.
+- AI review는 advisory이며 `quality`, `browser` required check와 사람의 Approve를 대신하지 않습니다.
 
-- [x] `astro.config.mjs`의 `SITE` / `BASE`를 실제 GitHub 계정·레포명으로 교체
-      (`USERNAME.github.io` 레포면 `BASE = '/'`)
-- [x] `src/components/Nav.astro`의 GitHub 링크 URL 교체
-- [x] 레포 Settings → Pages → Source를 `GitHub Actions`로 설정
-- [x] 푸시 후 배포 확인, 실제 URL에서 base 경로가 깨지지 않는지 점검
+## 즉시 수행할 작업 패킷
 
-### C. 알려진 개선 과제
+### Objective
 
-- [x] `Stage.tsx` — browser performance budget과 자동 회귀 검수 추가
-      (`test/browser/performance.spec.ts`, 상세 기준은 `docs/PERFORMANCE.md`)
-- [x] scenario 상태를 URL query에 직렬화 — playground 설정 공유 가능
-- [ ] `Chart.tsx`에 처리량(throughput) 라인 추가 검토 (현재는 지연시간과 에러율만)
-- [x] 다크/라이트 테마 토글과 system preference 지원 (기본은 라이트)
-- [ ] OG 이미지 자동 생성
-- [x] AI Gateway 실제 배포: OpenRouter key, Cloudflare Worker, `PUBLIC_AI_API_URL` 연결
-- [ ] 최종 고양이 sprite asset 제작과 상태별 animation 연결
-- [ ] Wiki 규모가 수천 건을 넘을 때 build 시간·검색 index 크기를 측정하고 외부 검색 전환 판단
+PR #14의 consumer 전환 diff를 사람의 review로 확인하고 `develop`에 rebase merge합니다. merge 후 작은 non-draft
+test PR에서 live AI comment 경계를 검증합니다.
 
-Cloudflare는 정적 site hosting이 아니라 AI API key를 보호하는 proxy에만 사용합니다. 설정과 수동 작업은
-`docs/AI_GATEWAY.md`를 따릅니다. API key를 repository나 `PUBLIC_` 환경 변수에 넣지 않습니다.
+### Merge 전 확인
 
-AI retrieval은 내부 검수 자료를 먼저 사용하고, 부족할 때만 공식 원문으로 fallback하며 답변마다 출처를
-표시합니다. 현재는 별도 database나 vector index를 사용하지 않습니다. 도입 기준은
-`docs/RETRIEVAL_COST_POLICY.md`, 결정 이력은 `docs/DECISIONS.md`를 따릅니다.
+- PR #14의 현재 HEAD에서 `quality`, `browser`가 통과했는지 확인합니다.
+- external Action `uses:`가 `66f5efffa411a355beebc5ba690c31154c580af5`인지 확인합니다.
+- AI review가 실행되지 않았다면 현재 diff를 직접 검토했다고 PR에 기록합니다.
+- rebase merge를 사용하고 merge commit을 만들지 않습니다.
 
-### D. 다음 콘텐츠 (`src/lib/roadmap.ts`가 전체 목차 = 진행 상황판)
+### Live prototype prerequisites
 
-우선순위 순:
+2026-08-14 확인 결과 OCR 전용 secret/variable은 아직 설정되지 않았습니다. 값은 읽거나 출력하지 말고 존재 여부만
+확인합니다. 기존 site용 OpenRouter key를 재사용하지 않고 review 전용 key와 provider-side 비용 상한을 사용합니다.
 
-1. ~~**Queue의 감각**~~ — 완료 (`queue-sense`, roadmap status `done`)
+### Live prototype acceptance
 
-2. ~~**p50과 p99**~~ — 완료 (`p50-p99`, roadmap status `done`).
+독립 Action 자체의 TypeScript end-to-end prototype은 `engineering-review-action/HANDOFF.md`를 따라 별도 프로젝트에서 수행합니다. Breaking Point에서는 consumer 전환이 base branch에 반영된 뒤 작은 non-draft test PR로 다음만 검증합니다.
 
-3. **캐시 스탬피드** — 캐시를 넣었는데 왜 5분마다 DB가 죽을까
-   시뮬: TTL 동시 만료 순간 요청이 DB로 쏟아지는 장면 + 지터/뮤텍스 적용 비교.
-   → `engine.ts`에 캐시 계층(히트 시 즉시 반환, 미스 시 창구 점유) 추가 필요.
+- 한국어 sticky summary가 게시됩니다.
+- intentional defect가 유용한 inline 위치에 보고됩니다.
+- 새 push에서 겹치는 finding이 중복되지 않습니다.
+- artifact와 log에 secret, 전체 environment 또는 request body가 없습니다.
+- AI API 실패가 deterministic CI 결과를 가리지 않습니다.
 
-4. **리트라이 스톰** — 백오프 없음 / 고정 / 지수+지터 3가지를 나란히 실행
-   → `engine.ts`의 `retryBackoff`를 전략 함수로 일반화.
+필요 설정:
 
-랩을 완성하면 `src/lib/roadmap.ts`에서 해당 항목의 `status`를 `'done'`으로,
-`slug`를 채울 것.
+| 종류     | 이름                      |
+| -------- | ------------------------- |
+| Secret   | `OCR_LLM_URL`             |
+| Secret   | `OCR_LLM_TOKEN`           |
+| Variable | `OCR_LLM_MODEL`           |
+| Variable | `OCR_USE_ANTHROPIC`       |
+| Variable | `OCR_REVIEW_ENABLED=true` |
 
----
+값을 읽거나 출력하지 말고 존재 여부만 확인합니다. 전용 review key와 provider-side 비용 상한을 사용합니다.
 
-## 작업 규칙
+## 다음 제품 작업
 
-- **엔진을 고치면 `pnpm test`를 반드시 다시 돌린다.** 시뮬레이션이 물리적으로 틀리면
-  이 프로젝트는 존재 가치가 없다.
-- **새 챌린지를 만들면 반드시 스크립트로 난이도를 검증한다.**
-  `test/test-chal.ts`가 그 패턴이다 — 순진한 해법이 실패하고 의도한 해법이 통과하는지
-  코드로 확인한 뒤에 배포한다.
-- **콘텐츠를 쓰기 전에 `CONTENT_GUIDE.md`의 9단 구조와 발행 전 체크리스트를 확인한다.**
-- 커밋 메시지는 한국어로, `랩: 캐시 스탬피드 추가` / `엔진: 캐시 계층 지원` 식으로.
+AI review consumer 전환과 live prototype evidence가 끝난 뒤에만 다음 feature를 별도 Issue와 branch로 시작합니다.
 
-## 다음 작업 시작점
+### 1. Cache Stampede lab
 
-1. 일반 변경은 `AGENTS.md` → 관련 문서 → 관련 test 순으로 읽습니다.
-2. 브랜치는 `docs/GITFLOW.md`와 `docs/AI_DEVELOPMENT_LOOP.md`를 따릅니다. `feature/<slug>` →
-   `develop`과 release → `main`은 **rebase merge**입니다. 공개 설명은 `/process`입니다.
-3. 현재 상태 확인은 `git status --short --branch`와 `pnpm quality`로 시작합니다.
-4. 새 작업은 먼저 해당 Issue의 outcome·acceptance·evidence를 닫고 Draft PR로 연결합니다. AI review 설정과 사람
-   검토 순서는 `docs/AI_DEVELOPMENT_LOOP.md`를 따릅니다.
-5. UI 변경은 `docs/FRONTEND_GUIDELINES.md`, simulation 변경은 `docs/ENGINE_GUIDE.md`, 새 콘텐츠는
-   `CONTENT_GUIDE.md`를 먼저 읽습니다.
-6. feature를 `develop`에 합친 뒤 release PR로 `main`에 올리면 GitHub Pages가 배포됩니다. Actions와
-   공개 URL을 모두 확인합니다.
-7. AI Gateway는 배포되어 있습니다. Worker를 변경하면 `docs/AI_GATEWAY.md`에 따라 dry-run, deploy와 공개
-   endpoint를 검증합니다.
-8. 완료된 제품 변경은 `CHANGELOG.md`, architecture 결정은 `docs/DECISIONS.md`, 다음 실행 상태는 이 문서에
-   반영합니다.
+- 현상: 같은 TTL로 만료된 요청이 동시에 database로 쏟아집니다.
+- 산수: hit/miss와 downstream concurrency 증가를 작은 숫자로 보여줍니다.
+- 비교: naive TTL, jitter, single-flight/mutex를 나란히 실행합니다.
+- challenge: cache size나 database connection만 늘리는 순진한 해법은 실패해야 합니다.
+- engine 변경이 필요하면 Scenario schema와 UI를 분리하고 invariant/fixed-seed test를 먼저 설계합니다.
+
+새 lab이므로 구현 전 `CONTENT_GUIDE.md`, `docs/ENGINE_GUIDE.md`, 관련 engine test를 모두 읽고 Proposal Issue에서 acceptance와 challenge constraint를 닫습니다.
+
+### 2. Retry Storm lab
+
+Cache Stampede 이후 별도 slice로 진행합니다. `retryBackoff`를 무백오프, fixed, exponential+jitter 전략으로 일반화하되 Cache Stampede 작업과 함께 refactor하지 않습니다.
+
+## Delivery와 review 계약
+
+```text
+Issue/Proposal
+  → feature/<slug> branch
+  → early Draft PR to develop
+  → nearest tests
+  → pnpm quality
+  → UI면 browser/375px/error/console evidence
+  → advisory AI review
+  → author disposition
+  → human review
+  → rebase merge
+```
+
+- 한 branch는 한 사용자 결과만 담습니다.
+- feature는 `develop`에서 분기하고 `develop`으로 rebase merge합니다.
+- 공개할 때 `release/<yyyy-mm-dd>`를 `main`으로 rebase merge한 뒤 Pages와 공개 URL을 확인합니다.
+- 커밋은 `영역: 변경 내용` 형식의 한국어를 사용합니다. 예: `인프라: 독립 리뷰 Action 연결`.
+- 기존 사용자 변경을 덮어쓰거나 unrelated cleanup을 하지 않습니다.
+- 시니어·주니어 구분 없이 같은 CI와 AI review를 적용합니다.
+
+AI finding은 다음 셋 중 하나로 종료합니다.
+
+```text
+수정: <commit 또는 설명>
+근거 있는 반박: <test, contract 또는 source>
+별도 Issue: <링크와 지금 미루는 이유>
+```
+
+사람은 Issue/acceptance → behavior → architecture/security → risky diff → AI finding → evidence 순으로 검토합니다. AI comment 수나 job 성공만으로 Approve하지 않습니다.
+
+## 검증 matrix
+
+| 변경 유형         | 최소 evidence                                                                |
+| ----------------- | ---------------------------------------------------------------------------- |
+| 일반 변경         | `pnpm quality`                                                               |
+| Engine/Scenario   | invariant, fixed-seed 재현성 test + `pnpm test`                              |
+| Challenge         | 순진한 해법 실패, 의도한 해법 통과 script                                    |
+| UI/UX             | 핵심 flow, 오류 상태, desktop, 375px overflow, console error 확인            |
+| 성능 주장         | 환경, duration, warm-up, raw result와 model/measurement provenance           |
+| Workflow/security | `actionlint`, permissions, immutable pins, trusted-base/secret boundary 검토 |
+| Cloudflare Worker | `docs/AI_GATEWAY.md`에 따른 dry-run, deploy와 endpoint 검증                  |
+
+검사를 실행하지 못했다면 통과했다고 쓰지 않고 명령과 이유를 정확히 남깁니다. browser model 결과를 production benchmark로 표현하지 않습니다.
+
+## 유지해야 할 Architecture boundary
+
+- 계산 규칙을 React component 안에 넣지 않습니다.
+- Scenario schema와 engine은 UI를 알지 못합니다.
+- 같은 Scenario와 seed는 같은 결과를 냅니다.
+- local state는 React, 여러 island가 공유하는 preference만 Zustand, 공유 가능한 상태는 URL에 둡니다.
+- feature 간 import는 `@/`, 같은 directory 내부는 `./`를 사용합니다.
+- Astro는 정적 shell이고 React island는 interaction만 담당합니다.
+- database, hosted search, analytics는 측정된 필요와 비용 상한 없이 도입하지 않습니다.
+- AI retrieval은 내부 검수 자료를 먼저 찾고 부족할 때만 공식 원문을 사용하며 답변마다 출처를 표시합니다.
+
+## 현재 알려진 risk와 결정 필요 사항
+
+- PR #14의 local Action과 독립 Action이 중복되어 있습니다. merge 전에 단일 source of truth로 정리해야 합니다.
+- live LLM 및 GitHub comment write는 아직 credential과 원격 PR을 사용한 end-to-end evidence가 필요합니다.
+- 첫 workflow 추가 PR은 base branch에 workflow가 없으므로 스스로 AI review를 실행하지 못할 수 있습니다. merge 후 작은 test PR로 검증합니다.
+- OpenCodeReview `v1.7.16`은 Markdown/MDX review에 제한이 있습니다. 문서 drift와 source 검증은 deterministic checker와 사람이 담당합니다.
+- AI review는 false positive/negative와 provider 장애가 있으므로 required check로 승격하지 않습니다. 승격은 fixture eval, 비용과 가용성 측정 후 별도 decision입니다.
+
+## Handoff 완료 조건
+
+다음 채팅은 작업을 마칠 때 이 문서를 최신화하고 다음을 보고합니다.
+
+- 사용자가 얻게 된 결과
+- 영향을 받은 file과 public/architecture contract
+- 실제 실행한 검증 명령과 결과
+- browser 또는 GitHub Actions 관찰
+- 선택하지 않은 대안과 이유
+- 남은 risk와 다음 한 가지 결정
+
+대화 내용 자체는 evidence가 아닙니다. test, fixture, Scenario, screenshot, command output, GitHub run과 decision log를 남깁니다.

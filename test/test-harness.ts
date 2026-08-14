@@ -63,4 +63,28 @@ for (const [file, markers] of Object.entries(contributionTemplates)) {
   }
 }
 
-console.log('PASS  AI harness adapter, project skill과 contribution template reference');
+const aiReviewWorkflow = readFileSync('.github/workflows/ai-review.yml', 'utf8');
+assert.ok(
+  aiReviewWorkflow.includes(
+    'uses: rayleighko/engineering-review-action@66f5efffa411a355beebc5ba690c31154c580af5',
+  ),
+  'AI review Action은 검토한 immutable full SHA를 사용해야 합니다.',
+);
+assert.ok(
+  !aiReviewWorkflow.includes('uses: ./review-action'),
+  'AI review workflow가 제거된 local Action을 참조합니다.',
+);
+assert.ok(
+  !aiReviewWorkflow.includes('actions/checkout@'),
+  'credentialed caller workflow에서 별도 checkout을 실행하면 안 됩니다.',
+);
+assert.ok(
+  aiReviewWorkflow.includes('contents: read'),
+  'AI review contents 권한은 read여야 합니다.',
+);
+assert.ok(
+  aiReviewWorkflow.includes('pull-requests: write'),
+  'AI review가 comment를 작성하려면 pull-requests write 권한이 필요합니다.',
+);
+
+console.log('PASS  AI harness, contribution template와 external review Action boundary');

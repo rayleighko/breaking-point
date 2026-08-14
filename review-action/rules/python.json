@@ -1,8 +1,0 @@
-{
-  "rules": [
-    {
-      "path": "**/*.py",
-      "rule": "Prioritize concrete correctness, security, and regression risks in Python. Check mutable defaults, exception swallowing or overly broad catches, async event-loop blocking, missing awaits, task cancellation, context-manager cleanup, iterator exhaustion, type narrowing that disagrees with runtime behavior, SQL or command injection, unsafe deserialization, path traversal, timezone handling, and multiprocessing or threading shared state. Confirm tests cover exceptions and boundary inputs; ignore formatting and subjective style."
-    }
-  ]
-}

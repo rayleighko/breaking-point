@@ -19,12 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      # pull_request_target checks out the trusted base. Never change this to the PR head.
-      - name: Check out trusted review policy
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
       - name: Review PR
-        uses: ./review-action
+        # This full SHA is the reviewed v1.0.0 release. Never replace it with a mutable tag.
+        uses: rayleighko/engineering-review-action@66f5efffa411a355beebc5ba690c31154c580af5
         with:
           llm_url: ${{ secrets.OCR_LLM_URL }}
           llm_auth_token: ${{ secrets.OCR_LLM_TOKEN }}

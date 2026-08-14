@@ -1,0 +1,55 @@
+name: Reusable engineering review
+
+on:
+  workflow_call:
+    inputs:
+      profiles:
+        description: Comma-separated profiles (typescript, go, python)
+        required: false
+        type: string
+        default: typescript,go,python
+      project_rule:
+        description: Optional repository-relative OpenCodeReview rule JSON
+        required: false
+        type: string
+        default: ''
+      language:
+        description: Review output language
+        required: false
+        type: string
+        default: English
+      background:
+        description: Product context and acceptance criteria
+        required: false
+        type: string
+        default: ''
+    secrets:
+      llm_url:
+        required: true
+      llm_auth_token:
+        required: true
+      llm_model:
+        required: true
+      llm_use_anthropic:
+        required: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      # Enable immutable releases before publishing this release-specific tag.
+      - uses: rayleighko/engineering-review-action@v1.0.0
+        with:
+          llm_url: ${{ secrets.llm_url }}
+          llm_auth_token: ${{ secrets.llm_auth_token }}
+          llm_model: ${{ secrets.llm_model }}
+          llm_use_anthropic: ${{ secrets.llm_use_anthropic }}
+          profiles: ${{ inputs.profiles }}
+          project_rule: ${{ inputs.project_rule }}
+          language: ${{ inputs.language }}
+          background: ${{ inputs.background }}

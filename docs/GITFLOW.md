@@ -42,7 +42,7 @@ Branch protection (`main`, `develop`):
 | 규칙                        | `main` | `develop` | 의미                                                          |
 | --------------------------- | ------ | --------- | ------------------------------------------------------------- |
 | Require a pull request      | on     | on        | 직접 push 금지 (승인 수 0, 솔로 유지자용)                     |
-| Required checks             | on     | on        | `quality`, `browser` 통과 필요                                |
+| Required checks             | on     | on        | `quality`, `browser` 통과 필요 (`AI review`는 advisory)       |
 | Require branches up to date | on     | on        | base가 최신이어야 merge                                       |
 | Require linear history      | on     | on        | merge commit 불가                                             |
 | Allow force pushes          | off    | on        | release 후 develop을 main tip에 맞출 때                       |
@@ -72,8 +72,9 @@ main
 
 1. `develop`에서 `feature/<slug>`를 만듭니다.
 2. 로컬에서 `pnpm quality`를 통과시킵니다. UI면 375px와 console도 확인합니다.
-3. 필요하면 권장 리뷰 도구로 diff를 보조 검토합니다. 필수 게이트는 아닙니다.
-4. feature → `develop` PR을 열고 CI 통과 후 **Rebase and merge**합니다.
+3. Draft PR을 일찍 열고 Ready로 바꾸면 OpenCodeReview AI 1차 검수를 받습니다. finding을 처리한 뒤 사람이
+   acceptance, architecture와 evidence를 최종 검토합니다.
+4. feature → `develop` PR의 필수 CI 통과와 사람 검토 후 **Rebase and merge**합니다.
 5. 공개할 준비가 되면 `develop`에서 `release/<date>`를 만들어 `main`으로 rebase merge합니다.
 6. `main` merge 후 Actions 배포와 공개 URL을 확인합니다. rebase merge는 커밋 SHA가 달라지므로
    `develop`을 `main`에 **hard reset**으로 맞춥니다 (`git reset --hard origin/main` 후

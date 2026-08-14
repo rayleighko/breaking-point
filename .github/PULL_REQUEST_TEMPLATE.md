@@ -5,6 +5,7 @@
 ## Context
 
 - Related Issue/Proposal:
+- Issue acceptance criteria copied or linked:
 - Change type: <!-- content / engine / challenge / frontend / infrastructure / documentation -->
 - Read first: <!-- 실제로 확인한 contract 문서 -->
 - Merge plan: Rebase and merge into `develop` (release → `main`도 rebase)
@@ -45,6 +46,8 @@
 
 ## Contributor ownership
 
+- [ ] OpenCodeReview finding을 수정했거나, 재현 근거와 함께 false positive인 이유를 답했습니다.
+- [ ] AI review가 실행되지 않았다면 현재 HEAD의 diff를 직접 검토하고 그 사실을 Verification에 적었습니다.
 - [ ] 변경 내용과 trade-off를 직접 설명할 수 있습니다.
 - [ ] AI가 생성한 내용이 있다면 diff, 출처와 test를 직접 검토했습니다.
 - [ ] Secret, 개인정보, 실제 요청 본문과 불필요한 telemetry를 포함하지 않았습니다.

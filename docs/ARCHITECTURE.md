@@ -102,6 +102,21 @@ agent skill은 서로 다른 knowledge base를 만들지 않고 topic collection
 4. 실제 사용자가 설치 과정에서 막히는지 확인합니다.
 5. 수요가 확인된 뒤에만 hosted sandbox의 비용과 보안 모델을 설계합니다.
 
+## PR AI review boundary
+
+`review-action/`은 사이트 runtime이나 배포 dependency가 아니라 독립 repository로 추출 가능한 contribution
+infrastructure입니다. TypeScript·Go·Python 공통 policy와 프로젝트별 OpenCodeReview rule을 합성하고 PR에
+advisory finding을 게시합니다.
+
+- lint, typecheck, test와 build는 deterministic CI가 담당합니다.
+- AI credential이 있는 review job은 PR code를 실행하지 않고 diff를 데이터로만 읽습니다.
+- project rule은 PR head가 아니라 신뢰한 base에서 읽습니다.
+- AI review 성공이나 comment 수는 사람의 Approve를 대신하지 않습니다.
+- 다른 repository에서 검증한 뒤 별도 public Action repository와 immutable release로 추출할 수 있습니다.
+
+구체적인 위협 모델, 독립 실행, `needs: quality` 순차 실행과 언어 profile은
+[`review-action/README.md`](../review-action/README.md)를 따릅니다.
+
 ## Browser와 CLI의 책임
 
 | 영역                   | Browser Playground     | `bp` CLI                             |

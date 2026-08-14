@@ -1,0 +1,8 @@
+{
+  "rules": [
+    {
+      "path": "**/*.go",
+      "rule": "Prioritize concrete correctness, security, and regression risks in Go. Check goroutine leaks, data races, channel close and blocking behavior, context cancellation and deadlines, ignored or incorrectly wrapped errors, nil interfaces and pointers, defer placement, response body and file cleanup, loop-variable capture, transaction boundaries, unsafe shared mutable state, and partial-write handling. Confirm tests cover cancellation, concurrency, and failure paths; ignore formatting and subjective style."
+    }
+  ]
+}

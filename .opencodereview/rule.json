@@ -1,0 +1,26 @@
+{
+  "rules": [
+    {
+      "path": ".github/workflows/**",
+      "rule": "Check least-privilege permissions, immutable action pins, untrusted pull request input, secret exposure, concurrency, timeouts, and whether every CI command has a documented local equivalent. Treat pull_request_target changes as security-sensitive."
+    },
+    {
+      "path": "src/**/*.{ts,tsx,astro}",
+      "rule": "Apply AGENTS.md. Check deterministic Scenario and seed behavior, engine/UI separation, Astro static-shell and React-island boundaries, accessibility, error states, 375px overflow, feature import aliases, and test coverage. Do not accept browser-model numbers as production benchmarks.",
+      "profile": "typescript"
+    },
+    {
+      "path": "test/**",
+      "rule": "Check that tests assert observable contracts rather than implementation details. Engine changes need invariants and fixed-seed reproducibility; challenge changes must prove the naive solution fails and the intended solution passes. Look for false-positive tests and missing boundary cases.",
+      "profile": "typescript"
+    },
+    {
+      "path": "**/*.{json,yml,yaml}",
+      "rule": "Apply AGENTS.md and the nearest canonical documentation. Check contradictory configuration, unverifiable completion claims, leaked secrets or request data, and unsafe paths or commands."
+    },
+    {
+      "path": "**",
+      "rule": "Review for correctness, security, regressions, architecture-boundary violations, missing executable evidence, and unnecessary scope. Prioritize actionable defects over style. Apply AGENTS.md and compare behavior with the linked Issue acceptance criteria. For each finding include the triggering input, impact, and smallest useful verification. Apply the same risk standard regardless of the author's seniority and do not judge the author."
+    }
+  ]
+}

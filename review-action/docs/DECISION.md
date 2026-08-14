@@ -35,6 +35,13 @@ Action의 언어와 configuration review 범위에 포함하지 않고, 문서 �
 - **PR code에서 언어 toolchain 실행:** AI credential이 있는 trusted job에서는 diff를 데이터로만 읽습니다. lint와
   test는 별도 untrusted CI job이 담당합니다.
 
+## 실행기 확장 원칙
+
+OpenCodeReview를 영구적인 단일 정답으로 보지 않습니다. Vercel OpenReview처럼 sandbox에서 repository를 탐색하고
+명령과 수정까지 수행하는 agentic reviewer는 모든 PR의 automatic lane보다 명시적으로 호출하는 specialist lane에
+적합합니다. 공통 지식은 provenance가 있는 review pack으로 분리하고, sandbox·code suggestion·reaction처럼 실행기
+고유 기능은 억지로 공통화하지 않습니다. 비교와 intake contract는 [`ECOSYSTEM.md`](./ECOSYSTEM.md)에 기록합니다.
+
 ## Sources
 
 - [OpenCodeReview repository](https://github.com/alibaba/open-code-review)
@@ -46,3 +53,4 @@ Action의 언어와 configuration review 범위에 포함하지 않고, 문서 �
 - [GitHub pull_request_target security](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)
 - [GitHub reusable workflows](https://docs.github.com/en/actions/how-tos/reuse-automations/reuse-workflows)
 - [Publishing Marketplace Actions](https://docs.github.com/en/actions/how-tos/create-and-publish-actions/publish-in-github-marketplace)
+- [Vercel OpenReview](https://github.com/vercel-labs/openreview)

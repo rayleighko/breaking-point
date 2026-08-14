@@ -12,6 +12,8 @@ actionlint .github/workflows/ai-review.yml review-action/.github/workflows/*.yml
 ```
 
 - policy 합성, profile 중복 제거, project policy 상속을 검증했습니다.
+- review pack이 project rule 뒤에 합성되고 name/version provenance를 output으로 남기는지 검증했습니다.
+- source URL, full commit 또는 SHA-256 hash, license와 검토일이 없는 pack 및 mutable revision을 거부하는지 검증했습니다.
 - TypeScript·Go·Python profile path와 대표 defect rule을 검증했습니다.
 - 지원하지 않는 profile, workspace 밖 project rule과 symlink 탈출을 거부하는지 검증했습니다.
 - checkout과 OpenCodeReview가 full commit SHA로 고정됐는지 검증했습니다.

@@ -59,10 +59,11 @@ check에는 `quality`와 `browser`만 둡니다. 다만 AI review가 실패했�
 
 ### OpenCodeReview repository setup
 
-`.github/workflows/ai-review.yml`은 `pull_request_target`에서 [`review-action`](../review-action/README.md)을 실행합니다.
-wrapper는 project policy를 신뢰한 base에서 읽고, SHA로 고정한 OpenCodeReview가 PR head를 Git object로만
-가져옵니다. fork PR code를 secret이 있는 runner에서 실행하지 않으며, workflow에 PR head checkout이나 PR script
-실행 단계를 추가하지 않습니다.
+`.github/workflows/ai-review.yml`은 `pull_request_target`에서 독립
+[`rayleighko/engineering-review-action`](https://github.com/rayleighko/engineering-review-action)을 검토한 full
+commit SHA로 호출합니다. Action은 project policy를 신뢰한 base에서 읽고, SHA로 고정한 OpenCodeReview가 PR
+head를 Git object로만 가져옵니다. fork PR code를 secret이 있는 runner에서 실행하지 않으며, caller workflow에
+PR head checkout, dependency install, test 또는 PR script 실행 단계를 추가하지 않습니다.
 
 Repository Settings → Secrets and variables → Actions에 다음 값을 설정합니다.
 
@@ -88,9 +89,10 @@ request body를 PR에 올리지 않습니다. telemetry는 workflow에서 켜지
 - artifact에는 review JSON과 stderr만 있으며 secret이 출력되지 않습니다.
 - Settings → Branches의 required checks에는 `quality`, `browser`만 있습니다.
 
-wrapper 안의 OpenCodeReview Action은 `v1.7.16`의 commit SHA로 고정했습니다. version을 올릴 때 release note와
-`action.yml`의 checkout, permissions, secret 처리 변경을 검토하고 새 SHA로 갱신합니다. TypeScript·Go·Python
-공통 policy, 독립 실행과 CI 순차 실행 방법은 `review-action/README.md`를 따릅니다.
+외부 Action의 현재 검토 revision은 `66f5efffa411a355beebc5ba690c31154c580af5`이며 내부 OpenCodeReview Action은
+`v1.7.16`의 commit SHA로 고정되어 있습니다. version을 올릴 때 release note, `action.yml`의 checkout,
+permissions와 secret 처리 변경을 검토하고 caller의 full SHA를 갱신합니다. TypeScript·Go·Python 공통 policy,
+독립 실행과 CI 순차 실행 방법은 외부 Action repository의 README를 따릅니다.
 
 ### Human review
 
@@ -113,7 +115,9 @@ AI review 기준은 작성자의 직급과 무관합니다. 주니어는 finding
 결과, 확인한 contract/test와 시도한 선택지를 먼저 정리합니다. 시니어는 반복적인 style·누락 검수보다 auth,
 data loss, architecture, rollback처럼 판단이 필요한 위험에 집중합니다. 시니어가 작성한 PR도 같은 CI와 AI
 review를 거치며 가능한 경우 다른 사람이 최종 승인합니다. 도입 순서, escalation 조건과 개인 평가에 사용하지 않을
-지표는 [`review-action/docs/TEAM_ADOPTION.md`](../review-action/docs/TEAM_ADOPTION.md)를 따릅니다.
+지표는 외부 Action repository의
+[`docs/TEAM_ADOPTION.md`](https://github.com/rayleighko/engineering-review-action/blob/66f5efffa411a355beebc5ba690c31154c580af5/docs/TEAM_ADOPTION.md)를
+따릅니다.
 
 ## Optional local tooling (권장, 비강제)
 

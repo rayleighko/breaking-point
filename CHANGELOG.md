@@ -2,6 +2,14 @@
 
 사용자에게 보이는 주요 변경을 기록합니다. 세부 구현 이력은 Git commit을 source of truth로 사용합니다.
 
+## 2026-08-14
+
+### Changed
+
+- Breaking Point의 advisory AI PR review를 독립 `engineering-review-action`의 검토된 full SHA를 사용하는
+  consumer 구조로 전환했습니다.
+- repository 내부의 중복 Action 구현을 제거하고 project-specific rule과 사람 review contract만 유지합니다.
+
 ## 2026-08-03
 
 ### Added

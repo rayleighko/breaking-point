@@ -2,6 +2,15 @@
 
 대화가 아니라 이 문서가 현재 결정의 요약입니다. 새 결정은 날짜, 상태, 이유, 결과와 재검토 조건을 남깁니다.
 
+## 2026-08-14 — PR AI review Action의 단일 source
+
+**Status:** Accepted
+
+TypeScript·Go·Python 공통 review policy와 실행 구현은 독립
+`rayleighko/engineering-review-action` repository에서만 관리합니다. Breaking Point에는 trusted-base caller,
+project-specific rule과 사람 review contract만 두며, 외부 Action은 검토한 full commit SHA로 고정합니다. AI
+review는 advisory이고 deterministic `quality`·`browser` check와 사람의 Approve를 대신하지 않습니다.
+
 ## 2026-08-03 — Dual process surface and rebase delivery
 
 **Status:** Accepted

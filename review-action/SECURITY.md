@@ -11,12 +11,16 @@ The Action therefore:
 - never installs dependencies from or executes code from the pull request head;
 - passes the base-to-head diff to OpenCodeReview as review data;
 - pins `actions/checkout` and OpenCodeReview to full commit SHAs;
-- accepts project rules only from a path contained by `GITHUB_WORKSPACE`, including symlink resolution;
+- accepts project rules and knowledge packs only from paths contained by `GITHUB_WORKSPACE`, including symlink resolution;
+- requires each knowledge pack to record an immutable source revision, license decision, version, and review date;
 - writes the generated rule to `RUNNER_TEMP` and never prints tokens or the complete environment;
 - requests only `contents: read` and `pull-requests: write` in documented workflows.
 
 Consumers must not add a PR-head checkout, dependency installation, build, test, or arbitrary script execution to a
 `pull_request_target` review job. Run deterministic CI in a separate `pull_request` job without LLM credentials.
+
+Do not fetch a mutable external rule or skill inside the credentialed job. Review external material before committing a
+pack to the trusted base, preserve required notices, and remove the pack if its license or provenance cannot be verified.
 
 ## Data flow
 

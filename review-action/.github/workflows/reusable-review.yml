@@ -13,6 +13,11 @@ on:
         required: false
         type: string
         default: ''
+      knowledge_packs:
+        description: Comma-separated repository-relative review pack JSON files
+        required: false
+        type: string
+        default: ''
       language:
         description: Review output language
         required: false
@@ -51,5 +56,6 @@ jobs:
           llm_use_anthropic: ${{ secrets.llm_use_anthropic }}
           profiles: ${{ inputs.profiles }}
           project_rule: ${{ inputs.project_rule }}
+          knowledge_packs: ${{ inputs.knowledge_packs }}
           language: ${{ inputs.language }}
           background: ${{ inputs.background }}

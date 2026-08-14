@@ -27,6 +27,10 @@ inputs:
     description: Optional repository-relative OpenCodeReview rule JSON merged before language policies
     required: false
     default: ''
+  knowledge_packs:
+    description: Comma-separated repository-relative review pack JSON files from the trusted base
+    required: false
+    default: ''
   language:
     description: Review output language
     required: false
@@ -93,6 +97,9 @@ outputs:
   summary_comment_url:
     description: URL of the sticky summary comment
     value: ${{ steps.review.outputs.summary_comment_url }}
+  knowledge_packs:
+    description: Validated knowledge pack name and version identifiers
+    value: ${{ steps.policy.outputs.knowledge_packs }}
 
 runs:
   using: composite
@@ -110,6 +117,7 @@ runs:
       env:
         REVIEW_PROFILES: ${{ inputs.profiles }}
         REVIEW_PROJECT_RULE: ${{ inputs.project_rule }}
+        REVIEW_KNOWLEDGE_PACKS: ${{ inputs.knowledge_packs }}
       run: node "$GITHUB_ACTION_PATH/scripts/build-rule.mjs"
 
     # OpenCodeReview v1.7.16. Full SHA is required because this action receives LLM credentials.

@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const supportedProfiles = new Set(['typescript', 'go', 'python']);
 
-function readRuleFile(path) {
+function readRuleDocument(path) {
   const parsed = JSON.parse(readFileSync(path, 'utf8'));
   if (!parsed || !Array.isArray(parsed.rules)) {
     throw new Error(`${path} must contain a rules array.`);
@@ -19,7 +19,11 @@ function readRuleFile(path) {
     }
   }
 
-  return parsed.rules;
+  return parsed;
+}
+
+function readRuleFile(path) {
+  return readRuleDocument(path).rules;
 }
 
 export function parseProfiles(value) {
@@ -46,29 +50,88 @@ export function parseProfiles(value) {
   return profiles;
 }
 
-export function resolveProjectRule(workspace, projectRule) {
-  if (!projectRule) return null;
-  if (isAbsolute(projectRule)) {
-    throw new Error('project_rule must be relative to GITHUB_WORKSPACE.');
+export function resolveWorkspaceFile(workspace, requestedPath, fieldName) {
+  if (!requestedPath) return null;
+  if (isAbsolute(requestedPath)) {
+    throw new Error(`${fieldName} must be relative to GITHUB_WORKSPACE.`);
   }
 
   const workspaceRoot = resolve(workspace);
-  const candidatePath = resolve(workspaceRoot, projectRule);
+  const candidatePath = resolve(workspaceRoot, requestedPath);
   const lexicalPath = relative(workspaceRoot, candidatePath);
   if (lexicalPath === '..' || lexicalPath.startsWith(`..${sep}`)) {
-    throw new Error('project_rule must stay inside GITHUB_WORKSPACE.');
+    throw new Error(`${fieldName} must stay inside GITHUB_WORKSPACE.`);
   }
 
   const realWorkspaceRoot = realpathSync(workspaceRoot);
   const rulePath = realpathSync(candidatePath);
   const pathFromWorkspace = relative(realWorkspaceRoot, rulePath);
   if (pathFromWorkspace === '..' || pathFromWorkspace.startsWith(`..${sep}`)) {
-    throw new Error('project_rule symlinks must stay inside GITHUB_WORKSPACE.');
+    throw new Error(`${fieldName} symlinks must stay inside GITHUB_WORKSPACE.`);
   }
   return rulePath;
 }
 
-export function buildPolicy({ actionPath, workspace, tempDirectory, profiles, projectRule }) {
+export function resolveProjectRule(workspace, projectRule) {
+  return resolveWorkspaceFile(workspace, projectRule, 'project_rule');
+}
+
+export function parseKnowledgePacks(value) {
+  return [
+    ...new Set(
+      value
+        .split(',')
+        .map((item) => item.trim())
+        .filter(Boolean),
+    ),
+  ];
+}
+
+function readKnowledgePack(path) {
+  const pack = readRuleDocument(path);
+  if (pack.schema_version !== 1) {
+    throw new Error(`${path} schema_version must be 1.`);
+  }
+  for (const field of ['name', 'version']) {
+    if (typeof pack[field] !== 'string' || !pack[field].trim()) {
+      throw new Error(`${path} ${field} must be a non-empty string.`);
+    }
+  }
+  if (!pack.source || typeof pack.source !== 'object') {
+    throw new Error(`${path} source must describe the pack provenance.`);
+  }
+  for (const field of ['url', 'revision', 'license', 'reviewed_at']) {
+    if (typeof pack.source[field] !== 'string' || !pack.source[field].trim()) {
+      throw new Error(`${path} source.${field} must be a non-empty string.`);
+    }
+  }
+  if (!/^(?:[a-f\d]{40}|[a-f\d]{64}|sha256:[a-f\d]{64})$/i.test(pack.source.revision)) {
+    throw new Error(`${path} source.revision must be a full commit SHA or SHA-256 content hash.`);
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(pack.source.reviewed_at)) {
+    throw new Error(`${path} source.reviewed_at must use YYYY-MM-DD.`);
+  }
+  return pack;
+}
+
+function inheritRule(entry, profileRules, baseFallback, label) {
+  const inheritedRule = entry.profile
+    ? profileRules.get(entry.profile)?.[0]?.rule
+    : baseFallback.rule;
+  if (entry.profile && !inheritedRule) {
+    throw new Error(`${label} profile ${entry.profile} must be included in the profiles input.`);
+  }
+  return inheritedRule;
+}
+
+export function buildPolicy({
+  actionPath,
+  workspace,
+  tempDirectory,
+  profiles,
+  projectRule,
+  knowledgePacks = '',
+}) {
   const selectedProfiles = parseProfiles(profiles);
   const profileRules = new Map(
     selectedProfiles.map((profile) => [
@@ -85,17 +148,33 @@ export function buildPolicy({ actionPath, workspace, tempDirectory, profiles, pr
 
   if (projectRulePath) {
     for (const entry of readRuleFile(projectRulePath)) {
-      const inheritedRule = entry.profile
-        ? profileRules.get(entry.profile)?.[0]?.rule
-        : baseFallback.rule;
-      if (entry.profile && !inheritedRule) {
-        throw new Error(
-          `Project rule profile ${entry.profile} must be included in the profiles input.`,
-        );
-      }
+      const inheritedRule = inheritRule(entry, profileRules, baseFallback, 'Project rule');
       rules.push({
         path: entry.path,
         rule: `${inheritedRule}\n\nProject policy: ${entry.rule}`,
+      });
+    }
+  }
+
+  const packs = parseKnowledgePacks(knowledgePacks).map((packPath) => {
+    const resolvedPath = resolveWorkspaceFile(workspace, packPath, 'knowledge_packs');
+    return readKnowledgePack(resolvedPath);
+  });
+  const packIds = new Set();
+  for (const pack of packs) {
+    const packId = `${pack.name}@${pack.version}`;
+    if (packIds.has(packId)) throw new Error(`Duplicate knowledge pack: ${packId}.`);
+    packIds.add(packId);
+    for (const entry of pack.rules) {
+      const inheritedRule = inheritRule(
+        entry,
+        profileRules,
+        baseFallback,
+        `Knowledge pack ${packId}`,
+      );
+      rules.push({
+        path: entry.path,
+        rule: `${inheritedRule}\n\nKnowledge pack ${packId}: ${entry.rule}`,
       });
     }
   }
@@ -105,7 +184,7 @@ export function buildPolicy({ actionPath, workspace, tempDirectory, profiles, pr
   mkdirSync(tempDirectory, { recursive: true });
   const outputPath = resolve(tempDirectory, 'engineering-review-policy.json');
   writeFileSync(outputPath, `${JSON.stringify({ rules }, null, 2)}\n`, 'utf8');
-  return { outputPath, profiles: selectedProfiles, rules };
+  return { outputPath, packs: [...packIds], profiles: selectedProfiles, rules };
 }
 
 function writeActionOutput(path, name, value) {
@@ -122,14 +201,23 @@ function main() {
   );
   const profiles = process.env.REVIEW_PROFILES ?? 'typescript,go,python';
   const projectRule = process.env.REVIEW_PROJECT_RULE ?? '';
-  const result = buildPolicy({ actionPath, workspace, tempDirectory, profiles, projectRule });
+  const knowledgePacks = process.env.REVIEW_KNOWLEDGE_PACKS ?? '';
+  const result = buildPolicy({
+    actionPath,
+    workspace,
+    tempDirectory,
+    profiles,
+    projectRule,
+    knowledgePacks,
+  });
 
   if (process.env.GITHUB_OUTPUT) {
     writeActionOutput(process.env.GITHUB_OUTPUT, 'rule_path', result.outputPath);
     writeActionOutput(process.env.GITHUB_OUTPUT, 'profiles', result.profiles.join(','));
+    writeActionOutput(process.env.GITHUB_OUTPUT, 'knowledge_packs', result.packs.join(','));
   }
   process.stdout.write(
-    `Prepared ${result.rules.length} review rules for ${result.profiles.join(', ')}.\n`,
+    `Prepared ${result.rules.length} review rules for ${result.profiles.join(', ')} with ${result.packs.length} knowledge pack(s).\n`,
   );
 }
 

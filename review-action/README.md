@@ -16,7 +16,8 @@ OpenCodeReview 위에 공통 engineering policy와 TypeScript, Go, Python profil
 Hosted 대안과 선택 근거는 [`docs/DECISION.md`](./docs/DECISION.md), 사람 검토 방법은
 [`docs/HUMAN_REVIEW.md`](./docs/HUMAN_REVIEW.md), 주니어 self-service·시니어 escalation·팀 지표는
 [`docs/TEAM_ADOPTION.md`](./docs/TEAM_ADOPTION.md), 실행한 검증과 남은 end-to-end 항목은
-[`docs/VALIDATION.md`](./docs/VALIDATION.md)를 봅니다.
+[`docs/VALIDATION.md`](./docs/VALIDATION.md), 여러 reviewer와 외부 review 지식의 intake 구조는
+[`docs/ECOSYSTEM.md`](./docs/ECOSYSTEM.md)를 봅니다.
 
 ## Inputs
 
@@ -31,15 +32,16 @@ Hosted 대안과 선택 근거는 [`docs/DECISION.md`](./docs/DECISION.md), 사�
 
 주요 선택 input:
 
-| Input            | 기본값                 | 설명                                      |
-| ---------------- | ---------------------- | ----------------------------------------- |
-| `profiles`       | `typescript,go,python` | 쉼표로 구분한 언어 policy                 |
-| `project_rule`   | 없음                   | repository 내부 OpenCodeReview rule JSON  |
-| `language`       | `English`              | review 결과 언어                          |
-| `background`     | 없음                   | 제품 목표와 PR acceptance                 |
-| `ocr_version`    | `1.7.16`               | 설치할 OpenCodeReview CLI version         |
-| `incremental`    | `true`                 | 과거 comment와 겹치지 않는 finding만 추가 |
-| `sticky_summary` | `true`                 | summary comment 하나를 갱신               |
+| Input             | 기본값                 | 설명                                      |
+| ----------------- | ---------------------- | ----------------------------------------- |
+| `profiles`        | `typescript,go,python` | 쉼표로 구분한 언어 policy                 |
+| `project_rule`    | 없음                   | repository 내부 OpenCodeReview rule JSON  |
+| `knowledge_packs` | 없음                   | 검토된 review pack JSON 경로 목록         |
+| `language`        | `English`              | review 결과 언어                          |
+| `background`      | 없음                   | 제품 목표와 PR acceptance                 |
+| `ocr_version`     | `1.7.16`               | 설치할 OpenCodeReview CLI version         |
+| `incremental`     | `true`                 | 과거 comment와 겹치지 않는 finding만 추가 |
+| `sticky_summary`  | `true`                 | summary comment 하나를 갱신               |
 
 ## 안전한 독립 실행
 
@@ -153,6 +155,7 @@ jobs:
       profiles: go,python
       language: Korean
       project_rule: .engineering-review/rule.json
+      knowledge_packs: .engineering-review/packs/security.json
     secrets:
       llm_url: ${{ secrets.AI_REVIEW_LLM_URL }}
       llm_auth_token: ${{ secrets.AI_REVIEW_LLM_TOKEN }}
@@ -184,6 +187,11 @@ policy가 결합됩니다.
 `RUNNER_TEMP`에 합성하며 token이나 전체 environment를 출력하지 않습니다.
 
 `profile`은 Action의 `profiles` input에도 포함되어야 합니다. 지원 값은 `typescript`, `go`, `python`입니다.
+
+외부 또는 팀 내부 review 지식은 `knowledge_packs`에 쉼표로 구분한 repository 상대 경로로 전달합니다. pack은 trusted
+base에서만 읽으며 name/version, source URL, immutable revision 또는 content hash, license 판단과 검토일이 없으면
+거부합니다. 예시는 [`examples/review-pack.json`](./examples/review-pack.json), intake 기준은
+[`docs/ECOSYSTEM.md`](./docs/ECOSYSTEM.md)를 따릅니다.
 
 ## 검증과 release
 

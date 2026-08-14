@@ -117,6 +117,11 @@ advisory finding을 게시합니다.
 구체적인 위협 모델, 독립 실행, `needs: quality` 순차 실행과 언어 profile은
 [`review-action/README.md`](../review-action/README.md)를 따릅니다.
 
+외부 reviewer나 review 지식을 추가할 때 runtime을 site code에 결합하지 않습니다. 모든 PR의 automatic advisory
+lane, 명시적으로 호출하는 sandbox specialist lane, provenance가 있는 portable review pack을 분리합니다. project
+rule은 pack보다 우선하고 external source는 license와 immutable revision 검토 없이 vendoring하지 않습니다. 자세한
+intake와 adapter 경계는 [`review-action/docs/ECOSYSTEM.md`](../review-action/docs/ECOSYSTEM.md)를 따릅니다.
+
 ## Browser와 CLI의 책임
 
 | 영역                   | Browser Playground     | `bp` CLI                             |

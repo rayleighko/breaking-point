@@ -5,7 +5,12 @@ import { dirname, resolve } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { buildPolicy, parseProfiles, resolveProjectRule } from '../scripts/build-rule.mjs';
+import {
+  buildPolicy,
+  parseKnowledgePacks,
+  parseProfiles,
+  resolveProjectRule,
+} from '../scripts/build-rule.mjs';
 
 const actionPath = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -102,8 +107,118 @@ test('requires project rule profiles to be enabled', () => {
   }
 });
 
+test('merges provenance-checked knowledge packs after project rules', () => {
+  const root = mkdtempSync(resolve(tmpdir(), 'engineering-review-'));
+  const packPath = resolve(root, 'react-pack.json');
+  writeFileSync(
+    packPath,
+    JSON.stringify({
+      schema_version: 1,
+      name: 'react-boundaries',
+      version: '1.0.0',
+      source: {
+        url: 'https://example.com/review-knowledge',
+        revision: '0123456789abcdef0123456789abcdef01234567',
+        license: 'MIT',
+        reviewed_at: '2026-08-14',
+      },
+      rules: [
+        {
+          path: '**/*.tsx',
+          rule: 'Check server and client component boundaries.',
+          profile: 'typescript',
+        },
+      ],
+    }),
+  );
+
+  try {
+    const result = buildPolicy({
+      actionPath,
+      workspace: root,
+      tempDirectory: resolve(root, 'output'),
+      profiles: 'typescript',
+      projectRule: '',
+      knowledgePacks: 'react-pack.json, react-pack.json',
+    });
+    assert.deepEqual(result.packs, ['react-boundaries@1.0.0']);
+    assert.match(result.rules[0].rule, /floating promises/);
+    assert.match(result.rules[0].rule, /Knowledge pack react-boundaries@1.0.0/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('rejects knowledge packs without complete provenance', () => {
+  const root = mkdtempSync(resolve(tmpdir(), 'engineering-review-'));
+  writeFileSync(
+    resolve(root, 'unknown.json'),
+    JSON.stringify({
+      schema_version: 1,
+      name: 'unknown',
+      version: '1.0.0',
+      source: { url: 'https://example.com', revision: 'main', license: '' },
+      rules: [],
+    }),
+  );
+
+  try {
+    assert.throws(
+      () =>
+        buildPolicy({
+          actionPath,
+          workspace: root,
+          tempDirectory: resolve(root, 'output'),
+          profiles: 'typescript',
+          projectRule: '',
+          knowledgePacks: 'unknown.json',
+        }),
+      /source.license must be a non-empty string/,
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('rejects mutable knowledge pack revisions', () => {
+  const root = mkdtempSync(resolve(tmpdir(), 'engineering-review-'));
+  writeFileSync(
+    resolve(root, 'mutable.json'),
+    JSON.stringify({
+      schema_version: 1,
+      name: 'mutable',
+      version: '1.0.0',
+      source: {
+        url: 'https://example.com',
+        revision: 'main',
+        license: 'MIT',
+        reviewed_at: '2026-08-14',
+      },
+      rules: [],
+    }),
+  );
+
+  try {
+    assert.throws(
+      () =>
+        buildPolicy({
+          actionPath,
+          workspace: root,
+          tempDirectory: resolve(root, 'output'),
+          profiles: 'typescript',
+          projectRule: '',
+          knowledgePacks: 'mutable.json',
+        }),
+      /full commit SHA or SHA-256 content hash/,
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test('rejects unsupported profiles and project rules outside the workspace', () => {
   assert.throws(() => parseProfiles('typescript,ruby'), /Unsupported review profile: ruby/);
+  assert.deepEqual(parseKnowledgePacks('a.json, b.json, a.json'), ['a.json', 'b.json']);
   assert.throws(() => resolveProjectRule('/tmp/workspace', '../policy.json'), /must stay inside/);
   assert.throws(() => resolveProjectRule('/tmp/workspace', '/tmp/policy.json'), /must be relative/);
 });
@@ -130,4 +245,5 @@ test('pins the upstream reviewer and exposes the security-sensitive inputs', () 
   assert.match(metadata, /default: 1\.7\.16/);
   assert.match(metadata, /github_token:/);
   assert.match(metadata, /project_rule:/);
+  assert.match(metadata, /knowledge_packs:/);
 });

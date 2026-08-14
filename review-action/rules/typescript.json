@@ -1,0 +1,8 @@
+{
+  "rules": [
+    {
+      "path": "**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}",
+      "rule": "Prioritize concrete correctness, security, and regression risks in TypeScript and JavaScript. Check unhandled or floating promises, async race conditions, stale React closures and effect cleanup, server/client trust boundaries, unsafe any or type assertions that hide runtime states, null and undefined paths, resource cleanup, input validation, prototype or injection risks, and ESM/CJS compatibility. Confirm tests exercise observable failure paths; ignore formatting and subjective style."
+    }
+  ]
+}

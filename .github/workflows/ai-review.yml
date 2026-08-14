@@ -1,0 +1,42 @@
+name: AI review
+
+on:
+  pull_request_target:
+    branches: [main, develop]
+    types: [opened, reopened, synchronize, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ai-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  open-code-review:
+    if: ${{ vars.OCR_REVIEW_ENABLED == 'true' && github.event.pull_request.draft == false }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      # pull_request_target checks out the trusted base. Never change this to the PR head.
+      - name: Check out trusted review policy
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Review PR
+        uses: ./review-action
+        with:
+          llm_url: ${{ secrets.OCR_LLM_URL }}
+          llm_auth_token: ${{ secrets.OCR_LLM_TOKEN }}
+          llm_model: ${{ vars.OCR_LLM_MODEL }}
+          llm_use_anthropic: ${{ vars.OCR_USE_ANTHROPIC }}
+          profiles: typescript
+          language: Korean
+          project_rule: .opencodereview/rule.json
+          background: >-
+            Breaking Point는 browser simulation으로 system behavior를 학습하는 한국어 공개 사이트입니다.
+            AGENTS.md의 architecture boundary와 PR이 연결한 Issue의 acceptance criteria를 기준으로,
+            실제 defect, security, regression, 누락된 test와 재현성 문제를 우선 검토하세요.
+            browser simulation 결과를 production benchmark처럼 취급하지 마세요.
+            PR title: ${{ github.event.pull_request.title }}
+            PR description and copied acceptance criteria: ${{ github.event.pull_request.body }}

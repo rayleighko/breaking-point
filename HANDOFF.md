@@ -70,14 +70,22 @@
 > 375px overflow 없음, console error 없음을 확인했습니다.
 > 챌린지는 `test/test-queue-sense.ts`로 순진한 해법 실패·의도한 해법 통과를 검증했습니다.
 
-**진행 중 — feature/p50-p99 (2026-08-03)**
+**완료 — p50-p99 (2026-08-03)**
 
-> 브랜치: `feature/p50-p99` → PR target `develop` (main 직접 merge 금지).
+> `develop`과 `main`에 반영되었고 roadmap status는 `done`입니다.
 > 로컬 `pnpm quality` 통과 (format·lint·astro check·test·build).
 > 챌린지: `test/test-p50-p99.ts`에서 순진한 해법(평균 100·p99 5050) 실패,
 > 의도한 해법(평균 100·p99 290) 통과.
-> 남은 확인: preview 375px overflow·console, CI(browser) 녹색 후 develop merge.
-> 다음 slice: `engine.ts` Sim 좌우 체감 연결, Pet Coach `labId` 등록, browser smoke.
+
+**운영 파이프라인 준비 (2026-08-14)**
+
+> GitHub Issue → Draft PR → `pnpm quality`/browser → OpenCodeReview AI 1차 검수 → maintainer 최종 검토 →
+> rebase merge 계약을 `docs/AI_DEVELOPMENT_LOOP.md`에 정리했습니다. `.github/workflows/ai-review.yml`은
+> `review-action/`의 TypeScript profile을 사용하며 내부 OpenCodeReview는 `v1.7.16` commit에 고정되어 있습니다.
+> Action은 Go·Python profile, 독립 실행과 `needs: quality` 순차 실행도 지원하고 `.opencodereview/rule.json`의
+> 프로젝트 규칙을 먼저 적용합니다.
+> 활성화 전 repository secret/variable을 설정하고 작은 test PR로 comment·artifact·비용을 확인해야 합니다.
+> 로컬 unit/actionlint/OCR matcher 검증과 아직 필요한 live PR 항목은 `review-action/docs/VALIDATION.md`에 있습니다.
 
 ---
 
@@ -133,9 +141,7 @@ AI retrieval은 내부 검수 자료를 먼저 사용하고, 부족할 때만 �
 
 1. ~~**Queue의 감각**~~ — 완료 (`queue-sense`, roadmap status `done`)
 
-2. ~~**p50과 p99**~~ — 콘텐츠·챌린지 스크립트 완료 (`p50-p99`). develop PR 리뷰/CI 대기.
-   다음 slice 후보: 실제 `engine.ts` Sim을 낮은 이용률로 좌우 실행해 체감 연결,
-   Pet Coach `labId` 등록, browser smoke.
+2. ~~**p50과 p99**~~ — 완료 (`p50-p99`, roadmap status `done`).
 
 3. **캐시 스탬피드** — 캐시를 넣었는데 왜 5분마다 DB가 죽을까
    시뮬: TTL 동시 만료 순간 요청이 DB로 쏟아지는 장면 + 지터/뮤텍스 적용 비교.
@@ -165,11 +171,13 @@ AI retrieval은 내부 검수 자료를 먼저 사용하고, 부족할 때만 �
 2. 브랜치는 `docs/GITFLOW.md`와 `docs/AI_DEVELOPMENT_LOOP.md`를 따릅니다. `feature/<slug>` →
    `develop`과 release → `main`은 **rebase merge**입니다. 공개 설명은 `/process`입니다.
 3. 현재 상태 확인은 `git status --short --branch`와 `pnpm quality`로 시작합니다.
-4. UI 변경은 `docs/FRONTEND_GUIDELINES.md`, simulation 변경은 `docs/ENGINE_GUIDE.md`, 새 콘텐츠는
+4. 새 작업은 먼저 해당 Issue의 outcome·acceptance·evidence를 닫고 Draft PR로 연결합니다. AI review 설정과 사람
+   검토 순서는 `docs/AI_DEVELOPMENT_LOOP.md`를 따릅니다.
+5. UI 변경은 `docs/FRONTEND_GUIDELINES.md`, simulation 변경은 `docs/ENGINE_GUIDE.md`, 새 콘텐츠는
    `CONTENT_GUIDE.md`를 먼저 읽습니다.
-5. feature를 `develop`에 합친 뒤 release PR로 `main`에 올리면 GitHub Pages가 배포됩니다. Actions와
+6. feature를 `develop`에 합친 뒤 release PR로 `main`에 올리면 GitHub Pages가 배포됩니다. Actions와
    공개 URL을 모두 확인합니다.
-6. AI Gateway는 배포되어 있습니다. Worker를 변경하면 `docs/AI_GATEWAY.md`에 따라 dry-run, deploy와 공개
+7. AI Gateway는 배포되어 있습니다. Worker를 변경하면 `docs/AI_GATEWAY.md`에 따라 dry-run, deploy와 공개
    endpoint를 검증합니다.
-7. 완료된 제품 변경은 `CHANGELOG.md`, architecture 결정은 `docs/DECISIONS.md`, 다음 실행 상태는 이 문서에
+8. 완료된 제품 변경은 `CHANGELOG.md`, architecture 결정은 `docs/DECISIONS.md`, 다음 실행 상태는 이 문서에
    반영합니다.

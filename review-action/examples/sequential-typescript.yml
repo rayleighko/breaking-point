@@ -1,0 +1,40 @@
+name: TypeScript quality and AI review
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm quality
+
+  review:
+    needs: quality
+    if: >-
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: rayleighko/engineering-review-action@v1
+        with:
+          llm_url: ${{ secrets.AI_REVIEW_LLM_URL }}
+          llm_auth_token: ${{ secrets.AI_REVIEW_LLM_TOKEN }}
+          llm_model: ${{ vars.AI_REVIEW_LLM_MODEL }}
+          llm_use_anthropic: ${{ vars.AI_REVIEW_USE_ANTHROPIC }}
+          profiles: typescript
